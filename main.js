@@ -1,53 +1,52 @@
-/* MENU SHOW / HIDE */
+/* ==================== MENU & SCROLL ==================== */
 const navMenu = document.getElementById('nav-menu'),
       navToggle = document.getElementById('nav-toggle'),
-      navClose = document.getElementById('nav-close')
+      navClose = document.getElementById('nav-close');
 
-if(navToggle){ navToggle.addEventListener('click', () => navMenu.classList.add('show-menu')) }
-if(navClose){ navClose.addEventListener('click', () => navMenu.classList.remove('show-menu')) }
+if(navToggle){ navToggle.addEventListener('click', () => navMenu.classList.add('show-menu')); }
+if(navClose){ navClose.addEventListener('click', () => navMenu.classList.remove('show-menu')); }
 
-const navLink = document.querySelectorAll('.nav__link')
-function linkAction(){ navMenu.classList.remove('show-menu') }
-navLink.forEach(n => n.addEventListener('click', linkAction))
+const navLink = document.querySelectorAll('.nav__link');
+function linkAction(){ navMenu.classList.remove('show-menu'); }
+navLink.forEach(n => n.addEventListener('click', linkAction));
 
-/* ACTIVE LINK */
-const sections = document.querySelectorAll('section[id]')
+const sections = document.querySelectorAll('section[id]');
 function scrollActive(){
-    const scrollY = window.pageYOffset
+    const scrollY = window.pageYOffset;
     sections.forEach(current =>{
         const sectionHeight = current.offsetHeight,
               sectionTop = current.offsetTop - 58,
-              sectionId = current.getAttribute('id')
+              sectionId = current.getAttribute('id');
         if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight){
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
+            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link');
         }else{
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
+            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link');
         }
-    })
+    });
 }
-window.addEventListener('scroll', scrollActive)
+window.addEventListener('scroll', scrollActive);
 
-/* DARK / LIGHT THEME */
-const themeButton = document.getElementById('theme-button')
-const darkTheme = 'dark-theme'
-const iconTheme = 'fa-sun'
+/* ==================== DARK / LIGHT THEME ==================== */
+const themeButton = document.getElementById('theme-button');
+const darkTheme = 'dark-theme';
+const iconTheme = 'fa-sun';
 
-const selectedTheme = localStorage.getItem('selected-theme')
-const selectedIcon = localStorage.getItem('selected-icon')
-const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
-const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'fa-moon' : 'fa-sun'
+const selectedTheme = localStorage.getItem('selected-theme');
+const selectedIcon = localStorage.getItem('selected-icon');
+const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light';
+const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'fa-moon' : 'fa-sun';
 
 if (selectedTheme) {
-  document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
-  themeButton.classList[selectedIcon === 'fa-moon' ? 'add' : 'remove'](iconTheme)
+  document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme);
+  themeButton.classList[selectedIcon === 'fa-moon' ? 'add' : 'remove'](iconTheme);
 }
 
 themeButton.addEventListener('click', () => {
-    document.body.classList.toggle(darkTheme)
-    themeButton.classList.toggle(iconTheme)
-    localStorage.setItem('selected-theme', getCurrentTheme())
-    localStorage.setItem('selected-icon', getCurrentIcon())
-})
+    document.body.classList.toggle(darkTheme);
+    themeButton.classList.toggle(iconTheme);
+    localStorage.setItem('selected-theme', getCurrentTheme());
+    localStorage.setItem('selected-icon', getCurrentIcon());
+});
 
 /* ==================== TOAST NOTIFICATION ==================== */
 const toast = document.getElementById('toast-notification');
@@ -71,11 +70,8 @@ toastClose.addEventListener('click', () => {
     clearTimeout(toastTimer);
 });
 
-// Welcome message
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        triggerToast("Cảm ơn bạn đã ghé thăm Trish TEAM!");
-    }, 1000);
+    setTimeout(() => { triggerToast("Cảm ơn bạn đã ghé thăm Trish TEAM!"); }, 1000);
 });
 
 /* ==================== FLOATING CHAT WIDGET ==================== */
@@ -97,9 +93,56 @@ chatBtn.addEventListener('click', () => {
     }
 });
 
+/* ==================== WEB APP - QR GENERATOR ==================== */
+const generateBtn = document.getElementById('webapp-generate-btn');
+const linkInput = document.getElementById('webapp-link-input');
+const resultDiv = document.getElementById('webapp-result');
+const directLinkInput = document.getElementById('webapp-direct-link');
+const copyBtn = document.getElementById('webapp-copy-btn');
+const qrContainer = document.getElementById('qrcode-container');
 
-/* ==================== GỬI PHẢN HỒI QUA TELEGRAM API ==================== */
-// Tích hợp Token và Chat ID do bạn cung cấp
+if(generateBtn) {
+    generateBtn.addEventListener('click', () => {
+        let url = linkInput.value.trim();
+        if(!url) {
+            triggerToast('Vui lòng dán link vào ô nhập liệu!');
+            return;
+        }
+
+        // Chuyển link Google Drive thành Direct Download
+        let directUrl = url;
+        const driveRegex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+        const match = url.match(driveRegex);
+        if (match && match[1]) {
+            directUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        }
+
+        // Cập nhật UI
+        directLinkInput.value = directUrl;
+        qrContainer.innerHTML = ''; // Xóa ảnh QR cũ nếu có
+        
+        // Sinh mã QR sử dụng qrcode.js
+        new QRCode(qrContainer, {
+            text: directUrl,
+            width: 180,
+            height: 180,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        resultDiv.style.display = 'block';
+        triggerToast('Đã tạo mã QR và Link tải trực tiếp!');
+    });
+
+    copyBtn.addEventListener('click', () => {
+        directLinkInput.select();
+        document.execCommand('copy');
+        triggerToast('Đã copy Direct Link vào bộ nhớ tạm!');
+    });
+}
+
+/* ==================== GỬI PHẢN HỒI QUA TELEGRAM API (CÓ HỖ TRỢ ẢNH) ==================== */
 const TELEGRAM_BOT_TOKEN = '8668861015:AAES7-vHAOuuV2D4Nk2budyQIzgZ9arIYRU'; 
 const TELEGRAM_CHAT_ID = '1687867690'; 
 
@@ -107,57 +150,65 @@ const telegramForm = document.getElementById('telegram-form');
 const submitBtn = document.getElementById('submit-btn');
 
 if (telegramForm) {
-    telegramForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Ngăn trình duyệt load lại trang
+    telegramForm.addEventListener('submit', async function(e) {
+        e.preventDefault(); 
         
-        // Lấy dữ liệu
         const name = document.getElementById('sender-name').value;
         const email = document.getElementById('sender-email').value;
         const message = document.getElementById('sender-message').value;
+        const imageFile = document.getElementById('sender-image').files[0]; 
         
-        // Format tin nhắn đẹp mắt gửi về ĐT
         const text = `📬 <b>PHẢN HỒI MỚI TỪ WEBSITE</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email}\n💬 <b>Nội dung:</b>\n${message}`;
         
-        // Đổi trạng thái nút bấm thành Loading
         const originalBtnHTML = submitBtn.innerHTML;
         submitBtn.innerHTML = '<span>Đang gửi...</span> <i class="fas fa-spinner fa-spin button__icon" style="margin-left: 8px;"></i>';
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.7';
         submitBtn.style.cursor = 'not-allowed';
 
-        // Gọi API đến máy chủ Telegram
-        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-        
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CHAT_ID,
-                text: text,
-                parse_mode: 'HTML' // Render in đậm, in nghiêng
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
+        try {
+            let response;
+
+            if (imageFile) {
+                // NẾU CÓ ẢNH -> Dùng API sendPhoto với FormData
+                const formData = new FormData();
+                formData.append('chat_id', TELEGRAM_CHAT_ID);
+                formData.append('photo', imageFile);
+                formData.append('caption', text);
+                formData.append('parse_mode', 'HTML');
+                
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                // NẾU KHÔNG CÓ ẢNH -> Dùng API sendMessage thông thường
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: text,
+                        parse_mode: 'HTML'
+                    })
+                });
+            }
+
+            const data = await response.json();
             if (data.ok) {
-                triggerToast('Đã gửi thành công! Tác giả sẽ nhận được thông báo ngay lập tức.');
-                telegramForm.reset(); // Xóa trắng form sau khi gửi
+                triggerToast('Đã gửi phản hồi thành công! Tác giả sẽ nhận được thông báo ngay lập tức.');
+                telegramForm.reset(); 
             } else {
                 triggerToast('Lỗi hệ thống: Không thể gửi tin nhắn lúc này.');
                 console.error("Telegram API Error:", data);
             }
-        })
-        .catch(error => {
+        } catch (error) {
             triggerToast('Lỗi mạng: Vui lòng kiểm tra lại kết nối internet của bạn.');
-        })
-        .finally(() => {
-            // Phục hồi lại nút bấm ban đầu
+        } finally {
             submitBtn.innerHTML = originalBtnHTML;
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-        });
+        }
     });
 }
