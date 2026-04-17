@@ -99,31 +99,35 @@
 
         <section class="webapp section" id="webapp">
             <div class="container">
-                <div class="webapp__data" style="margin-bottom: 2rem;">
+                <div class="webapp__data" style="margin-bottom: 2.5rem;">
                     <h2 class="section__title" style="text-align: left;">Trish Web Workspace</h2>
                     <p class="webapp__description">
                         Trung tâm công cụ trực tuyến. Sử dụng ngay trên trình duyệt điện thoại hoặc máy tính mà không cần cài đặt.
                     </p>
                 </div>
                 
-                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
                     
                     <div class="webapp__dashboard">
                         <div class="dashboard__header">
                             <i class="fas fa-qrcode"></i> <span>Cloud QR & Direct Link</span>
                         </div>
                         <div class="dashboard__body">
-                            <input type="text" id="webapp-link-input" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="text" id="webapp-link-input" placeholder="Dán link Drive..." class="dashboard__input" style="flex: 1; margin: 0;">
+                                <button class="button button--small button--ghost" id="webapp-paste-btn" title="Dán từ bộ nhớ tạm"><i class="fas fa-paste"></i></button>
+                            </div>
                             <button class="button dashboard__btn" id="webapp-generate-btn"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
                             
                             <div id="webapp-result" style="display: none; margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1.5rem;">
                                 <div id="qrcode-container" style="display: flex; justify-content: center; background: white; padding: 15px; border-radius: 10px; width: max-content; margin: 0 auto 1rem; border: 1px solid #eee;"></div>
                                 <input type="text" id="webapp-direct-link" class="dashboard__input" readonly style="margin-bottom: 1rem; font-size: 0.85rem; text-align: center;">
                                 
-                                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
                                     <button class="button button--small button--ghost" id="webapp-copy-btn" style="flex: 1; justify-content: center;"><i class="fas fa-copy"></i> Copy Link</button>
-                                    <button class="button button--small" id="webapp-download-qr-btn" style="flex: 1; justify-content: center; background-color: #2E7D32;"><i class="fas fa-download"></i> Tải Ảnh QR</button>
+                                    <button class="button button--small" id="webapp-download-qr-btn" style="flex: 1; justify-content: center; background-color: #2E7D32;"><i class="fas fa-download"></i> Tải Mã QR</button>
                                 </div>
+                                <button class="button button--small" id="webapp-zalo-btn" style="width: 100%; justify-content: center; background-color: #0068FF;"><i class="fas fa-share"></i> Copy Formatted & Mở Zalo</button>
                             </div>
                         </div>
                     </div>
@@ -133,9 +137,29 @@
                             <i class="fab fa-youtube"></i> <span>YouTube Downloader</span>
                         </div>
                         <div class="dashboard__body">
-                            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-color);">Công cụ hỗ trợ tải Video hoặc MP3 từ YouTube tốc độ cao (Trình duyệt sẽ tự động kết nối qua máy chủ trung gian).</p>
+                            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-color);">Công cụ hỗ trợ tải Video hoặc MP3 từ YouTube tốc độ cao an toàn.</p>
                             <input type="text" id="yt-link-input" placeholder="Dán link YouTube (VD: https://youtu.be/...)" class="dashboard__input">
                             <button class="button dashboard__btn" id="yt-download-btn" style="background-color: #FF0000;"><i class="fas fa-video"></i> Lấy link tải Video</button>
+                        </div>
+                    </div>
+
+                    <div class="webapp__dashboard">
+                        <div class="dashboard__header" style="background-color: #6A1B9A;">
+                            <i class="fas fa-code"></i> <span>AutoCAD LISP Vault</span>
+                        </div>
+                        <div class="dashboard__body">
+                            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-color);">Kho lưu trữ các hàm AutoLISP thông dụng. Copy và dán thẳng vào CAD để chạy.</p>
+                            <select id="lisp-select" class="dashboard__input" style="margin-bottom: 1rem; font-weight: 600; cursor: pointer;">
+                                <option value="tkl">Tính khối lượng trắc ngang (TKL)</option>
+                                <option value="cd">Cắt chân Dim (CD)</option>
+                                <option value="ntext">Nối Text nhanh (NTEXT)</option>
+                            </select>
+                            
+                            <div class="code-editor">
+                                <pre><code id="lisp-code-display">; Đang tải mã LISP...</code></pre>
+                            </div>
+                            
+                            <button class="button dashboard__btn" id="lisp-copy-btn" style="background-color: #6A1B9A;"><i class="fas fa-copy"></i> Copy Script</button>
                         </div>
                     </div>
 
@@ -179,7 +203,7 @@
                         </div>
                         <div class="contact__content">
                             <label class="contact__label">Đính kèm ảnh lỗi (Tùy chọn)</label>
-                            <input type="file" id="sender-image" accept="image/*" class="contact__input" style="padding: 0.8rem;">
+                            <input type="file" id="sender-image" accept="image/*" class="contact__input" style="padding: 0.8rem; cursor: pointer;">
                         </div>
                         <div class="contact__content">
                             <label class="contact__label">Nội dung</label>
