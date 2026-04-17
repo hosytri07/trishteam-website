@@ -99,6 +99,7 @@ const linkInput = document.getElementById('webapp-link-input');
 const resultDiv = document.getElementById('webapp-result');
 const directLinkInput = document.getElementById('webapp-direct-link');
 const copyBtn = document.getElementById('webapp-copy-btn');
+const downloadQrBtn = document.getElementById('webapp-download-qr-btn');
 const qrContainer = document.getElementById('qrcode-container');
 
 if(generateBtn) {
@@ -121,7 +122,7 @@ if(generateBtn) {
         directLinkInput.value = directUrl;
         qrContainer.innerHTML = ''; // Xóa ảnh QR cũ nếu có
         
-        // Sinh mã QR sử dụng qrcode.js
+        // Sinh mã QR
         new QRCode(qrContainer, {
             text: directUrl,
             width: 180,
@@ -135,10 +136,70 @@ if(generateBtn) {
         triggerToast('Đã tạo mã QR và Link tải trực tiếp!');
     });
 
+    // Tính năng Copy Link
     copyBtn.addEventListener('click', () => {
         directLinkInput.select();
         document.execCommand('copy');
         triggerToast('Đã copy Direct Link vào bộ nhớ tạm!');
+    });
+
+    // TÍNH NĂNG MỚI: Tải Ảnh QR về máy
+    downloadQrBtn.addEventListener('click', () => {
+        // qrcode.js sinh ra thẻ <canvas> hoặc <img> tùy trình duyệt
+        const qrCanvas = qrContainer.querySelector('canvas');
+        const qrImage = qrContainer.querySelector('img');
+        let imageSrc = '';
+
+        if (qrCanvas) {
+            imageSrc = qrCanvas.toDataURL("image/png");
+        } else if (qrImage && qrImage.src) {
+            imageSrc = qrImage.src;
+        }
+
+        if (imageSrc) {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageSrc;
+            downloadLink.download = 'TrishTeam_QRCode.png'; // Tên file khi tải về
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            triggerToast('Đã tải ảnh QR về thiết bị thành công!');
+        } else {
+            triggerToast('Lỗi: Không tìm thấy ảnh QR để tải.');
+        }
+    });
+}
+
+/* ==================== WEB APP - YOUTUBE DOWNLOADER ==================== */
+const ytBtn = document.getElementById('yt-download-btn');
+const ytInput = document.getElementById('yt-link-input');
+
+if (ytBtn) {
+    ytBtn.addEventListener('click', () => {
+        const url = ytInput.value.trim();
+        if (!url) {
+            triggerToast('Vui lòng dán link YouTube!');
+            return;
+        }
+
+        // Kiểm tra xem có đúng là link YouTube không
+        if(url.includes('youtube.com') || url.includes('youtu.be')) {
+            // Dùng thủ thuật thay "youtube.com" thành "ssyoutube.com" để bắt link tải trực tiếp
+            let downloadUrl = url.replace('youtube.com', 'ssyoutube.com');
+            
+            // Xử lý riêng định dạng link rút gọn youtu.be
+            if(url.includes('youtu.be')) {
+                const videoId = url.split('youtu.be/')[1].split('?')[0];
+                downloadUrl = `https://ssyoutube.com/watch?v=${videoId}`;
+            }
+            
+            // Mở trang tải video ở một tab mới
+            window.open(downloadUrl, '_blank');
+            triggerToast('Đang chuyển hướng đến máy chủ tải Video an toàn...');
+            ytInput.value = ''; // Xóa trắng ô nhập liệu sau khi bấm
+        } else {
+            triggerToast('Lỗi: Đây không phải là đường link YouTube hợp lệ!');
+        }
     });
 }
 
