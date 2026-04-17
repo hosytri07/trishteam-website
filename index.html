@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="toast-notification" class="toast">
+        <div class="toast__icon"><i class="fas fa-info-circle"></i></div>
+        <div class="toast__content">
+            <h4 class="toast__title">Chào mừng bạn!</h4>
+            <p class="toast__desc">Website đã cập nhật bản Trish Library 1.0 mới nhất.</p>
+        </div>
+        <button class="toast__close" id="toast-close"><i class="fas fa-times"></i></button>
+    </div>
+
     <header class="header" id="header">
         <nav class="nav container">
             <a href="#" class="nav__logo">Trish <span>TEAM</span></a>
@@ -17,7 +26,6 @@
                     <li class="nav__item"><a href="#home" class="nav__link active-link">Trang chủ</a></li>
                     <li class="nav__item"><a href="#products" class="nav__link">Sản phẩm</a></li>
                     <li class="nav__item"><a href="#webapp" class="nav__link">Web App</a></li>
-                    <li class="nav__item"><a href="#about" class="nav__link">Tác giả</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Liên hệ</a></li>
                 </ul>
                 <i class="fas fa-times nav__close" id="nav-close"></i>
@@ -37,7 +45,7 @@
                     <p class="home__description">Hệ sinh thái phần mềm, Plugin và Web-app hỗ trợ kỹ sư khảo sát và thiết kế hạ tầng giao thông. Hoàn toàn phi thương mại.</p>
                     <div class="home__btns">
                         <a href="#products" class="button">Khám phá Phần mềm</a>
-                        <a href="#webapp" class="button button--ghost">Thử Web-App ngay &rarr;</a>
+                        <a href="https://github.com/hosytri07" target="_blank" class="button button--ghost"><i class="fab fa-github"></i> Xem GitHub</a>
                     </div>
                 </div>
             </div>
@@ -55,7 +63,7 @@
                         <div class="product__info">
                             <h3>Trish Library 1.0</h3>
                             <p>Quản lý tiêu chuẩn, bản vẽ, tự động sinh mã QR từ link Cloud.</p>
-                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải (Windows)</a>
+                            <a href="#" class="button button--small" onclick="triggerToast('Đang tải xuống Trish Library 1.0...')"><i class="fas fa-download"></i> Tải Setup (.exe)</a>
                         </div>
                     </div>
                     
@@ -67,7 +75,7 @@
                         <div class="product__info">
                             <h3>Trish Volume Tools</h3>
                             <p>Tính toán sạt lở, xuất khối lượng đào đắp trên nền AutoCAD.</p>
-                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải Module</a>
+                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải Module (.lsp)</a>
                         </div>
                     </div>
                 </div>
@@ -84,16 +92,6 @@
                             <p>Tự động thiết kế trắc ngang đường từ tệp số liệu .ntd / .tdtn.</p>
                         </div>
                     </div>
-                    <div class="product__card wip-card">
-                        <div class="product__img-box">
-                            <span class="product__tag tag--wip">Đang phát triển</span>
-                            <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=600&q=80" alt="WIP" class="product__img">
-                        </div>
-                        <div class="product__info">
-                            <h3>Trish GIS Survey</h3>
-                            <p>Ứng dụng quản lý tọa độ mốc, xem bình đồ tuyến trên điện thoại.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -106,11 +104,6 @@
                         <p class="webapp__description">
                             Không cần cài đặt Desktop App? Sử dụng trực tiếp công cụ tạo QR Code và chuyển đổi Link Google Drive ngay trên trình duyệt điện thoại hoặc máy tính của bạn.
                         </p>
-                        <ul class="webapp__features">
-                            <li><i class="fas fa-check"></i> Chuyển đổi Drive URL sang Direct Link</li>
-                            <li><i class="fas fa-check"></i> Sinh mã QR tải tốc độ cao</li>
-                            <li><i class="fas fa-check"></i> Đồng bộ với hệ thống Trish Library</li>
-                        </ul>
                     </div>
                     
                     <div class="webapp__dashboard">
@@ -119,11 +112,7 @@
                         </div>
                         <div class="dashboard__body">
                             <input type="text" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
-                            <button class="button dashboard__btn"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
-                            <div class="dashboard__result">
-                                <i class="fas fa-cloud-upload-alt placeholder-icon"></i>
-                                <p>Kết quả sẽ hiển thị ở đây</p>
-                            </div>
+                            <button class="button dashboard__btn" onclick="triggerToast('Tính năng Web-App đang được hoàn thiện!')"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
                         </div>
                     </div>
                 </div>
@@ -134,7 +123,7 @@
             <div class="container grid contact__grid">
                 <div class="about__data" id="about">
                     <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span>(1995)</span></h2>
-                    <p class="contact__description">Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Đam mê xây dựng các công cụ tối ưu hóa công việc cho cộng đồng kỹ sư.</p>
+                    <p class="contact__description">Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Gặp vấn đề khi cài đặt phần mềm? Hãy liên hệ hoặc chat trực tiếp với tôi.</p>
                     
                     <div class="contact__info">
                         <div class="contact__card">
@@ -151,24 +140,24 @@
                 </div>
 
                 <div class="contact__form-wrapper">
-                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi phản hồi / Góp ý</h2>
+                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi Email tự động</h2>
                     <form action="https://formsubmit.co/trishteam.official@gmail.com" method="POST" class="contact__form">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_next" value="https://trishteam.vercel.app">
                         
                         <div class="contact__inputs">
                             <div class="contact__content">
-                                <label class="contact__label">Hên / Biệt danh</label>
-                                <input type="text" name="Name" required class="contact__input" placeholder="Nhập tên của bạn">
+                                <label class="contact__label">Tên của bạn</label>
+                                <input type="text" name="Name" required class="contact__input" placeholder="Nhập tên">
                             </div>
                             <div class="contact__content">
-                                <label class="contact__label">Email liên hệ</label>
-                                <input type="email" name="Email" required class="contact__input" placeholder="Nhập email của bạn">
+                                <label class="contact__label">Email</label>
+                                <input type="email" name="Email" required class="contact__input" placeholder="Nhập email">
                             </div>
                         </div>
                         <div class="contact__content">
-                            <label class="contact__label">Bạn muốn góp ý về tính năng gì?</label>
-                            <textarea name="Message" required cols="0" rows="5" class="contact__input" placeholder="Hãy viết ý tưởng hoặc báo lỗi phần mềm..."></textarea>
+                            <label class="contact__label">Nội dung</label>
+                            <textarea name="Message" required cols="0" rows="4" class="contact__input" placeholder="Viết báo lỗi hoặc tính năng mong muốn..."></textarea>
                         </div>
                         <button type="submit" class="button">Gửi đi <i class="fas fa-paper-plane button__icon"></i></button>
                     </form>
@@ -177,15 +166,28 @@
         </section>
     </main>
 
+    <div class="floating-chat-container">
+        <div class="chat-options" id="chat-options">
+            <a href="https://zalo.me/0969580657" target="_blank" class="chat-item zalo" title="Chat qua Zalo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" alt="Zalo">
+                <span>Zalo</span>
+            </a>
+            <a href="https://m.me/hosytri07" target="_blank" class="chat-item messenger" title="Chat qua Messenger">
+                <i class="fab fa-facebook-messenger"></i>
+                <span>Messenger</span>
+            </a>
+        </div>
+        <button class="chat-btn" id="chat-btn" title="Chat với Tác giả">
+            <i class="fas fa-comments chat-icon"></i>
+            <i class="fas fa-times close-icon" style="display: none;"></i>
+        </button>
+    </div>
+
     <footer class="footer">
         <div class="container footer__container">
             <div class="footer__content">
                 <a href="#" class="footer__logo">Trish TEAM</a>
-                <p class="footer__description">Sản phẩm Vide-Coding phi thương mại.<br>Vui lòng không sử dụng cho mục đích kiếm tiền.</p>
-                <div class="footer__socials">
-                    <a href="https://fb.com/hosytri07" class="footer__social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://github.com/hosytri07" class="footer__social"><i class="fab fa-github"></i></a>
-                </div>
+                <p class="footer__description">Sản phẩm Vide-Coding phi thương mại.</p>
             </div>
             <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
         </div>
