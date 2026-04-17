@@ -287,3 +287,152 @@ if (telegramForm) {
         }
     });
 }
+
+/* ==================== WEB APP - CODE EDITOR (NOTEPAD++ CLONE) ==================== */
+const codeEditor = document.getElementById('code-editor-area');
+const templateSelect = document.getElementById('editor-template');
+const codeCopyBtn = document.getElementById('editor-copy-btn');
+const codeClearBtn = document.getElementById('editor-clear-btn');
+const codeDownloadBtn = document.getElementById('editor-download-btn');
+
+const lispTemplates = {
+    tkl: "; Lệnh: TKL - Tính tổng khối lượng\n(defun c:TKL ( / ss i total val)\n  (prompt \"\\nQuet chon cac text:\")\n  (setq ss (ssget '((0 . \"TEXT\"))))\n  (setq total 0.0 i 0)\n  (while (< i (sslength ss))\n    (setq val (atof (cdr (assoc 1 (entget (ssname ss i))))))\n    (setq total (+ total val))\n    (setq i (1+ i))\n  )\n  (alert (strcat \"Tong khoi luong: \" (rtos total 2 2)))\n  (princ)\n)",
+    cd: "; Lệnh: CD - Cắt chân Dim\n(defun c:CD ()\n  (prompt \"\\nChon duong line de cat chan Dim...\")\n  ; ... Thuật toán cắt Dim ...\n  (princ \"\\nDa cat dim thanh cong!\")\n  (princ)\n)"
+};
+
+if (codeEditor) {
+    // 1. Tính năng phím Tab thụt lề
+    codeEditor.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            // Chèn 4 dấu cách thay vì nhảy sang ô khác
+            this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 4;
+        }
+    });
+
+    // 2. Chèn mẫu Code
+    templateSelect.addEventListener('change', (e) => {
+        if(e.target.value && lispTemplates[e.target.value]) {
+            codeEditor.value = lispTemplates[e.target.value];
+            triggerToast('Đã tải mẫu LISP thành công!');
+        }
+    });
+
+    // 3. Copy Code
+    codeCopyBtn.addEventListener('click', () => {
+        if(!codeEditor.value) return;
+        codeEditor.select();
+        document.execCommand('copy');
+        triggerToast('Đã copy đoạn mã vào bộ nhớ tạm!');
+    });
+
+    // 4. Xóa trắng
+    codeClearBtn.addEventListener('click', () => {
+        codeEditor.value = '';
+        templateSelect.value = '';
+    });
+
+    // 5. Tải file về máy (.txt hoặc .lsp)
+    codeDownloadBtn.addEventListener('click', () => {
+        if(!codeEditor.value) { triggerToast('Không có nội dung để tải!'); return; }
+        
+        // Tạo file ảo trong trình duyệt
+        const blob = new Blob([codeEditor.value], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        // Nếu code có chứa defun c: thì lưu thành .lsp, ngược lại lưu .txt
+        a.download = codeEditor.value.includes('defun') ? 'TrishTeam_Code.lsp' : 'TrishTeam_Note.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        triggerToast('Đã tải file thành công!');
+    });
+}
+
+/* ==================== WEB APP - TÍNH PHONG THỦY (THUẬT TOÁN) ==================== */
+const fsInput = document.getElementById('fs-year-input');
+const fsBtn = document.getElementById('fs-calc-btn');
+const fsResult = document.getElementById('fs-result');
+const fsCanchi = document.getElementById('fs-canchi');
+const fsMenh = document.getElementById('fs-menh');
+
+if (fsBtn) {
+    fsBtn.addEventListener('click', () => {
+        const year = parseInt(fsInput.value);
+        if(!year || year < 1900 || year > 2100) {
+            triggerToast('Vui lòng nhập năm sinh hợp lệ (1900 - 2100)');
+            return;
+        }
+
+        // Mảng dữ liệu
+        const Can = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"];
+        const Chi = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"];
+        const NguHanh = ["", "Kim (Vàng)", "Thủy (Nước)", "Hỏa (Lửa)", "Thổ (Đất)", "Mộc (Cây)"];
+        
+        // Thuật toán tính Can Chi
+        const canIndex = year % 10;
+        const chiIndex = year % 12;
+        const canChiName = Can[canIndex] + " " + Chi[chiIndex];
+
+        // Thuật toán tính Ngũ Hành (Quy đổi Can/Chi ra hệ số rồi cộng lại)
+        const canValue = [4, 4, 5, 5, 1, 1, 2, 2, 3, 3][canIndex];
+        const chiValue = [1, 1, 2, 2, 0, 0, 1, 1, 2, 2, 0, 0][chiIndex];
+        
+        let menhValue = canValue + chiValue;
+        if(menhValue > 5) menhValue -= 5; // Vòng lặp ngũ hành
+        
+        // Hiển thị kết quả
+        fsCanchi.innerText = canChiName;
+        fsMenh.innerText = NguHanh[menhValue];
+        fsResult.style.display = 'block';
+    });
+}
+
+/* ==================== WEB APP - TIN TỨC RSS (VNEXPRESS KHOA HỌC) ==================== */
+const newsContainer = document.getElementById('news-container');
+
+// Dùng API trung gian rss2json để vượt tường lửa CORS
+const RSS_URL = 'https://vnexpress.net/rss/khoa-hoc.rss';
+const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&api_key=`;
+
+if (newsContainer) {
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                newsContainer.innerHTML = ''; // Xóa chữ "Đang tải"
+                const items = data.items.slice(0, 6); // Lấy 6 tin mới nhất
+                
+                items.forEach(item => {
+                    // Cố gắng bóc tách link ảnh thumbnail từ description (vì VNExpress nhúng ảnh trong desc)
+                    let imgSrc = 'https://via.placeholder.com/80x80?text=News';
+                    const imgMatch = item.description.match(/src="([^"]+)"/);
+                    if (imgMatch) imgSrc = imgMatch[1];
+
+                    // Xử lý lại ngày tháng
+                    const pubDate = new Date(item.pubDate).toLocaleDateString('vi-VN', {
+                        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    const html = `
+                        <div class="news-item">
+                            <img src="${imgSrc}" alt="Thumbnail" class="news-img">
+                            <div class="news-content">
+                                <h4><a href="${item.link}" target="_blank">${item.title}</a></h4>
+                                <span class="news-date">${pubDate}</span>
+                            </div>
+                        </div>
+                    `;
+                    newsContainer.insertAdjacentHTML('beforeend', html);
+                });
+            } else {
+                newsContainer.innerHTML = '<div style="padding: 1.5rem; text-align: center;">Không thể tải tin tức lúc này.</div>';
+            }
+        })
+        .catch(error => {
+            newsContainer.innerHTML = '<div style="padding: 1.5rem; text-align: center;">Lỗi kết nối máy chủ tin tức.</div>';
+        });
+}
