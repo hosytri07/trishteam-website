@@ -1,237 +1,521 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="dark">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trish TEAM | Engineering Workspace</title>
+    <title>Trish TEAM | Đa năng Workspace</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/lunar-javascript/lunar.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div id="toast-notification" class="toast">
-        <div class="toast__icon"><i class="fas fa-check-circle"></i></div>
-        <div class="toast__content">
-            <h4 class="toast__title">Thông báo</h4>
-            <p class="toast__desc">Nội dung thông báo ở đây.</p>
-        </div>
-        <button class="toast__close" id="toast-close"><i class="fas fa-times"></i></button>
+<body data-theme="dark">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Thông báo</span>
     </div>
 
-    <header class="header" id="header">
-        <nav class="nav container">
-            <a href="#" class="nav__logo">Trish <span>TEAM</span></a>
-            <div class="nav__menu" id="nav-menu">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="#home" class="nav__link active-link">Trang chủ</a></li>
-                    <li class="nav__item"><a href="#workspace" class="nav__link">Workspace</a></li>
-                    <li class="nav__item"><a href="#contact" class="nav__link">Liên hệ</a></li>
-                </ul>
-                <i class="fas fa-times nav__close" id="nav-close"></i>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <span class="brand-icon">✨</span>
+                <span class="brand-text">Trish<strong>TEAM</strong></span>
+            </a>
+            
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link active">Trang chủ</a>
+                <a href="#tools" class="nav-link">Công cụ</a>
+                <a href="#mystical" class="nav-link">Phong thủy</a>
+                <a href="#utilities" class="nav-link">Tiện ích</a>
+                <a href="#contact" class="nav-link">Liên hệ</a>
             </div>
-            <div class="nav__btns">
-                <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" title="Đổi theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-        </nav>
-    </header>
-
-    <main class="main">
-        <section class="home section" id="home">
-            <div class="home__container container grid">
-                <div class="home__data">
-                    <h1 class="home__title">Tối ưu hóa quy trình với <br><span>Vide-Coding</span></h1>
-                    <p class="home__description">Hệ sinh thái công cụ hỗ trợ kỹ sư khảo sát và thiết kế hạ tầng giao thông. Hoàn toàn phi thương mại.</p>
-                    <div class="home__btns">
-                        <a href="#workspace" class="button">Mở Workspace</a>
-                        <a href="https://github.com/hosytri07" target="_blank" class="button button--ghost"><i class="fab fa-github"></i> Xem GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="workspace section" id="workspace">
-            <div class="container">
-                <h2 class="section__title">Trish Web Workspace</h2>
-                <p class="section__subtitle">Trung tâm công cụ trực tuyến. Tốc độ, mượt mà và không cần cài đặt.</p>
-                
-                <div class="workspace__container">
-                    
-                    <div class="split-layout">
-                        <div class="split-text">
-                            <h3>Cloud QR Generator</h3>
-                            <p>Tạo mã QR và Link tải trực tiếp từ Google Drive. Phục vụ đính kèm bản vẽ và hồ sơ khảo sát hiện trường một cách nhanh chóng.</p>
-                        </div>
-                        <div class="split-tool widget-card">
-                            <div class="widget-header">
-                                <i class="fas fa-qrcode"></i> Công cụ QR & Direct Link
-                            </div>
-                            <div class="widget-body">
-                                <div class="input-group">
-                                    <input type="text" id="webapp-link-input" class="form-input" placeholder="Dán link Google Drive vào đây...">
-                                    <button class="btn-icon" id="webapp-paste-btn" title="Dán"><i class="fas fa-paste"></i></button>
-                                </div>
-                                <button class="btn-primary" id="webapp-generate-btn" style="width: 100%; margin-top: 10px;"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
-                                
-                                <div id="webapp-result" class="result-box">
-                                    <div id="qrcode-container" class="qr-wrapper"></div>
-                                    <input type="text" id="webapp-direct-link" class="form-input text-center" readonly>
-                                    <div class="action-row">
-                                        <button class="btn-secondary" id="webapp-copy-btn"><i class="fas fa-copy"></i> Copy Link</button>
-                                        <button class="btn-secondary" id="webapp-download-qr-btn"><i class="fas fa-download"></i> Tải Ảnh</button>
-                                    </div>
-                                    <button class="btn-primary btn-zalo" id="webapp-zalo-btn"><i class="fas fa-share"></i> Chia sẻ qua Zalo</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="split-layout reverse">
-                        <div class="split-text">
-                            <h3>Bát Tự & Phong Thủy</h3>
-                            <p>Không còn "Tiếng Trung" hay "Undefined". Thuật toán toán học chuẩn xác giúp bạn lấy lá số, ngũ hành bản mệnh, con số chủ đạo và hướng tốt làm việc.</p>
-                        </div>
-                        <div class="split-tool widget-card">
-                            <div class="widget-header">
-                                <i class="fas fa-yin-yang"></i> Phân tích Bản Mệnh
-                            </div>
-                            <div class="widget-body">
-                                <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 10px;">
-                                    <input type="number" id="tv-day" class="form-input" placeholder="Ngày">
-                                    <input type="number" id="tv-month" class="form-input" placeholder="Tháng">
-                                    <input type="number" id="tv-year" class="form-input" placeholder="Năm (VD: 1995)">
-                                </div>
-                                <select id="tv-gender" class="form-input" style="margin-top: 10px; width: 100%;">
-                                    <option value="1">Nam Mạng</option>
-                                    <option value="0">Nữ Mạng</option>
-                                </select>
-                                <button class="btn-primary" id="tv-calc-btn" style="width: 100%; margin-top: 10px;"><i class="fas fa-search"></i> Lập Bảng Phân Tích</button>
-                                
-                                <div id="tv-result" class="result-box">
-                                    <div class="tuvi-grid">
-                                        <div class="tuvi-item">Số chủ đạo<br><strong id="tv-res-numerology">...</strong></div>
-                                        <div class="tuvi-item">Cung Hoàng Đạo<br><strong id="tv-res-zodiac">...</strong></div>
-                                    </div>
-                                    <div class="tuvi-details">
-                                        <p>☯️ <b>Bát Tự:</b> <span id="tv-res-canchi">...</span></p>
-                                        <p>🔥 <b>Mệnh:</b> <span id="tv-res-menh">...</span></p>
-                                        <p>🧭 <b>Cung Phi:</b> <span id="tv-res-cung">...</span></p>
-                                        <p>✨ <b>Hướng tốt:</b> <span id="tv-res-huong">...</span></p>
-                                        <p>🎨 <b>Màu hợp:</b> <span id="tv-res-color">...</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="split-layout">
-                        <div class="split-text">
-                            <h3>Bảng Điện Tử Real-time</h3>
-                            <p>Sử dụng API thực tế cập nhật Giá Vàng SJC và Tỷ giá Ngoại tệ Vietcombank ngay trên trình duyệt. Tích hợp Lịch Âm Dương vạn niên.</p>
-                        </div>
-                        <div class="split-tool widget-card">
-                            <div class="widget-header">
-                                <i class="fas fa-chart-line"></i> Thị Trường & Lịch Vạn Niên
-                            </div>
-                            <div class="widget-body p-0">
-                                <div class="calendar-block">
-                                    <div class="cal-solar" id="cal-solar">--/--/----</div>
-                                    <div class="cal-lunar" id="cal-lunar">Âm lịch: Đang tính...</div>
-                                    <div class="cal-event" id="holiday-info">Sự kiện: Đang tải...</div>
-                                </div>
-                                <div class="market-block">
-                                    <div class="market-item">
-                                        <div class="m-title"><i class="fas fa-coins" style="color: #fbbf24;"></i> Vàng SJC (Hồ Chí Minh)</div>
-                                        <div class="m-price" id="market-gold"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>
-                                        <div class="m-desc">Bán ra (Nguồn: sjc.com.vn)</div>
-                                    </div>
-                                    <div class="market-item">
-                                        <div class="m-title"><i class="fas fa-dollar-sign" style="color: #34d399;"></i> Tỷ giá USD (Vietcombank)</div>
-                                        <div class="m-price" id="market-usd"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>
-                                        <div class="m-desc">Bán ra (Nguồn: VCB)</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="split-layout reverse">
-                        <div class="split-text">
-                            <h3>Trish CodePad Vault</h3>
-                            <p>Môi trường soạn thảo giả lập VS Code. Tích hợp sẵn các mã lệnh AutoLISP hỗ trợ thiết kế giao thông. Tính năng Syntax Highlighting chuyên nghiệp.</p>
-                        </div>
-                        <div class="split-tool widget-card" style="max-width: 100%;">
-                            <div class="widget-header">
-                                <i class="fas fa-code"></i> AutoLISP Vault
-                            </div>
-                            <div class="widget-body">
-                                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                    <select id="editor-template" class="form-input" style="flex: 1; cursor: pointer;">
-                                        <option value="">-- Mở AutoLISP Mẫu --</option>
-                                        <option value="tkl">Lệnh TKL: Tính khối lượng tổng</option>
-                                        <option value="cd">Lệnh CD: Cắt chân Dim chuẩn</option>
-                                        <option value="ntext">Lệnh NTEXT: Nối Text nhanh</option>
-                                    </select>
-                                    <button class="btn-secondary" id="editor-copy-btn" title="Copy"><i class="fas fa-copy"></i></button>
-                                    <button class="btn-secondary" id="editor-download-btn" title="Lưu File"><i class="fas fa-download"></i></button>
-                                </div>
-                                <textarea id="code-editor-area" spellcheck="false" placeholder="// Bắt đầu viết mã AutoLISP hoặc dán văn bản vào đây..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section class="contact section" id="contact">
-            <div class="container">
-                <div class="split-layout">
-                    <div class="split-text">
-                        <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span style="color:var(--accent-color); font-size:1rem;">(1995)</span></h2>
-                        <p>Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Đam mê phát triển công cụ tự động hóa. Hãy gửi phản hồi hoặc báo lỗi trực tiếp cho tôi.</p>
-                        <ul class="contact-list">
-                            <li><i class="fas fa-envelope"></i> trishteam.official@gmail.com</li>
-                            <li><i class="fas fa-phone-alt"></i> 0969 580 657 (Zalo/Telegram)</li>
-                        </ul>
-                    </div>
-                    <div class="split-tool widget-card">
-                        <div class="widget-header"><i class="fas fa-paper-plane"></i> Gửi Phản Hồi Trực Tiếp</div>
-                        <div class="widget-body">
-                            <form id="telegram-form" class="contact-form">
-                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                    <input type="text" id="sender-name" required class="form-input" placeholder="Tên của bạn">
-                                    <input type="email" id="sender-email" required class="form-input" placeholder="Email liên hệ">
-                                </div>
-                                <input type="file" id="sender-image" accept="image/*" class="form-input" style="margin-bottom: 15px; padding: 10px;">
-                                <textarea id="sender-message" required rows="4" class="form-input" placeholder="Nội dung cần hỗ trợ..." style="margin-bottom: 15px;"></textarea>
-                                <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%;">
-                                    <span>Gửi Tới Tác Giả</span> <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div class="floating-chat-container">
-        <div class="chat-options" id="chat-options">
-            <a href="https://zalo.me/0969580657" target="_blank" class="chat-item zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" alt="Zalo"><span>Zalo</span></a>
-            <a href="https://m.me/hosytri07" target="_blank" class="chat-item messenger"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></a>
         </div>
-        <button class="chat-btn" id="chat-btn" title="Chat với Tác giả"><i class="fas fa-comments chat-icon"></i><i class="fas fa-times close-icon" style="display: none;"></i></button>
-    </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Phi thương mại • Miễn phí 100%</span>
+                </div>
+                <h1 class="hero-title">
+                    Hệ sinh thái<br>
+                    <span class="gradient-text">Đa năng Workspace</span>
+                </h1>
+                <p class="hero-desc">
+                    Tích hợp hơn 20+ công cụ hữu ích từ QR Generator, Phong thủy, Tử vi, 
+                    Thần số học đến các tiện ích hàng ngày. Tất cả trong một nơi.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#tools" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Khám phá ngay
+                    </a>
+                    <a href="https://github.com/hosytri07" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i>
+                        GitHub
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">Công cụ</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Miễn phí</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Truy cập</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Tools Grid -->
+    <section class="tools-section" id="tools">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Bộ sưu tập công cụ</h2>
+                <p class="section-subtitle">Chọn công cụ bạn cần và bắt đầu sử dụng ngay</p>
+            </div>
+
+            <div class="tools-filter">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> Tất cả
+                </button>
+                <button class="filter-btn" data-filter="generator">
+                    <i class="fas fa-magic"></i> Tạo mã
+                </button>
+                <button class="filter-btn" data-filter="converter">
+                    <i class="fas fa-exchange-alt"></i> Chuyển đổi
+                </button>
+                <button class="filter-btn" data-filter="calculator">
+                    <i class="fas fa-calculator"></i> Tính toán
+                </button>
+                <button class="filter-btn" data-filter="text">
+                    <i class="fas fa-font"></i> Văn bản
+                </button>
+            </div>
+
+            <div class="tools-grid">
+                <!-- QR Generator -->
+                <div class="tool-card" data-category="generator" data-tool="qr-generator">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3 class="tool-title">QR Generator</h3>
+                    <p class="tool-desc">Tạo mã QR từ Google Drive link</p>
+                    <div class="tool-tags">
+                        <span class="tag">QR Code</span>
+                        <span class="tag">Drive</span>
+                    </div>
+                </div>
+
+                <!-- Password Generator -->
+                <div class="tool-card" data-category="generator" data-tool="password-gen">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 class="tool-title">Password Generator</h3>
+                    <p class="tool-desc">Tạo mật khẩu mạnh và an toàn</p>
+                    <div class="tool-tags">
+                        <span class="tag">Bảo mật</span>
+                    </div>
+                </div>
+
+                <!-- Color Picker -->
+                <div class="tool-card" data-category="generator" data-tool="color-picker">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="tool-title">Color Picker</h3>
+                    <p class="tool-desc">Bảng màu và tạo gradient</p>
+                    <div class="tool-tags">
+                        <span class="tag">Màu sắc</span>
+                        <span class="tag">Design</span>
+                    </div>
+                </div>
+
+                <!-- Base64 Converter -->
+                <div class="tool-card" data-category="converter" data-tool="base64">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="tool-title">Base64 Encoder</h3>
+                    <p class="tool-desc">Encode/Decode Base64</p>
+                    <div class="tool-tags">
+                        <span class="tag">Base64</span>
+                    </div>
+                </div>
+
+                <!-- Unit Converter -->
+                <div class="tool-card" data-category="converter" data-tool="unit-converter">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 class="tool-title">Unit Converter</h3>
+                    <p class="tool-desc">Chuyển đổi đơn vị đo lường</p>
+                    <div class="tool-tags">
+                        <span class="tag">Đơn vị</span>
+                    </div>
+                </div>
+
+                <!-- BMI Calculator -->
+                <div class="tool-card" data-category="calculator" data-tool="bmi-calc">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <i class="fas fa-weight"></i>
+                    </div>
+                    <h3 class="tool-title">BMI Calculator</h3>
+                    <p class="tool-desc">Tính chỉ số khối cơ thể</p>
+                    <div class="tool-tags">
+                        <span class="tag">Sức khỏe</span>
+                    </div>
+                </div>
+
+                <!-- Age Calculator -->
+                <div class="tool-card" data-category="calculator" data-tool="age-calc">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3 class="tool-title">Age Calculator</h3>
+                    <p class="tool-desc">Tính tuổi chính xác</p>
+                    <div class="tool-tags">
+                        <span class="tag">Tuổi</span>
+                    </div>
+                </div>
+
+                <!-- JSON Formatter -->
+                <div class="tool-card" data-category="text" data-tool="json-formatter">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                        <i class="fas fa-brackets-curly"></i>
+                    </div>
+                    <h3 class="tool-title">JSON Formatter</h3>
+                    <p class="tool-desc">Format và validate JSON</p>
+                    <div class="tool-tags">
+                        <span class="tag">JSON</span>
+                    </div>
+                </div>
+
+                <!-- Markdown Editor -->
+                <div class="tool-card" data-category="text" data-tool="markdown-editor">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);">
+                        <i class="fab fa-markdown"></i>
+                    </div>
+                    <h3 class="tool-title">Markdown Editor</h3>
+                    <p class="tool-desc">Soạn thảo Markdown live</p>
+                    <div class="tool-tags">
+                        <span class="tag">Editor</span>
+                    </div>
+                </div>
+
+                <!-- Text Case Converter -->
+                <div class="tool-card" data-category="text" data-tool="text-case">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <h3 class="tool-title">Text Case</h3>
+                    <p class="tool-desc">Chuyển đổi chữ hoa/thường</p>
+                    <div class="tool-tags">
+                        <span class="tag">Text</span>
+                    </div>
+                </div>
+
+                <!-- World Clock -->
+                <div class="tool-card" data-category="calculator" data-tool="world-clock">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%);">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="tool-title">World Clock</h3>
+                    <p class="tool-desc">Đồng hồ thế giới</p>
+                    <div class="tool-tags">
+                        <span class="tag">Thời gian</span>
+                    </div>
+                </div>
+
+                <!-- Pomodoro Timer -->
+                <div class="tool-card" data-category="calculator" data-tool="pomodoro">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="tool-title">Pomodoro Timer</h3>
+                    <p class="tool-desc">Quản lý thời gian làm việc</p>
+                    <div class="tool-tags">
+                        <span class="tag">Timer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mystical Section -->
+    <section class="mystical-section" id="mystical">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Phong thủy & Tử vi</h2>
+                <p class="section-subtitle">Khám phá bản mệnh và vận số của bạn</p>
+            </div>
+
+            <div class="mystical-grid">
+                <!-- Tử Vi -->
+                <div class="mystical-card" data-mystical="tu-vi">
+                    <div class="mystical-header">
+                        <i class="fas fa-yin-yang"></i>
+                        <h3>Lá Số Tử Vi</h3>
+                    </div>
+                    <p>Xem lá số tử vi chi tiết với 12 cung</p>
+                    <div class="mystical-features">
+                        <span><i class="fas fa-check"></i> Bát tự ngày sinh</span>
+                        <span><i class="fas fa-check"></i> Ngũ hành mệnh</span>
+                        <span><i class="fas fa-check"></i> Cung phi tinh</span>
+                        <span><i class="fas fa-check"></i> Hướng tốt</span>
+                    </div>
+                </div>
+
+                <!-- Thần Số Học -->
+                <div class="mystical-card" data-mystical="numerology">
+                    <div class="mystical-header">
+                        <i class="fas fa-calculator-alt"></i>
+                        <h3>Thần Số Học</h3>
+                    </div>
+                    <p>Phân tích con số chủ đạo và vận mệnh</p>
+                    <div class="mystical-features">
+                        <span><i class="fas fa-check"></i> Số chủ đạo</span>
+                        <span><i class="fas fa-check"></i> Động lực bên trong</span>
+                        <span><i class="fas fa-check"></i> Năng lực tự nhiên</span>
+                        <span><i class="fas fa-check"></i> Nhân cách bên ngoài</span>
+                    </div>
+                </div>
+
+                <!-- Lịch Âm -->
+                <div class="mystical-card" data-mystical="lunar-calendar">
+                    <div class="mystical-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Lịch Vạn Niên</h3>
+                    </div>
+                    <p>Tra cứu âm dương lịch và ngày tốt xấu</p>
+                    <div class="mystical-features">
+                        <span><i class="fas fa-check"></i> Âm dương lịch</span>
+                        <span><i class="fas fa-check"></i> Can chi năm</span>
+                        <span><i class="fas fa-check"></i> Sao tốt xấu</span>
+                        <span><i class="fas fa-check"></i> Ngày hoàng đạo</span>
+                    </div>
+                </div>
+
+                <!-- Tuổi Xây Dựng -->
+                <div class="mystical-card" data-mystical="construction-age">
+                    <div class="mystical-header">
+                        <i class="fas fa-home"></i>
+                        <h3>Tuổi Xây Dựng</h3>
+                    </div>
+                    <p>Xem tuổi xây nhà và hướng nhà hợp phong thủy</p>
+                    <div class="mystical-features">
+                        <span><i class="fas fa-check"></i> Tuổi hợp xây</span>
+                        <span><i class="fas fa-check"></i> Hướng nhà</span>
+                        <span><i class="fas fa-check"></i> Màu sơn hợp</span>
+                        <span><i class="fas fa-check"></i> Ngày tốt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Utilities Section -->
+    <section class="utilities-section" id="utilities">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tiện ích thông tin</h2>
+                <p class="section-subtitle">Thông tin thời gian thực và hữu ích</p>
+            </div>
+
+            <div class="utilities-grid">
+                <!-- Gold Price -->
+                <div class="utility-card">
+                    <div class="utility-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="utility-title">Giá Vàng SJC</h3>
+                    <div class="utility-value" id="gold-price">
+                        <span class="loading-spinner"></span>
+                    </div>
+                    <p class="utility-unit">VNĐ/Lượng</p>
+                    <div class="utility-update">Cập nhật: <span id="gold-update">--:--</span></div>
+                </div>
+
+                <!-- USD Rate -->
+                <div class="utility-card">
+                    <div class="utility-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3 class="utility-title">Tỷ Giá USD</h3>
+                    <div class="utility-value" id="usd-rate">
+                        <span class="loading-spinner"></span>
+                    </div>
+                    <p class="utility-unit">VNĐ</p>
+                    <div class="utility-update">Nguồn: Vietcombank</div>
+                </div>
+
+                <!-- Weather -->
+                <div class="utility-card">
+                    <div class="utility-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3 class="utility-title">Thời Tiết</h3>
+                    <div class="utility-value" id="weather-temp">
+                        <span class="loading-spinner"></span>
+                    </div>
+                    <p class="utility-unit" id="weather-desc">Đang tải...</p>
+                    <div class="utility-update">Vị trí: Đà Nẵng</div>
+                </div>
+
+                <!-- Lunar Date -->
+                <div class="utility-card">
+                    <div class="utility-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <h3 class="utility-title">Âm Lịch Hôm Nay</h3>
+                    <div class="utility-value" id="lunar-date">
+                        <span class="loading-spinner"></span>
+                    </div>
+                    <p class="utility-unit" id="lunar-year">---</p>
+                    <div class="utility-update" id="lunar-holiday">Không có sự kiện</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2 class="section-title">Liên hệ & Hỗ trợ</h2>
+                    <p class="contact-desc">
+                        Tôi là <strong>Hồ Sỹ Trí</strong>, kỹ sư thiết kế hạ tầng giao thông 
+                        tại S-RETC. Đam mê phát triển các công cụ tự động hóa giúp tối ưu 
+                        quy trình làm việc.
+                    </p>
+                    <div class="contact-methods">
+                        <a href="mailto:trishteam.official@gmail.com" class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <div class="method-label">Email</div>
+                                <div class="method-value">trishteam.official@gmail.com</div>
+                            </div>
+                        </a>
+                        <a href="tel:0969580657" class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <div class="method-label">Điện thoại</div>
+                                <div class="method-value">0969 580 657</div>
+                            </div>
+                        </a>
+                        <a href="https://github.com/hosytri07" target="_blank" class="contact-method">
+                            <i class="fab fa-github"></i>
+                            <div>
+                                <div class="method-label">GitHub</div>
+                                <div class="method-value">@hosytri07</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="contact-name" required placeholder=" ">
+                            <label>Họ và tên</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="contact-email" required placeholder=" ">
+                            <label>Email</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="contact-message" required placeholder=" " rows="5"></textarea>
+                            <label>Nội dung tin nhắn</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-paper-plane"></i>
+                            Gửi tin nhắn
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
-        <div class="container footer__container">
-            <div class="footer__logo">Trish TEAM</div>
-            <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="brand-icon">✨</span>
+                    <span class="brand-text">Trish<strong>TEAM</strong></span>
+                </div>
+                <p class="footer-text">
+                    © 2026 Hồ Sỹ Trí. Phi thương mại • Mã nguồn mở
+                </p>
+                <div class="footer-social">
+                    <a href="https://github.com/hosytri07" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://zalo.me/0969580657" target="_blank" title="Zalo">
+                        <i class="fas fa-comments"></i>
+                    </a>
+                    <a href="https://m.me/hosytri07" target="_blank" title="Messenger">
+                        <i class="fab fa-facebook-messenger"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button class="fab" id="scroll-top" title="Về đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- Tool Modal -->
+    <div class="modal" id="tool-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modal-body">
+                <!-- Tool content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/lunar-javascript/lunar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
