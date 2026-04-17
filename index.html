@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ Sỹ Trí | Trish TEAM</title>
+    <title>Trish TEAM | Engineering & Vide-Coding</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header" id="header">
         <nav class="nav container">
             <a href="#" class="nav__logo">Trish <span>TEAM</span></a>
-
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="#home" class="nav__link active-link">Trang chủ</a></li>
-                    <li class="nav__item"><a href="#about" class="nav__link">Giới thiệu</a></li>
-                    <li class="nav__item"><a href="#skills" class="nav__link">Kỹ năng</a></li>
-                    <li class="nav__item"><a href="#portfolio" class="nav__link">Sản phẩm</a></li>
+                    <li class="nav__item"><a href="#products" class="nav__link">Sản phẩm</a></li>
+                    <li class="nav__item"><a href="#webapp" class="nav__link">Web App</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">Tác giả</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Liên hệ</a></li>
                 </ul>
-                <div class="nav__close" id="nav-close"><i class="fas fa-times"></i></div>
+                <i class="fas fa-times nav__close" id="nav-close"></i>
             </div>
-
             <div class="nav__btns">
                 <i class="fas fa-moon change-theme" id="theme-button"></i>
-                <div class="nav__toggle" id="nav-toggle"><i class="fas fa-th-large"></i></div>
+                <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
     </header>
@@ -34,181 +32,162 @@
     <main class="main">
         <section class="home section" id="home">
             <div class="home__container container grid">
-                <div class="home__content grid">
-                    <div class="home__social">
-                        <a href="https://fb.com/hosytri07" target="_blank" class="home__social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://github.com/hosytri07" target="_blank" class="home__social-icon"><i class="fab fa-github"></i></a>
-                        <a href="#" class="home__social-icon"><i class="fab fa-telegram-plane"></i></a>
+                <div class="home__data">
+                    <h1 class="home__title">Tối ưu hóa quy trình với <br><span>Vide-Coding</span></h1>
+                    <p class="home__description">Hệ sinh thái phần mềm, Plugin và Web-app hỗ trợ kỹ sư khảo sát và thiết kế hạ tầng giao thông. Hoàn toàn phi thương mại.</p>
+                    <div class="home__btns">
+                        <a href="#products" class="button">Khám phá Phần mềm</a>
+                        <a href="#webapp" class="button button--ghost">Thử Web-App ngay &rarr;</a>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="home__data">
-                        <h1 class="home__title">Hồ Sỹ Trí <span class="home__year">(1995)</span></h1>
-                        <h3 class="home__subtitle">Transportation Design Engineer & Developer</h3>
-                        <p class="home__description">
-                            Chuyên gia về khảo sát, thiết kế hạ tầng cầu đường tại S-RETC. 
-                            Đam mê lập trình và tự động hóa quy trình kỹ thuật với phương châm "Vide-Coding".
+        <section class="products section" id="products">
+            <div class="container">
+                <h2 class="section__title">Phần mềm đã ra mắt</h2>
+                <div class="product__slider">
+                    <div class="product__card">
+                        <div class="product__img-box">
+                            <span class="product__tag">Desktop App</span>
+                            <img src="https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=600&q=80" alt="Trish Library" class="product__img">
+                        </div>
+                        <div class="product__info">
+                            <h3>Trish Library 1.0</h3>
+                            <p>Quản lý tiêu chuẩn, bản vẽ, tự động sinh mã QR từ link Cloud.</p>
+                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải (Windows)</a>
+                        </div>
+                    </div>
+                    
+                    <div class="product__card">
+                        <div class="product__img-box">
+                            <span class="product__tag">CAD Plugin</span>
+                            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" alt="AutoCAD Plugin" class="product__img">
+                        </div>
+                        <div class="product__info">
+                            <h3>Trish Volume Tools</h3>
+                            <p>Tính toán sạt lở, xuất khối lượng đào đắp trên nền AutoCAD.</p>
+                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải Module</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section__title section__title-margin">Sắp ra mắt (WIP)</h2>
+                <div class="product__slider">
+                    <div class="product__card wip-card">
+                        <div class="product__img-box">
+                            <span class="product__tag tag--wip">Đang phát triển</span>
+                            <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=600&q=80" alt="WIP" class="product__img">
+                        </div>
+                        <div class="product__info">
+                            <h3>Trish Cross-Section Auto</h3>
+                            <p>Tự động thiết kế trắc ngang đường từ tệp số liệu .ntd / .tdtn.</p>
+                        </div>
+                    </div>
+                    <div class="product__card wip-card">
+                        <div class="product__img-box">
+                            <span class="product__tag tag--wip">Đang phát triển</span>
+                            <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=600&q=80" alt="WIP" class="product__img">
+                        </div>
+                        <div class="product__info">
+                            <h3>Trish GIS Survey</h3>
+                            <p>Ứng dụng quản lý tọa độ mốc, xem bình đồ tuyến trên điện thoại.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="webapp section" id="webapp">
+            <div class="container">
+                <div class="webapp__container grid">
+                    <div class="webapp__data">
+                        <h2 class="section__title" style="text-align: left;">Trish Web Workspace</h2>
+                        <p class="webapp__description">
+                            Không cần cài đặt Desktop App? Sử dụng trực tiếp công cụ tạo QR Code và chuyển đổi Link Google Drive ngay trên trình duyệt điện thoại hoặc máy tính của bạn.
                         </p>
-                        <a href="#contact" class="button button--flex">Liên hệ ngay <i class="fas fa-paper-plane button__icon"></i></a>
+                        <ul class="webapp__features">
+                            <li><i class="fas fa-check"></i> Chuyển đổi Drive URL sang Direct Link</li>
+                            <li><i class="fas fa-check"></i> Sinh mã QR tải tốc độ cao</li>
+                            <li><i class="fas fa-check"></i> Đồng bộ với hệ thống Trish Library</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="about section" id="about">
-            <h2 class="section__title">Về tôi</h2>
-            <span class="section__subtitle">Giới thiệu ngắn gọn</span>
-
-            <div class="about__container container grid">
-                <div class="about__data">
-                    <p class="about__description">
-                        Là một kỹ sư thiết kế hạ tầng giao thông thực chiến, tôi hiểu rõ những khó khăn trong việc xử lý khối lượng dữ liệu khổng lồ, quản lý bản vẽ và tính toán trắc ngang, sạt lở. <br><br>
-                        <strong>Trish TEAM</strong> được lập ra để cung cấp các giải pháp phần mềm, Plugin và Web-app phi thương mại, giúp anh em kỹ sư rút ngắn thời gian làm việc và tối ưu hóa quy trình.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section class="skills section" id="skills">
-            <h2 class="section__title">Kỹ năng cốt lõi</h2>
-            <span class="section__subtitle">Công nghệ & Chuyên môn</span>
-
-            <div class="skills__container container grid">
-                <div class="skills__content">
-                    <div class="skills__header">
-                        <i class="fas fa-road skills__icon"></i>
-                        <div>
-                            <h1 class="skills__title">Kỹ thuật Hạ tầng</h1>
-                            <span class="skills__subtitle">S-RETC</span>
+                    
+                    <div class="webapp__dashboard">
+                        <div class="dashboard__header">
+                            <i class="fas fa-qrcode"></i> <span>Cloud QR Generator</span>
                         </div>
-                    </div>
-                    <div class="skills__list grid">
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">Khảo sát & Thiết kế cầu đường</h3>
-                            </div>
-                        </div>
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">AutoCAD / Civil 3D / Revit / BIM</h3>
-                            </div>
-                        </div>
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">Tính toán khối lượng & Sạt lở</h3>
+                        <div class="dashboard__body">
+                            <input type="text" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
+                            <button class="button dashboard__btn"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
+                            <div class="dashboard__result">
+                                <i class="fas fa-cloud-upload-alt placeholder-icon"></i>
+                                <p>Kết quả sẽ hiển thị ở đây</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="skills__content">
-                    <div class="skills__header">
-                        <i class="fas fa-code skills__icon"></i>
-                        <div>
-                            <h1 class="skills__title">Lập trình & Phần mềm</h1>
-                            <span class="skills__subtitle">Vide-Coding</span>
-                        </div>
-                    </div>
-                    <div class="skills__list grid">
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">Python (PyQt6 / Data Processing)</h3>
-                            </div>
-                        </div>
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">AutoLISP & Plugin Development</h3>
-                            </div>
-                        </div>
-                        <div class="skills__data">
-                            <div class="skills__titles">
-                                <h3 class="skills__name">Web App (Vercel / Firebase)</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="portfolio section" id="portfolio">
-            <h2 class="section__title">Sản phẩm tiêu biểu</h2>
-            <span class="section__subtitle">Các dự án đã hoàn thiện</span>
-
-            <div class="portfolio__container container grid">
-                
-                <div class="portfolio__card">
-                    <div class="portfolio__img-wrapper">
-                        <div class="portfolio__tag">Desktop App</div>
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Trish Library" class="portfolio__img">
-                    </div>
-                    <div class="portfolio__data">
-                        <h3 class="portfolio__title">Trish Library 1.0</h3>
-                        <p class="portfolio__description">Hệ thống quản lý tiêu chuẩn và bản vẽ chuyên dụng. Hỗ trợ đa thư viện (Workspace), tạo mã QR trực tiếp từ link Cloud và xuất báo cáo dữ liệu trực quan.</p>
-                        <a href="#" class="button button--small portfolio__button">
-                            Tải về (Windows) <i class="fas fa-arrow-right button__icon"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="portfolio__card">
-                    <div class="portfolio__img-wrapper">
-                        <div class="portfolio__tag">CAD Plugin</div>
-                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="AutoCAD Plugin" class="portfolio__img">
-                    </div>
-                    <div class="portfolio__data">
-                        <h3 class="portfolio__title">Trish Volume Calculator</h3>
-                        <p class="portfolio__description">Module Toolkit tích hợp trực tiếp vào AutoCAD giúp tự động hóa việc tính toán khối lượng sạt lở nền đường và xuất dữ liệu trắc ngang cực nhanh.</p>
-                        <a href="#" class="button button--small portfolio__button">
-                            Xem chi tiết <i class="fas fa-arrow-right button__icon"></i>
-                        </a>
-                    </div>
-                </div>
-
             </div>
         </section>
 
         <section class="contact section" id="contact">
-            <h2 class="section__title">Liên hệ</h2>
-            <span class="section__subtitle">Kết nối với Trish TEAM</span>
-
-            <div class="contact__container container grid">
-                <div>
-                    <div class="contact__information">
-                        <i class="fas fa-phone-alt contact__icon"></i>
-                        <div>
-                            <h3 class="contact__title">Điện thoại / Zalo / Telegram</h3>
-                            <span class="contact__subtitle">0969 580 657</span>
+            <div class="container grid contact__grid">
+                <div class="about__data" id="about">
+                    <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span>(1995)</span></h2>
+                    <p class="contact__description">Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Đam mê xây dựng các công cụ tối ưu hóa công việc cho cộng đồng kỹ sư.</p>
+                    
+                    <div class="contact__info">
+                        <div class="contact__card">
+                            <i class="fas fa-envelope contact__card-icon"></i>
+                            <h3 class="contact__card-title">Email</h3>
+                            <span class="contact__card-data">trishteam.official@gmail.com</span>
+                        </div>
+                        <div class="contact__card">
+                            <i class="fab fa-telegram contact__card-icon"></i>
+                            <h3 class="contact__card-title">Zalo / Telegram</h3>
+                            <span class="contact__card-data">0969 580 657</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="contact__information">
-                        <i class="fab fa-facebook-messenger contact__icon"></i>
-                        <div>
-                            <h3 class="contact__title">Facebook</h3>
-                            <span class="contact__subtitle">fb.com/hosytri07</span>
+                <div class="contact__form-wrapper">
+                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi phản hồi / Góp ý</h2>
+                    <form action="https://formsubmit.co/trishteam.official@gmail.com" method="POST" class="contact__form">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_next" value="https://trishteam.vercel.app">
+                        
+                        <div class="contact__inputs">
+                            <div class="contact__content">
+                                <label class="contact__label">Hên / Biệt danh</label>
+                                <input type="text" name="Name" required class="contact__input" placeholder="Nhập tên của bạn">
+                            </div>
+                            <div class="contact__content">
+                                <label class="contact__label">Email liên hệ</label>
+                                <input type="email" name="Email" required class="contact__input" placeholder="Nhập email của bạn">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="contact__information">
-                        <i class="fas fa-map-marker-alt contact__icon"></i>
-                        <div>
-                            <h3 class="contact__title">Đơn vị công tác</h3>
-                            <span class="contact__subtitle">S-RETC</span>
+                        <div class="contact__content">
+                            <label class="contact__label">Bạn muốn góp ý về tính năng gì?</label>
+                            <textarea name="Message" required cols="0" rows="5" class="contact__input" placeholder="Hãy viết ý tưởng hoặc báo lỗi phần mềm..."></textarea>
                         </div>
-                    </div>
+                        <button type="submit" class="button">Gửi đi <i class="fas fa-paper-plane button__icon"></i></button>
+                    </form>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <div class="footer__bg">
-            <div class="footer__container container grid">
-                <div>
-                    <h1 class="footer__title">Trish TEAM</h1>
-                    <span class="footer__subtitle">Vide-Coding for Engineers</span>
+        <div class="container footer__container">
+            <div class="footer__content">
+                <a href="#" class="footer__logo">Trish TEAM</a>
+                <p class="footer__description">Sản phẩm Vide-Coding phi thương mại.<br>Vui lòng không sử dụng cho mục đích kiếm tiền.</p>
+                <div class="footer__socials">
+                    <a href="https://fb.com/hosytri07" class="footer__social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/hosytri07" class="footer__social"><i class="fab fa-github"></i></a>
                 </div>
-                <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
             </div>
+            <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
         </div>
     </footer>
 
