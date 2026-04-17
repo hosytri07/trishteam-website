@@ -6,6 +6,7 @@
     <title>Trish TEAM | Engineering & Vide-Coding</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -111,8 +112,14 @@
                             <i class="fas fa-qrcode"></i> <span>Cloud QR Generator</span>
                         </div>
                         <div class="dashboard__body">
-                            <input type="text" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
-                            <button class="button dashboard__btn" onclick="triggerToast('Tính năng Web-App đang được hoàn thiện!')"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
+                            <input type="text" id="webapp-link-input" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
+                            <button class="button dashboard__btn" id="webapp-generate-btn"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
+                            
+                            <div id="webapp-result" style="display: none; margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1.5rem;">
+                                <div id="qrcode-container" style="display: flex; justify-content: center; background: white; padding: 15px; border-radius: 10px; width: max-content; margin: 0 auto 1rem;"></div>
+                                <input type="text" id="webapp-direct-link" class="dashboard__input" readonly style="margin-bottom: 0.5rem; font-size: 0.85rem;">
+                                <button class="button button--small button--ghost" id="webapp-copy-btn" style="width: 100%; justify-content: center;"><i class="fas fa-copy"></i> Copy Link Direct</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,6 +161,10 @@
                             </div>
                         </div>
                         <div class="contact__content">
+                            <label class="contact__label">Đính kèm ảnh lỗi (Tùy chọn)</label>
+                            <input type="file" id="sender-image" accept="image/*" class="contact__input" style="padding: 0.8rem;">
+                        </div>
+                        <div class="contact__content">
                             <label class="contact__label">Nội dung</label>
                             <textarea id="sender-message" required cols="0" rows="4" class="contact__input" placeholder="Viết báo lỗi hoặc tính năng mong muốn..."></textarea>
                         </div>
@@ -161,7 +172,6 @@
                             <span>Gửi phản hồi</span> <i class="fas fa-paper-plane button__icon"></i>
                         </button>
                     </form>
-
                 </div>
             </div>
         </section>
