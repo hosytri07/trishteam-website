@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trish TEAM | Engineering & Vide-Coding</title>
+    <title>Trish TEAM | Engineering Workspace</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/lunar-javascript/lunar.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="toast-notification" class="toast">
-        <div class="toast__icon"><i class="fas fa-info-circle"></i></div>
+        <div class="toast__icon"><i class="fas fa-check-circle"></i></div>
         <div class="toast__content">
             <h4 class="toast__title">Thông báo</h4>
             <p class="toast__desc">Nội dung thông báo ở đây.</p>
@@ -28,14 +26,12 @@
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="#home" class="nav__link active-link">Trang chủ</a></li>
-                    <li class="nav__item"><a href="#products" class="nav__link">Sản phẩm</a></li>
-                    <li class="nav__item"><a href="#webapp" class="nav__link">Công cụ Web</a></li>
+                    <li class="nav__item"><a href="#workspace" class="nav__link">Workspace</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Liên hệ</a></li>
                 </ul>
                 <i class="fas fa-times nav__close" id="nav-close"></i>
             </div>
             <div class="nav__btns">
-                <i class="fas fa-moon change-theme" id="theme-button"></i>
                 <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
@@ -46,193 +42,176 @@
             <div class="home__container container grid">
                 <div class="home__data">
                     <h1 class="home__title">Tối ưu hóa quy trình với <br><span>Vide-Coding</span></h1>
-                    <p class="home__description">Hệ sinh thái phần mềm, Plugin và Web-app hỗ trợ kỹ sư khảo sát và thiết kế hạ tầng giao thông. Hoàn toàn phi thương mại.</p>
+                    <p class="home__description">Hệ sinh thái công cụ hỗ trợ kỹ sư khảo sát và thiết kế hạ tầng giao thông. Hoàn toàn phi thương mại.</p>
                     <div class="home__btns">
-                        <a href="#products" class="button">Khám phá Phần mềm</a>
-                        <a href="#webapp" class="button button--ghost">Sử dụng Công cụ Web</a>
+                        <a href="#workspace" class="button">Mở Workspace</a>
+                        <a href="https://github.com/hosytri07" target="_blank" class="button button--ghost"><i class="fab fa-github"></i> Xem GitHub</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="products section" id="products">
+        <section class="workspace section" id="workspace">
             <div class="container">
-                <h2 class="section__title">Phần mềm đã ra mắt</h2>
-                <div class="product__slider">
-                    <div class="product__card">
-                        <div class="product__img-box">
-                            <span class="product__tag">Desktop App</span>
-                            <img src="https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=600&q=80" alt="Trish Library" class="product__img">
-                        </div>
-                        <div class="product__info">
-                            <h3>Trish Library 1.0</h3>
-                            <p>Quản lý tiêu chuẩn, bản vẽ, tự động sinh mã QR từ link Cloud.</p>
-                            <a href="#" class="button button--small" onclick="triggerToast('Đang chuẩn bị link tải xuống Trish Library 1.0...')"><i class="fas fa-download"></i> Tải Setup (.exe)</a>
-                        </div>
-                    </div>
-                    <div class="product__card">
-                        <div class="product__img-box">
-                            <span class="product__tag">CAD Plugin</span>
-                            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" alt="AutoCAD Plugin" class="product__img">
-                        </div>
-                        <div class="product__info">
-                            <h3>Trish Volume Tools</h3>
-                            <p>Tính toán sạt lở, xuất khối lượng đào đắp trên nền AutoCAD.</p>
-                            <a href="#" class="button button--small"><i class="fas fa-download"></i> Tải Module (.lsp)</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="webapp section" id="webapp">
-            <div class="container">
-                <div class="webapp__data" style="margin-bottom: 2.5rem;">
-                    <h2 class="section__title" style="text-align: left;">Trish Web Workspace</h2>
-                    <p class="webapp__description">Bảng điều khiển siêu tiện ích. Cung cấp các công cụ kỹ thuật và tra cứu đời sống hàng ngày.</p>
-                </div>
+                <h2 class="section__title">Trish Web Workspace</h2>
+                <p class="section__subtitle">Trung tâm công cụ trực tuyến. Tốc độ, mượt mà và không cần cài đặt.</p>
                 
-                <div class="webapp__grid">
+                <div class="workspace__container">
                     
-                    <div class="webapp__dashboard tool-qr">
-                        <div class="dashboard__header"><i class="fas fa-qrcode"></i> <span>Cloud QR & Direct Link</span></div>
-                        <div class="dashboard__body">
-                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <input type="text" id="webapp-link-input" placeholder="Dán link Drive..." class="dashboard__input" style="flex: 1; margin: 0;">
-                                <button class="button button--small button--ghost" id="webapp-paste-btn" title="Dán từ bộ nhớ tạm"><i class="fas fa-paste"></i></button>
+                    <div class="split-layout">
+                        <div class="split-text">
+                            <h3>Cloud QR Generator</h3>
+                            <p>Tạo mã QR và Link tải trực tiếp từ Google Drive. Phục vụ đính kèm bản vẽ và hồ sơ khảo sát hiện trường một cách nhanh chóng.</p>
+                        </div>
+                        <div class="split-tool widget-card">
+                            <div class="widget-header">
+                                <i class="fas fa-qrcode"></i> Công cụ QR & Direct Link
                             </div>
-                            <button class="button dashboard__btn" id="webapp-generate-btn"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
-                            
-                            <div id="webapp-result" style="display: none; margin-top: 1rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem;">
-                                <div id="qrcode-container" style="display: flex; justify-content: center; background: white; padding: 15px; border-radius: 10px; width: max-content; margin: 0 auto 1rem; border: 1px solid #eee;"></div>
-                                <input type="text" id="webapp-direct-link" class="dashboard__input" readonly style="margin-bottom: 1rem; font-size: 0.85rem; text-align: center;">
-                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
-                                    <button class="button button--small button--ghost" id="webapp-copy-btn" style="flex: 1; justify-content: center;"><i class="fas fa-copy"></i> Copy</button>
-                                    <button class="button button--small" id="webapp-download-qr-btn" style="flex: 1; justify-content: center; background-color: #2E7D32;"><i class="fas fa-download"></i> Tải QR</button>
+                            <div class="widget-body">
+                                <div class="input-group">
+                                    <input type="text" id="webapp-link-input" class="form-input" placeholder="Dán link Google Drive vào đây...">
+                                    <button class="btn-icon" id="webapp-paste-btn" title="Dán"><i class="fas fa-paste"></i></button>
                                 </div>
-                                <button class="button button--small" id="webapp-zalo-btn" style="width: 100%; justify-content: center; background-color: #0068FF;"><i class="fas fa-share"></i> Gửi Zalo</button>
+                                <button class="btn-primary" id="webapp-generate-btn" style="width: 100%; margin-top: 10px;"><i class="fas fa-bolt"></i> Tạo Link & QR</button>
+                                
+                                <div id="webapp-result" class="result-box">
+                                    <div id="qrcode-container" class="qr-wrapper"></div>
+                                    <input type="text" id="webapp-direct-link" class="form-input text-center" readonly>
+                                    <div class="action-row">
+                                        <button class="btn-secondary" id="webapp-copy-btn"><i class="fas fa-copy"></i> Copy Link</button>
+                                        <button class="btn-secondary" id="webapp-download-qr-btn"><i class="fas fa-download"></i> Tải Ảnh</button>
+                                    </div>
+                                    <button class="btn-primary btn-zalo" id="webapp-zalo-btn"><i class="fas fa-share"></i> Chia sẻ qua Zalo</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="webapp__dashboard tool-editor">
-                        <div class="dashboard__header" style="background-color: #6A1B9A;"><i class="fas fa-code"></i> <span>Trish CodePad (Workspace)</span></div>
-                        <div class="dashboard__body" style="display: flex; flex-direction: column;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <select id="editor-template" class="dashboard__input" style="width: auto; flex: 1; cursor: pointer; padding: 0.5rem; margin-right: 0.5rem;">
-                                    <option value="">-- Mở AutoLISP Mẫu --</option>
-                                    <option value="tkl">LISP: Tính khối lượng (TKL)</option>
-                                    <option value="cd">LISP: Cắt chân Dim (CD)</option>
+                    <div class="split-layout reverse">
+                        <div class="split-text">
+                            <h3>Bát Tự & Phong Thủy</h3>
+                            <p>Không còn "Tiếng Trung" hay "Undefined". Thuật toán toán học chuẩn xác giúp bạn lấy lá số, ngũ hành bản mệnh, con số chủ đạo và hướng tốt làm việc.</p>
+                        </div>
+                        <div class="split-tool widget-card">
+                            <div class="widget-header">
+                                <i class="fas fa-yin-yang"></i> Phân tích Bản Mệnh
+                            </div>
+                            <div class="widget-body">
+                                <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 10px;">
+                                    <input type="number" id="tv-day" class="form-input" placeholder="Ngày">
+                                    <input type="number" id="tv-month" class="form-input" placeholder="Tháng">
+                                    <input type="number" id="tv-year" class="form-input" placeholder="Năm (VD: 1995)">
+                                </div>
+                                <select id="tv-gender" class="form-input" style="margin-top: 10px; width: 100%;">
+                                    <option value="1">Nam Mạng</option>
+                                    <option value="0">Nữ Mạng</option>
                                 </select>
-                                <div style="display: flex; gap: 0.5rem;">
-                                    <button class="button button--small button--ghost" id="editor-copy-btn" title="Copy"><i class="fas fa-copy"></i></button>
-                                    <button class="button button--small" id="editor-download-btn" style="background-color: #6A1B9A;" title="Tải File"><i class="fas fa-file-download"></i></button>
-                                    <button class="button button--small button--ghost" id="editor-clear-btn" style="color: #d32f2f; border-color: #d32f2f;" title="Xóa trắng"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <textarea id="code-editor-area" spellcheck="false" placeholder="Soạn thảo Code, Text... Hỗ trợ phím Tab thụt lề chuẩn."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="webapp__dashboard tool-calendar">
-                        <div class="dashboard__header" style="background-color: #00838F;"><i class="far fa-calendar-alt"></i> <span>Lịch Âm & Lễ Hội</span></div>
-                        <div class="dashboard__body" style="text-align: center;">
-                            <div class="calendar-display">
-                                <div id="cal-solar" class="cal-solar">--/--/----</div>
-                                <div id="cal-lunar" class="cal-lunar">Âm lịch: --/--</div>
-                                <div id="cal-canchi" class="cal-canchi">Năm...</div>
-                            </div>
-                            <div class="holiday-countdown">
-                                <p style="font-size: 0.85rem; color: var(--text-color); margin-bottom: 0.5rem;">Sự kiện sắp tới:</p>
-                                <div id="holiday-name" style="font-weight: bold; font-size: 1.1rem; color: #00838F;">Đang tải...</div>
-                                <div style="font-size: 2rem; font-weight: 700; color: #d32f2f; margin: 0.5rem 0;" id="holiday-days">--</div>
-                                <p style="font-size: 0.85rem; font-weight: 600;">Ngày nữa</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="webapp__dashboard tool-tuvi">
-                        <div class="dashboard__header" style="background-color: #E65100;"><i class="fas fa-yin-yang"></i> <span>Thần Số Học & Tử Vi</span></div>
-                        <div class="dashboard__body">
-                            <div class="tuvi-inputs" style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <input type="number" id="tv-day" placeholder="Ngày" class="dashboard__input" min="1" max="31">
-                                <input type="number" id="tv-month" placeholder="Tháng" class="dashboard__input" min="1" max="12">
-                                <input type="number" id="tv-year" placeholder="Năm" class="dashboard__input" min="1900" max="2100">
-                            </div>
-                            <select id="tv-gender" class="dashboard__input" style="margin-bottom: 0.5rem;">
-                                <option value="1">Nam Mạng</option>
-                                <option value="0">Nữ Mạng</option>
-                            </select>
-                            <button class="button dashboard__btn" id="tv-calc-btn" style="background-color: #E65100;"><i class="fas fa-search"></i> Phân tích Bản Mệnh</button>
-                            
-                            <div id="tv-result" style="display: none; margin-top: 1rem;">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                    <div class="info-box">Số chủ đạo<br><strong id="tv-res-numerology" style="font-size:1.5rem; color:#E65100;">...</strong></div>
-                                    <div class="info-box">Cung Hoàng Đạo<br><strong id="tv-res-zodiac" style="color:#E65100;">...</strong></div>
-                                </div>
-                                <div class="info-box" style="text-align: left; padding: 1rem;">
-                                    <p>☯️ <b>Bát Tự:</b> <span id="tv-res-canchi">...</span></p>
-                                    <p>🔥 <b>Mệnh:</b> <span id="tv-res-menh">...</span></p>
-                                    <p>🧭 <b>Cung Phi:</b> <span id="tv-res-cung">...</span> (Hướng tốt: <span id="tv-res-huong">...</span>)</p>
-                                    <p>🎨 <b>Màu hợp:</b> <span id="tv-res-color">...</span></p>
+                                <button class="btn-primary" id="tv-calc-btn" style="width: 100%; margin-top: 10px;"><i class="fas fa-search"></i> Lập Bảng Phân Tích</button>
+                                
+                                <div id="tv-result" class="result-box">
+                                    <div class="tuvi-grid">
+                                        <div class="tuvi-item">Số chủ đạo<br><strong id="tv-res-numerology">...</strong></div>
+                                        <div class="tuvi-item">Cung Hoàng Đạo<br><strong id="tv-res-zodiac">...</strong></div>
+                                    </div>
+                                    <div class="tuvi-details">
+                                        <p>☯️ <b>Bát Tự:</b> <span id="tv-res-canchi">...</span></p>
+                                        <p>🔥 <b>Mệnh:</b> <span id="tv-res-menh">...</span></p>
+                                        <p>🧭 <b>Cung Phi:</b> <span id="tv-res-cung">...</span></p>
+                                        <p>✨ <b>Hướng tốt:</b> <span id="tv-res-huong">...</span></p>
+                                        <p>🎨 <b>Màu hợp:</b> <span id="tv-res-color">...</span></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="webapp__dashboard tool-market">
-                        <div class="dashboard__header" style="background-color: #F57F17;"><i class="fas fa-chart-line"></i> <span>Thị trường: Vàng & Xăng</span></div>
-                        <div class="dashboard__body" style="padding: 0;">
-                            <div class="market-container">
-                                <div class="market-item">
-                                    <div class="market-title"><i class="fas fa-coins" style="color:#FFD700;"></i> SJC 1 Lượng (Bán ra)</div>
-                                    <div class="market-price" id="market-gold">--,---,--- ₫</div>
-                                    <div class="market-trend up"><i class="fas fa-caret-up"></i> Cập nhật hôm nay</div>
+                    <div class="split-layout">
+                        <div class="split-text">
+                            <h3>Bảng Điện Tử Real-time</h3>
+                            <p>Sử dụng API thực tế cập nhật Giá Vàng SJC và Tỷ giá Ngoại tệ Vietcombank ngay trên trình duyệt. Tích hợp Lịch Âm Dương vạn niên.</p>
+                        </div>
+                        <div class="split-tool widget-card">
+                            <div class="widget-header">
+                                <i class="fas fa-chart-line"></i> Thị Trường & Lịch Vạn Niên
+                            </div>
+                            <div class="widget-body p-0">
+                                <div class="calendar-block">
+                                    <div class="cal-solar" id="cal-solar">--/--/----</div>
+                                    <div class="cal-lunar" id="cal-lunar">Âm lịch: Đang tính...</div>
+                                    <div class="cal-event" id="holiday-info">Sự kiện: Đang tải...</div>
                                 </div>
-                                <div class="market-item">
-                                    <div class="market-title"><i class="fas fa-gas-pump" style="color:#D32F2F;"></i> RON 95-III (Petrolimex)</div>
-                                    <div class="market-price" id="market-gas">--,--- ₫</div>
-                                    <div class="market-trend down"><i class="fas fa-caret-down"></i> Cập nhật hôm nay</div>
+                                <div class="market-block">
+                                    <div class="market-item">
+                                        <div class="m-title"><i class="fas fa-coins" style="color: #fbbf24;"></i> Vàng SJC (Hồ Chí Minh)</div>
+                                        <div class="m-price" id="market-gold"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>
+                                        <div class="m-desc">Bán ra (Nguồn: sjc.com.vn)</div>
+                                    </div>
+                                    <div class="market-item">
+                                        <div class="m-title"><i class="fas fa-dollar-sign" style="color: #34d399;"></i> Tỷ giá USD (Vietcombank)</div>
+                                        <div class="m-price" id="market-usd"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>
+                                        <div class="m-desc">Bán ra (Nguồn: VCB)</div>
+                                    </div>
                                 </div>
-                                <p style="padding: 0.5rem 1rem; font-size: 0.75rem; color: var(--text-color-light); font-style: italic;">*Dữ liệu mang tính chất tham khảo mô phỏng.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="webapp__dashboard tool-news">
-                        <div class="dashboard__header" style="background-color: #2E7D32;"><i class="far fa-newspaper"></i> <span>Tin Công Nghệ 24/7</span></div>
-                        <div class="dashboard__body" style="padding: 0;">
-                            <div id="news-container" class="news-list">
-                                <div style="padding: 2rem; text-align: center; color: var(--text-color);"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Đang tải dữ liệu tự động...</div>
+                    <div class="split-layout reverse">
+                        <div class="split-text">
+                            <h3>Trish CodePad Vault</h3>
+                            <p>Môi trường soạn thảo giả lập VS Code. Tích hợp sẵn các mã lệnh AutoLISP hỗ trợ thiết kế giao thông. Tính năng Syntax Highlighting chuyên nghiệp.</p>
+                        </div>
+                        <div class="split-tool widget-card" style="max-width: 100%;">
+                            <div class="widget-header">
+                                <i class="fas fa-code"></i> AutoLISP Vault
+                            </div>
+                            <div class="widget-body">
+                                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                    <select id="editor-template" class="form-input" style="flex: 1; cursor: pointer;">
+                                        <option value="">-- Mở AutoLISP Mẫu --</option>
+                                        <option value="tkl">Lệnh TKL: Tính khối lượng tổng</option>
+                                        <option value="cd">Lệnh CD: Cắt chân Dim chuẩn</option>
+                                        <option value="ntext">Lệnh NTEXT: Nối Text nhanh</option>
+                                    </select>
+                                    <button class="btn-secondary" id="editor-copy-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                                    <button class="btn-secondary" id="editor-download-btn" title="Lưu File"><i class="fas fa-download"></i></button>
+                                </div>
+                                <textarea id="code-editor-area" spellcheck="false" placeholder="// Bắt đầu viết mã AutoLISP hoặc dán văn bản vào đây..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                </div> </div>
+                </div>
+            </div>
         </section>
 
         <section class="contact section" id="contact">
-            <div class="container grid contact__grid">
-                <div class="about__data" id="about">
-                    <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span>(1995)</span></h2>
-                    <p class="contact__description">Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Gặp vấn đề khi cài đặt phần mềm? Hãy liên hệ hoặc chat trực tiếp với tôi.</p>
-                    <div class="contact__info">
-                        <div class="contact__card"><i class="fas fa-envelope contact__card-icon"></i><h3 class="contact__card-title">Email</h3><span class="contact__card-data">trishteam.official@gmail.com</span></div>
-                        <div class="contact__card"><i class="fab fa-telegram contact__card-icon"></i><h3 class="contact__card-title">Zalo / Telegram</h3><span class="contact__card-data">0969 580 657</span></div>
+            <div class="container">
+                <div class="split-layout">
+                    <div class="split-text">
+                        <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span style="color:var(--accent-color); font-size:1rem;">(1995)</span></h2>
+                        <p>Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Đam mê phát triển công cụ tự động hóa. Hãy gửi phản hồi hoặc báo lỗi trực tiếp cho tôi.</p>
+                        <ul class="contact-list">
+                            <li><i class="fas fa-envelope"></i> trishteam.official@gmail.com</li>
+                            <li><i class="fas fa-phone-alt"></i> 0969 580 657 (Zalo/Telegram)</li>
+                        </ul>
                     </div>
-                </div>
-
-                <div class="contact__form-wrapper">
-                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi Phản hồi trực tiếp</h2>
-                    <form id="telegram-form" class="contact__form">
-                        <div class="contact__inputs">
-                            <div class="contact__content"><label class="contact__label">Tên của bạn</label><input type="text" id="sender-name" required class="contact__input" placeholder="Nhập tên"></div>
-                            <div class="contact__content"><label class="contact__label">Email liên hệ</label><input type="email" id="sender-email" required class="contact__input" placeholder="Nhập email"></div>
+                    <div class="split-tool widget-card">
+                        <div class="widget-header"><i class="fas fa-paper-plane"></i> Gửi Phản Hồi Trực Tiếp</div>
+                        <div class="widget-body">
+                            <form id="telegram-form" class="contact-form">
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                    <input type="text" id="sender-name" required class="form-input" placeholder="Tên của bạn">
+                                    <input type="email" id="sender-email" required class="form-input" placeholder="Email liên hệ">
+                                </div>
+                                <input type="file" id="sender-image" accept="image/*" class="form-input" style="margin-bottom: 15px; padding: 10px;">
+                                <textarea id="sender-message" required rows="4" class="form-input" placeholder="Nội dung cần hỗ trợ..." style="margin-bottom: 15px;"></textarea>
+                                <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%;">
+                                    <span>Gửi Tới Tác Giả</span> <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>
+                                </button>
+                            </form>
                         </div>
-                        <div class="contact__content"><label class="contact__label">Đính kèm ảnh lỗi (Tùy chọn)</label><input type="file" id="sender-image" accept="image/*" class="contact__input" style="padding: 0.8rem; cursor: pointer;"></div>
-                        <div class="contact__content"><label class="contact__label">Nội dung</label><textarea id="sender-message" required cols="0" rows="4" class="contact__input" placeholder="Viết báo lỗi hoặc tính năng mong muốn..."></textarea></div>
-                        <button type="submit" id="submit-btn" class="button"><span>Gửi phản hồi</span> <i class="fas fa-paper-plane button__icon"></i></button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -240,18 +219,15 @@
 
     <div class="floating-chat-container">
         <div class="chat-options" id="chat-options">
-            <a href="https://zalo.me/0969580657" target="_blank" class="chat-item zalo" title="Chat qua Zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" alt="Zalo"><span>Zalo</span></a>
-            <a href="https://m.me/hosytri07" target="_blank" class="chat-item messenger" title="Chat qua Messenger"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></a>
+            <a href="https://zalo.me/0969580657" target="_blank" class="chat-item zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" alt="Zalo"><span>Zalo</span></a>
+            <a href="https://m.me/hosytri07" target="_blank" class="chat-item messenger"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></a>
         </div>
         <button class="chat-btn" id="chat-btn" title="Chat với Tác giả"><i class="fas fa-comments chat-icon"></i><i class="fas fa-times close-icon" style="display: none;"></i></button>
     </div>
 
     <footer class="footer">
         <div class="container footer__container">
-            <div class="footer__content">
-                <a href="#" class="footer__logo">Trish TEAM</a>
-                <p class="footer__description">Sản phẩm Vide-Coding phi thương mại.</p>
-            </div>
+            <div class="footer__logo">Trish TEAM</div>
             <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
         </div>
     </footer>
