@@ -102,11 +102,11 @@
                 <div class="webapp__data" style="margin-bottom: 2.5rem;">
                     <h2 class="section__title" style="text-align: left;">Trish Web Workspace</h2>
                     <p class="webapp__description">
-                        Trung tâm công cụ trực tuyến. Sử dụng ngay trên trình duyệt điện thoại hoặc máy tính mà không cần cài đặt.
+                        Trung tâm công cụ trực tuyến đa năng. Không cần cài đặt, hoạt động mượt mà trên mọi thiết bị.
                     </p>
                 </div>
                 
-                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
                     
                     <div class="webapp__dashboard">
                         <div class="dashboard__header">
@@ -127,7 +127,59 @@
                                     <button class="button button--small button--ghost" id="webapp-copy-btn" style="flex: 1; justify-content: center;"><i class="fas fa-copy"></i> Copy Link</button>
                                     <button class="button button--small" id="webapp-download-qr-btn" style="flex: 1; justify-content: center; background-color: #2E7D32;"><i class="fas fa-download"></i> Tải Mã QR</button>
                                 </div>
-                                <button class="button button--small" id="webapp-zalo-btn" style="width: 100%; justify-content: center; background-color: #0068FF;"><i class="fas fa-share"></i> Copy Formatted & Mở Zalo</button>
+                                <button class="button button--small" id="webapp-zalo-btn" style="width: 100%; justify-content: center; background-color: #0068FF;"><i class="fas fa-share"></i> Gửi Zalo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="webapp__dashboard" style="grid-row: span 2;">
+                        <div class="dashboard__header" style="background-color: #6A1B9A;">
+                            <i class="fas fa-code"></i> <span>Trish CodePad (AutoLISP/Text)</span>
+                        </div>
+                        <div class="dashboard__body" style="display: flex; flex-direction: column;">
+                            <select id="editor-template" class="dashboard__input" style="margin-bottom: 0.5rem; cursor: pointer;">
+                                <option value="">-- Chọn code LISP mẫu --</option>
+                                <option value="tkl">Tính khối lượng (TKL)</option>
+                                <option value="cd">Cắt chân Dim (CD)</option>
+                            </select>
+                            
+                            <textarea id="code-editor-area" spellcheck="false" placeholder="Viết mã code hoặc ghi chú của bạn vào đây... Hỗ trợ phím Tab để thụt lề."></textarea>
+                            
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="button button--small button--ghost" id="editor-copy-btn" style="flex: 1; justify-content: center;"><i class="fas fa-copy"></i> Copy</button>
+                                <button class="button button--small" id="editor-download-btn" style="flex: 1; justify-content: center; background-color: #6A1B9A;"><i class="fas fa-file-download"></i> Lưu File</button>
+                                <button class="button button--small button--ghost" id="editor-clear-btn" style="color: #d32f2f; border-color: #d32f2f;" title="Xóa trắng"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="webapp__dashboard">
+                        <div class="dashboard__header" style="background-color: #E65100;">
+                            <i class="fas fa-yin-yang"></i> <span>Tra cứu Mệnh Phong Thủy</span>
+                        </div>
+                        <div class="dashboard__body">
+                            <p style="font-size: 0.85rem; margin-bottom: 1rem;">Tính toán chính xác Can Chi và Ngũ Hành bản mệnh theo năm sinh dương lịch.</p>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="number" id="fs-year-input" placeholder="Nhập năm sinh (VD: 1995)" class="dashboard__input" style="flex: 1;" min="1900" max="2100">
+                                <button class="button" id="fs-calc-btn" style="background-color: #E65100;"><i class="fas fa-search"></i> Xem</button>
+                            </div>
+                            
+                            <div id="fs-result" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; background-color: rgba(230, 81, 0, 0.1); border: 1px solid rgba(230, 81, 0, 0.3);">
+                                <p style="margin-bottom: 0.5rem;">📅 Năm âm lịch: <strong id="fs-canchi" style="color: #E65100;">...</strong></p>
+                                <p>🔮 Ngũ hành (Mệnh): <strong id="fs-menh" style="color: #E65100;">...</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="webapp__dashboard" style="grid-row: span 2;">
+                        <div class="dashboard__header" style="background-color: #2E7D32;">
+                            <i class="far fa-newspaper"></i> <span>Tin tức Công nghệ 24/7</span>
+                        </div>
+                        <div class="dashboard__body" style="padding: 0;">
+                            <div id="news-container" class="news-list">
+                                <div style="padding: 1.5rem; text-align: center; color: var(--text-color);">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu từ báo...
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -137,29 +189,9 @@
                             <i class="fab fa-youtube"></i> <span>YouTube Downloader</span>
                         </div>
                         <div class="dashboard__body">
-                            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-color);">Công cụ hỗ trợ tải Video hoặc MP3 từ YouTube tốc độ cao an toàn.</p>
-                            <input type="text" id="yt-link-input" placeholder="Dán link YouTube (VD: https://youtu.be/...)" class="dashboard__input">
-                            <button class="button dashboard__btn" id="yt-download-btn" style="background-color: #FF0000;"><i class="fas fa-video"></i> Lấy link tải Video</button>
-                        </div>
-                    </div>
-
-                    <div class="webapp__dashboard">
-                        <div class="dashboard__header" style="background-color: #6A1B9A;">
-                            <i class="fas fa-code"></i> <span>AutoCAD LISP Vault</span>
-                        </div>
-                        <div class="dashboard__body">
-                            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-color);">Kho lưu trữ các hàm AutoLISP thông dụng. Copy và dán thẳng vào CAD để chạy.</p>
-                            <select id="lisp-select" class="dashboard__input" style="margin-bottom: 1rem; font-weight: 600; cursor: pointer;">
-                                <option value="tkl">Tính khối lượng trắc ngang (TKL)</option>
-                                <option value="cd">Cắt chân Dim (CD)</option>
-                                <option value="ntext">Nối Text nhanh (NTEXT)</option>
-                            </select>
-                            
-                            <div class="code-editor">
-                                <pre><code id="lisp-code-display">; Đang tải mã LISP...</code></pre>
-                            </div>
-                            
-                            <button class="button dashboard__btn" id="lisp-copy-btn" style="background-color: #6A1B9A;"><i class="fas fa-copy"></i> Copy Script</button>
+                            <p style="font-size: 0.85rem; margin-bottom: 1rem;">Công cụ chuyển hướng tải Video hoặc MP3 tốc độ cao.</p>
+                            <input type="text" id="yt-link-input" placeholder="Dán link YouTube..." class="dashboard__input">
+                            <button class="button dashboard__btn" id="yt-download-btn" style="background-color: #FF0000; margin-top: 1rem;"><i class="fas fa-video"></i> Tải Video</button>
                         </div>
                     </div>
 
