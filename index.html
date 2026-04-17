@@ -1,273 +1,217 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="light">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trish TEAM - Engineering Tools</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        /* Kế thừa ý tưởng từ Styled-components: Layout App-like */
-        :root {
-            --bg-color: #ffffff;
-            --sidebar-bg: #f6f8fa;
-            --border-color: #d0d7de;
-            --text-color: #24292f;
-            --accent: #0969da;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0d1117;
-            --sidebar-bg: #161b22;
-            --border-color: #30363d;
-            --text-color: #c9d1d9;
-            --accent: #58a6ff;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            height: 100vh;
-            overflow: hidden; /* Chống cuộn toàn trang, chỉ cuộn phần nội dung */
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* SIDEBAR - Menu cố định bên trái */
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.3s;
-        }
-
-        .brand {
-            padding: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 15px 0;
-            margin: 0;
-            overflow-y: auto;
-        }
-
-        .nav-links li {
-            padding: 8px 20px;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text-color);
-            opacity: 0.8;
-            transition: 0.2s;
-        }
-
-        .nav-links li:hover { opacity: 1; color: var(--accent); }
-        .nav-links li.active {
-            border-left: 4px solid var(--accent);
-            background-color: rgba(9, 105, 218, 0.1);
-            color: var(--accent);
-            opacity: 1;
-        }
-
-        /* NÚT ĐỔI MÀU SÁNG/TỐI */
-        .theme-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 18px;
-        }
-
-        /* MAIN CONTENT - Không gian đọc tài liệu */
-        .main-content {
-            flex: 1;
-            overflow-y: auto; /* Chỉ cuộn phần này */
-            padding: 40px;
-            scroll-behavior: smooth;
-        }
-
-        /* Căn giữa phần đọc như file Readme */
-        .markdown-body {
-            box-sizing: border-box;
-            min-width: 200px;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 0;
-            background-color: transparent !important; /* Đè màu nền để khớp theme */
-        }
-
-        /* Ẩn các section không active (Tạo hiệu ứng Web-App SPA) */
-        .content-section { display: none; animation: fadeIn 0.3s; }
-        .content-section.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Responsive cho điện thoại */
-        @media (max-width: 768px) {
-            body { flex-direction: column; overflow: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
-            .nav-links { display: flex; overflow-x: auto; padding: 10px; white-space: nowrap; }
-            .nav-links li { border-left: none; border-bottom: 3px solid transparent; }
-            .nav-links li.active { border-left: none; border-bottom: 3px solid var(--accent); background: none; }
-            .main-content { padding: 20px; overflow-y: visible; }
-        }
-    </style>
+    <title>Hồ Sỹ Trí | Trish TEAM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="#" class="nav__logo">Trish <span>TEAM</span></a>
 
-    <div class="sidebar">
-        <div class="brand">
-            <span>🚀 Trish TEAM</span>
-            <button class="theme-toggle" id="theme-btn" title="Đổi Giao diện Sáng/Tối">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>
-        <ul class="nav-links" id="nav-menu">
-            <li data-target="home" class="active">Giới thiệu chung</li>
-            <li data-target="trish-library">📁 Trish Library 1.0</li>
-            <li data-target="upcoming">🚧 Sắp ra mắt...</li>
-            <li data-target="contact">📞 Liên hệ</li>
-        </ul>
-    </div>
-
-    <div class="main-content">
-        <article class="markdown-body">
-            
-            <div id="home" class="content-section active">
-                <h1>Engineering Tools by Trish TEAM</h1>
-                <p>Chào mừng đến với không gian phát triển phần mềm của <strong>Hồ Sỹ Trí</strong>. Nơi đây tập hợp các công cụ hỗ trợ thiết kế, khảo sát và quản lý hạ tầng giao thông.</p>
-                <blockquote>
-                    <p><em>"Sản phẩm Vide-Coding by Trish TEAM với mục đích phi thương mại, vui lòng không sử dụng cho mục đích kiếm tiền khác."</em></p>
-                </blockquote>
-                <h2>Chuyên môn cốt lõi:</h2>
-                <ul>
-                    <li>Quản lý và tổ chức dữ liệu kỹ thuật.</li>
-                    <li>Tự động hóa quy trình với AutoLISP & Python.</li>
-                    <li>Xử lý số liệu Khảo sát hạ tầng giao thông.</li>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="#home" class="nav__link active-link">Trang chủ</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">Giới thiệu</a></li>
+                    <li class="nav__item"><a href="#skills" class="nav__link">Kỹ năng</a></li>
+                    <li class="nav__item"><a href="#portfolio" class="nav__link">Sản phẩm</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Liên hệ</a></li>
                 </ul>
-                <p>Hãy chọn các sản phẩm ở menu bên trái để xem chi tiết và tải về.</p>
+                <div class="nav__close" id="nav-close"><i class="fas fa-times"></i></div>
             </div>
 
-            <div id="trish-library" class="content-section">
-                <h1>Trish Library 1.0 <span class="badge">Official Release</span></h1>
-                <p>Phần mềm quản lý tài liệu kỹ thuật, tiêu chuẩn và bản vẽ chuyên dụng trên Desktop (Windows).</p>
+            <div class="nav__btns">
+                <i class="fas fa-moon change-theme" id="theme-button"></i>
+                <div class="nav__toggle" id="nav-toggle"><i class="fas fa-th-large"></i></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="home section" id="home">
+            <div class="home__container container grid">
+                <div class="home__content grid">
+                    <div class="home__social">
+                        <a href="https://fb.com/hosytri07" target="_blank" class="home__social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://github.com/hosytri07" target="_blank" class="home__social-icon"><i class="fab fa-github"></i></a>
+                        <a href="#" class="home__social-icon"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
+
+                    <div class="home__data">
+                        <h1 class="home__title">Hồ Sỹ Trí <span class="home__year">(1995)</span></h1>
+                        <h3 class="home__subtitle">Transportation Design Engineer & Developer</h3>
+                        <p class="home__description">
+                            Chuyên gia về khảo sát, thiết kế hạ tầng cầu đường tại S-RETC. 
+                            Đam mê lập trình và tự động hóa quy trình kỹ thuật với phương châm "Vide-Coding".
+                        </p>
+                        <a href="#contact" class="button button--flex">Liên hệ ngay <i class="fas fa-paper-plane button__icon"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about section" id="about">
+            <h2 class="section__title">Về tôi</h2>
+            <span class="section__subtitle">Giới thiệu ngắn gọn</span>
+
+            <div class="about__container container grid">
+                <div class="about__data">
+                    <p class="about__description">
+                        Là một kỹ sư thiết kế hạ tầng giao thông thực chiến, tôi hiểu rõ những khó khăn trong việc xử lý khối lượng dữ liệu khổng lồ, quản lý bản vẽ và tính toán trắc ngang, sạt lở. <br><br>
+                        <strong>Trish TEAM</strong> được lập ra để cung cấp các giải pháp phần mềm, Plugin và Web-app phi thương mại, giúp anh em kỹ sư rút ngắn thời gian làm việc và tối ưu hóa quy trình.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills section" id="skills">
+            <h2 class="section__title">Kỹ năng cốt lõi</h2>
+            <span class="section__subtitle">Công nghệ & Chuyên môn</span>
+
+            <div class="skills__container container grid">
+                <div class="skills__content">
+                    <div class="skills__header">
+                        <i class="fas fa-road skills__icon"></i>
+                        <div>
+                            <h1 class="skills__title">Kỹ thuật Hạ tầng</h1>
+                            <span class="skills__subtitle">S-RETC</span>
+                        </div>
+                    </div>
+                    <div class="skills__list grid">
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">Khảo sát & Thiết kế cầu đường</h3>
+                            </div>
+                        </div>
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">AutoCAD / Civil 3D / Revit / BIM</h3>
+                            </div>
+                        </div>
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">Tính toán khối lượng & Sạt lở</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills__content">
+                    <div class="skills__header">
+                        <i class="fas fa-code skills__icon"></i>
+                        <div>
+                            <h1 class="skills__title">Lập trình & Phần mềm</h1>
+                            <span class="skills__subtitle">Vide-Coding</span>
+                        </div>
+                    </div>
+                    <div class="skills__list grid">
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">Python (PyQt6 / Data Processing)</h3>
+                            </div>
+                        </div>
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">AutoLISP & Plugin Development</h3>
+                            </div>
+                        </div>
+                        <div class="skills__data">
+                            <div class="skills__titles">
+                                <h3 class="skills__name">Web App (Vercel / Firebase)</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="portfolio section" id="portfolio">
+            <h2 class="section__title">Sản phẩm tiêu biểu</h2>
+            <span class="section__subtitle">Các dự án đã hoàn thiện</span>
+
+            <div class="portfolio__container container grid">
                 
-                <h2>✨ Tính năng nổi bật</h2>
-                <ul>
-                    <li><strong>Quản lý Đa Thư Viện:</strong> Gắn bất kỳ thư mục nào trên ổ cứng thành Workspace.</li>
-                    <li><strong>Google Drive Integration:</strong> Chuyển đổi link Drive thành Direct Link và <strong>tạo mã QR</strong> siêu tốc.</li>
-                    <li><strong>Báo cáo trực quan:</strong> Xuất file cấu trúc cây thư mục ra <code>.csv</code> và biểu đồ dung lượng.</li>
-                    <li><strong>Dark Mode & Light Mode:</strong> Giao diện chuẩn kỹ thuật, không mỏi mắt.</li>
-                </ul>
+                <div class="portfolio__card">
+                    <div class="portfolio__img-wrapper">
+                        <div class="portfolio__tag">Desktop App</div>
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Trish Library" class="portfolio__img">
+                    </div>
+                    <div class="portfolio__data">
+                        <h3 class="portfolio__title">Trish Library 1.0</h3>
+                        <p class="portfolio__description">Hệ thống quản lý tiêu chuẩn và bản vẽ chuyên dụng. Hỗ trợ đa thư viện (Workspace), tạo mã QR trực tiếp từ link Cloud và xuất báo cáo dữ liệu trực quan.</p>
+                        <a href="#" class="button button--small portfolio__button">
+                            Tải về (Windows) <i class="fas fa-arrow-right button__icon"></i>
+                        </a>
+                    </div>
+                </div>
 
-                <h2>📥 Tải xuống & Cài đặt</h2>
-                <p>Khuyến nghị cài đặt trên hệ điều hành <strong>Windows 10 (64-bit)</strong> hoặc Windows 11.</p>
-                <a href="#" style="display: inline-block; padding: 10px 20px; background-color: #2da44e; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
-                    <i class="fas fa-download"></i> Tải bản Setup (v1.0.0)
-                </a>
+                <div class="portfolio__card">
+                    <div class="portfolio__img-wrapper">
+                        <div class="portfolio__tag">CAD Plugin</div>
+                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="AutoCAD Plugin" class="portfolio__img">
+                    </div>
+                    <div class="portfolio__data">
+                        <h3 class="portfolio__title">Trish Volume Calculator</h3>
+                        <p class="portfolio__description">Module Toolkit tích hợp trực tiếp vào AutoCAD giúp tự động hóa việc tính toán khối lượng sạt lở nền đường và xuất dữ liệu trắc ngang cực nhanh.</p>
+                        <a href="#" class="button button--small portfolio__button">
+                            Xem chi tiết <i class="fas fa-arrow-right button__icon"></i>
+                        </a>
+                    </div>
+                </div>
 
-                <h2>🚀 Cập nhật (Changelog)</h2>
-                <h3>v1.0.0 (Bản chính thức)</h3>
-                <ul>
-                    <li>Sử dụng lõi <code>PyQt6</code> mới nhất.</li>
-                    <li>Thay đổi cơ chế lưu file config chống lỗi 0 byte khi mất điện đột ngột.</li>
-                    <li>Loại bỏ hàm gọi API Google Drive nặng nề, tập trung vào quét QR tĩnh.</li>
-                </ul>
             </div>
+        </section>
 
-            <div id="upcoming" class="content-section">
-                <h1>Đang phát triển (WIP)</h1>
-                <p>Trish TEAM vẫn đang tiếp tục nghiên cứu các giải pháp mới để hỗ trợ anh em kỹ sư:</p>
-                <ol>
-                    <li><strong>Trish Cross-Section (CAD Plugin):</strong> Tự động dựng trắc ngang từ file <code>.ntd</code>.</li>
-                    <li><strong>Trish QR Survey:</strong> Quản lý mốc tọa độ trên nền web.</li>
-                </ol>
-                <p>Theo dõi repo <a href="https://github.com/hosytri07">GitHub của tôi</a> để nhận cập nhật sớm nhất.</p>
+        <section class="contact section" id="contact">
+            <h2 class="section__title">Liên hệ</h2>
+            <span class="section__subtitle">Kết nối với Trish TEAM</span>
+
+            <div class="contact__container container grid">
+                <div>
+                    <div class="contact__information">
+                        <i class="fas fa-phone-alt contact__icon"></i>
+                        <div>
+                            <h3 class="contact__title">Điện thoại / Zalo / Telegram</h3>
+                            <span class="contact__subtitle">0969 580 657</span>
+                        </div>
+                    </div>
+
+                    <div class="contact__information">
+                        <i class="fab fa-facebook-messenger contact__icon"></i>
+                        <div>
+                            <h3 class="contact__title">Facebook</h3>
+                            <span class="contact__subtitle">fb.com/hosytri07</span>
+                        </div>
+                    </div>
+
+                    <div class="contact__information">
+                        <i class="fas fa-map-marker-alt contact__icon"></i>
+                        <div>
+                            <h3 class="contact__title">Đơn vị công tác</h3>
+                            <span class="contact__subtitle">S-RETC</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+    </main>
 
-            <div id="contact" class="content-section">
-                <h1>Liên hệ Tác giả</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Kênh liên hệ</th>
-                            <th>Thông tin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Tác giả</strong></td>
-                            <td>Hồ Sỹ Trí</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Zalo / Telegram</strong></td>
-                            <td>0969 580 657</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Facebook</strong></td>
-                            <td><a href="https://fb.com/hosytri07">fb.com/hosytri07</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+    <footer class="footer">
+        <div class="footer__bg">
+            <div class="footer__container container grid">
+                <div>
+                    <h1 class="footer__title">Trish TEAM</h1>
+                    <span class="footer__subtitle">Vide-Coding for Engineers</span>
+                </div>
+                <p class="footer__copy">&#169; 2026 Hồ Sỹ Trí. All rights reserved.</p>
             </div>
+        </div>
+    </footer>
 
-        </article>
-    </div>
-
-    <script>
-        // 1. Xử lý Chuyển Tab (Giống hệt SPA của React)
-        const menuItems = document.querySelectorAll('#nav-menu li');
-        const sections = document.querySelectorAll('.content-section');
-
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                // Đổi class active ở menu
-                menuItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                // Hiển thị nội dung tương ứng
-                const targetId = item.getAttribute('data-target');
-                sections.forEach(sec => {
-                    sec.classList.remove('active');
-                    if(sec.id === targetId) {
-                        sec.classList.add('active');
-                        // Tự động cuộn lên đầu phần nội dung
-                        document.querySelector('.main-content').scrollTop = 0;
-                    }
-                });
-            });
-        });
-
-        // 2. Xử lý Dark Mode / Light Mode
-        const themeBtn = document.getElementById('theme-btn');
-        const htmlElement = document.documentElement;
-
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            if(currentTheme === 'light') {
-                htmlElement.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-                // Đổi theme cho class markdown-body (thư viện github)
-                document.documentElement.style.setProperty('color-scheme', 'dark');
-            } else {
-                htmlElement.setAttribute('data-theme', 'light');
-                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-                document.documentElement.style.setProperty('color-scheme', 'light');
-            }
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
