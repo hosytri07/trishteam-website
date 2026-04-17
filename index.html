@@ -12,8 +12,8 @@
     <div id="toast-notification" class="toast">
         <div class="toast__icon"><i class="fas fa-info-circle"></i></div>
         <div class="toast__content">
-            <h4 class="toast__title">Chào mừng bạn!</h4>
-            <p class="toast__desc">Website đã cập nhật bản Trish Library 1.0 mới nhất.</p>
+            <h4 class="toast__title">Thông báo</h4>
+            <p class="toast__desc">Nội dung thông báo ở đây.</p>
         </div>
         <button class="toast__close" id="toast-close"><i class="fas fa-times"></i></button>
     </div>
@@ -108,7 +108,7 @@
                     
                     <div class="webapp__dashboard">
                         <div class="dashboard__header">
-                            <i class="fas fa-qrcode"></i> <span>QR Generator</span>
+                            <i class="fas fa-qrcode"></i> <span>Cloud QR Generator</span>
                         </div>
                         <div class="dashboard__body">
                             <input type="text" placeholder="Dán link Google Drive vào đây..." class="dashboard__input">
@@ -122,8 +122,8 @@
         <section class="contact section" id="contact">
             <div class="container grid contact__grid">
                 <div class="about__data" id="about">
-                    <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span></span></h2>
-                    <p class="contact__description">Kẻ vô công rỗi nghề. Gặp vấn đề khi cài đặt phần mềm? Hãy liên hệ hoặc chat trực tiếp với tôi.</p>
+                    <h2 class="section__title" style="text-align: left;">Hồ Sỹ Trí <span>(1995)</span></h2>
+                    <p class="contact__description">Kỹ sư khảo sát và thiết kế hạ tầng giao thông tại <strong>S-RETC</strong>. Gặp vấn đề khi cài đặt phần mềm? Hãy liên hệ hoặc chat trực tiếp với tôi.</p>
                     
                     <div class="contact__info">
                         <div class="contact__card">
@@ -140,27 +140,28 @@
                 </div>
 
                 <div class="contact__form-wrapper">
-                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi Email tự động</h2>
-                    <form action="https://formsubmit.co/trishteam.official@gmail.com" method="POST" class="contact__form">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_next" value="https://trishteam.vercel.app">
-                        
+                    <h2 class="section__title" style="text-align: left; margin-bottom: 1.5rem;">Gửi Phản hồi trực tiếp</h2>
+                    
+                    <form id="telegram-form" class="contact__form">
                         <div class="contact__inputs">
                             <div class="contact__content">
                                 <label class="contact__label">Tên của bạn</label>
-                                <input type="text" name="Name" required class="contact__input" placeholder="Nhập tên">
+                                <input type="text" id="sender-name" required class="contact__input" placeholder="Nhập tên">
                             </div>
                             <div class="contact__content">
-                                <label class="contact__label">Email</label>
-                                <input type="email" name="Email" required class="contact__input" placeholder="Nhập email">
+                                <label class="contact__label">Email liên hệ</label>
+                                <input type="email" id="sender-email" required class="contact__input" placeholder="Nhập email">
                             </div>
                         </div>
                         <div class="contact__content">
                             <label class="contact__label">Nội dung</label>
-                            <textarea name="Message" required cols="0" rows="4" class="contact__input" placeholder="Viết báo lỗi hoặc tính năng mong muốn..."></textarea>
+                            <textarea id="sender-message" required cols="0" rows="4" class="contact__input" placeholder="Viết báo lỗi hoặc tính năng mong muốn..."></textarea>
                         </div>
-                        <button type="submit" class="button">Gửi đi <i class="fas fa-paper-plane button__icon"></i></button>
+                        <button type="submit" id="submit-btn" class="button">
+                            <span>Gửi phản hồi</span> <i class="fas fa-paper-plane button__icon"></i>
+                        </button>
                     </form>
+
                 </div>
             </div>
         </section>
