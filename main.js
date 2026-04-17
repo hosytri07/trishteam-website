@@ -60,7 +60,6 @@ function triggerToast(message = null) {
     }
     toast.classList.add('show');
     
-    // Tự động đóng sau 4 giây
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
         toast.classList.remove('show');
@@ -72,7 +71,7 @@ toastClose.addEventListener('click', () => {
     clearTimeout(toastTimer);
 });
 
-// Kích hoạt Toast Welcome sau khi tải trang 1 giây
+// Welcome message
 window.addEventListener('load', () => {
     setTimeout(() => {
         triggerToast("Cảm ơn bạn đã ghé thăm Trish TEAM!");
@@ -87,15 +86,78 @@ const closeIcon = chatBtn.querySelector('.close-icon');
 
 chatBtn.addEventListener('click', () => {
     chatOptions.classList.toggle('show');
-    
-    // Đổi Icon Chat <-> Dấu X
     if(chatOptions.classList.contains('show')) {
         chatIcon.style.display = 'none';
         closeIcon.style.display = 'block';
-        chatBtn.style.animation = 'none'; // Tắt hiệu ứng nhịp đập khi đang mở
+        chatBtn.style.animation = 'none'; 
     } else {
         chatIcon.style.display = 'block';
         closeIcon.style.display = 'none';
         chatBtn.style.animation = 'pulse 2s infinite';
     }
 });
+
+
+/* ==================== GỬI PHẢN HỒI QUA TELEGRAM API ==================== */
+// Tích hợp Token và Chat ID do bạn cung cấp
+const TELEGRAM_BOT_TOKEN = '8668861015:AAES7-vHAOuuV2D4Nk2budyQIzgZ9arIYRU'; 
+const TELEGRAM_CHAT_ID = '1687867690'; 
+
+const telegramForm = document.getElementById('telegram-form');
+const submitBtn = document.getElementById('submit-btn');
+
+if (telegramForm) {
+    telegramForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Ngăn trình duyệt load lại trang
+        
+        // Lấy dữ liệu
+        const name = document.getElementById('sender-name').value;
+        const email = document.getElementById('sender-email').value;
+        const message = document.getElementById('sender-message').value;
+        
+        // Format tin nhắn đẹp mắt gửi về ĐT
+        const text = `📬 <b>PHẢN HỒI MỚI TỪ WEBSITE</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email}\n💬 <b>Nội dung:</b>\n${message}`;
+        
+        // Đổi trạng thái nút bấm thành Loading
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span>Đang gửi...</span> <i class="fas fa-spinner fa-spin button__icon" style="margin-left: 8px;"></i>';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+        submitBtn.style.cursor = 'not-allowed';
+
+        // Gọi API đến máy chủ Telegram
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: text,
+                parse_mode: 'HTML' // Render in đậm, in nghiêng
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                triggerToast('Đã gửi thành công! Tác giả sẽ nhận được thông báo ngay lập tức.');
+                telegramForm.reset(); // Xóa trắng form sau khi gửi
+            } else {
+                triggerToast('Lỗi hệ thống: Không thể gửi tin nhắn lúc này.');
+                console.error("Telegram API Error:", data);
+            }
+        })
+        .catch(error => {
+            triggerToast('Lỗi mạng: Vui lòng kiểm tra lại kết nối internet của bạn.');
+        })
+        .finally(() => {
+            // Phục hồi lại nút bấm ban đầu
+            submitBtn.innerHTML = originalBtnHTML;
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        });
+    });
+}
