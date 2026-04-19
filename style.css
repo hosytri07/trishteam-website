@@ -56,7 +56,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body {
-    font-family: 'DM Sans', -apple-system, sans-serif;
+    font-family: 'DM Sans', 'Be Vietnam Pro', -apple-system, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.65;
@@ -67,7 +67,7 @@ body {
 
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, .hero-title, .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 /* ── DOODLE ELEMENTS ── */
@@ -115,7 +115,7 @@ h1, h2, h3, .hero-title, .section-title {
     align-items: center;
     gap: 0.4rem;
     text-decoration: none;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 1.45rem;
     font-weight: 800;
     color: var(--text-primary);
@@ -325,7 +325,7 @@ h1, h2, h3, .hero-title, .section-title {
 }
 .stat-item { text-align: center; }
 .stat-number {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 2.2rem;
     font-weight: 800;
     background: var(--accent-gradient);
@@ -507,7 +507,7 @@ h1, h2, h3, .hero-title, .section-title {
     flex-shrink: 0;
 }
 .tool-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 0.3rem;
@@ -571,7 +571,7 @@ h1, h2, h3, .hero-title, .section-title {
 .mystical-card:hover::before { top: -80%; right: -80%; }
 .mystical-header { display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm); }
 .mystical-header i { font-size: 2rem; color: var(--accent-1); }
-.mystical-header h3 { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 700; }
+.mystical-header h3 { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.35rem; font-weight: 700; }
 .mystical-card > p { color: var(--text-secondary); margin-bottom: var(--spacing-md); font-size: 0.9rem; }
 .mystical-features { display: flex; flex-direction: column; gap: 0.6rem; }
 .mystical-features span { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.88rem; }
@@ -601,9 +601,9 @@ h1, h2, h3, .hero-title, .section-title {
     margin: 0 auto var(--spacing-sm);
     font-size: 1.6rem; color: white;
 }
-.utility-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: var(--spacing-sm); }
+.utility-title { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: var(--spacing-sm); }
 .utility-value {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 1.8rem; font-weight: 800;
     color: var(--accent-1);
     margin-bottom: 0.4rem;
@@ -703,7 +703,7 @@ h1, h2, h3, .hero-title, .section-title {
 }
 .footer-brand {
     display: flex; align-items: center; gap: 0.5rem;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 1.2rem; font-weight: 800;
 }
 .footer-text { color: var(--text-secondary); font-size: 0.85rem; }
@@ -827,7 +827,7 @@ h1, h2, h3, .hero-title, .section-title {
     border: 1px solid rgba(102,126,234,0.25); border-radius: 20px;
     font-size: 0.75rem; font-weight: 700;
 }
-.software-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
+.software-title { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
 .software-desc { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: var(--spacing-sm); line-height: 1.6; }
 .software-features { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: var(--spacing-md); }
 .software-features span { display: flex; align-items: center; gap: 0.4rem; font-size: 0.83rem; color: var(--text-secondary); }
@@ -863,7 +863,7 @@ h1, h2, h3, .hero-title, .section-title {
 .news-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--accent-1); }
 .news-image { width: 100%; height: 180px; object-fit: cover; }
 .news-content { padding: var(--spacing-md); }
-.news-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.45; }
+.news-title { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.45; }
 .news-desc { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6; margin-bottom: var(--spacing-sm); }
 .news-meta { display: flex; justify-content: space-between; align-items: center; }
 .news-source { font-size: 0.78rem; font-weight: 600; color: var(--accent-1); }
@@ -875,13 +875,26 @@ h1, h2, h3, .hero-title, .section-title {
 .crypto-card {
     background: var(--bg-card); border: 1.5px solid var(--border-color);
     border-radius: var(--radius-lg); padding: var(--spacing-md);
-    text-align: center; transition: all var(--transition-base);
+    transition: all var(--transition-base);
 }
-.crypto-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-.crypto-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
-.crypto-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-.crypto-price { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--accent-1); margin-bottom: 0.3rem; }
-.crypto-change { font-size: 0.85rem; font-weight: 600; }
+.crypto-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--accent-1); }
+.crypto-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.crypto-emoji {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800;
+    flex-shrink: 0;
+}
+.crypto-header h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.1rem; }
+.crypto-symbol { font-size: 0.72rem; color: var(--text-tertiary); font-weight: 500; }
+.crypto-price { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--accent-1); margin-bottom: 0.3rem; }
+.crypto-change { font-size: 0.82rem; font-weight: 600; }
 .crypto-change.positive { color: #10b981; }
 .crypto-change.negative { color: #ef4444; }
 
@@ -910,8 +923,8 @@ h1, h2, h3, .hero-title, .section-title {
 }
 .calc-group input:focus, .calc-group select:focus { outline: none; border-color: var(--accent-1); }
 .calc-result { background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
-.calc-result-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: var(--spacing-md); }
-.calc-result-value { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--accent-1); margin-bottom: 0.3rem; }
+.calc-result-title { font-family: 'Be Vietnam Pro', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: var(--spacing-md); }
+.calc-result-value { font-family: 'Be Vietnam Pro', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--accent-1); margin-bottom: 0.3rem; }
 .calc-result-label { font-size: 0.85rem; color: var(--text-secondary); }
 
 /* ── IDEA FORM ── */

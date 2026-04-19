@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập — TrishTeam</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&subset=vietnamese&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,16 +46,27 @@
         /* Back link */
         .back-link {
             position: fixed;
-            top: 24px; left: 24px;
-            display: flex; align-items: center; gap: 0.4rem;
-            color: rgba(255,255,255,0.5);
+            top: 20px; left: 20px;
+            display: flex; align-items: center; gap: 0.45rem;
+            color: rgba(255,255,255,0.65);
             text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-size: 0.83rem;
+            font-weight: 600;
+            transition: all 0.2s;
             z-index: 10;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.45rem 0.9rem;
+            border-radius: 40px;
+            backdrop-filter: blur(8px);
         }
-        .back-link:hover { color: rgba(255,255,255,0.9); }
+        .back-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateX(-2px);
+        }
+        .back-link i { font-size: 1rem; }
 
         /* Wrapper card */
         .wrapper {
@@ -82,7 +93,7 @@
             margin-bottom: 0.3rem;
         }
         .brand-name {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 1.7rem;
             font-weight: 800;
             color: white;
