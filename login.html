@@ -437,13 +437,11 @@
             btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
 
             try {
+                // Luôn dùng LOCAL persistence để giữ login sau redirect
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
                 const cred = await auth.signInWithEmailAndPassword(email, pass);
-                // Lưu remember me
-                if (document.getElementById('remember-me').checked) {
-                    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                }
                 showToast('Đăng nhập thành công! Đang chuyển hướng...', 'success');
-                setTimeout(() => window.location.href = 'index.html', 1200);
+                setTimeout(() => window.location.href = 'index.html', 900);
             } catch(err) {
                 const msgs = {
                     'auth/user-not-found': 'Tài khoản không tồn tại',
@@ -498,7 +496,7 @@
                 // Cập nhật display name
                 await cred.user.updateProfile({ displayName: name });
                 showToast('Tạo tài khoản thành công! Đang chuyển hướng...', 'success');
-                setTimeout(() => window.location.href = 'index.html', 1200);
+                setTimeout(() => window.location.href = 'index.html', 900);
             } catch(err) {
                 const msgs = {
                     'auth/email-already-in-use': 'Email này đã được đăng ký',
