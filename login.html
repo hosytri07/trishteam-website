@@ -281,6 +281,10 @@
             .wrapper { width: 92vw; padding: 2rem 1.5rem; }
         }
     </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -384,37 +388,127 @@
             setTimeout(() => t.classList.remove('show'), 3500);
         }
 
-        // Placeholder handlers — Firebase Auth sẽ tích hợp ở phiên sau
-        function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
-            setTimeout(() => {
-                // TODO: Firebase Auth integration (phiên sau)
-                showToast('Tính năng đang được phát triển!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bx bx-log-in"></i> Đăng nhập';
-            }, 1200);
+        // ── FIREBASE CONFIG ──
+        // Lấy config từ: Firebase Console → Project Settings → Web App
+        // Điền vào đây sau khi đăng ký Firebase project mới
+        const firebaseConfig = {
+            apiKey: "PASTE_YOUR_API_KEY_HERE",
+            authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
+            databaseURL: "PASTE_YOUR_DATABASE_URL_HERE",
+            projectId: "PASTE_YOUR_PROJECT_ID_HERE",
+            storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
+            messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
+            appId: "PASTE_YOUR_APP_ID_HERE"
+        };
+
+        // Khởi tạo Firebase
+        let auth = null;
+        let db = null;
+        try {
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.database();
+        } catch(e) {
+            console.warn('Firebase chưa được cấu hình:', e.message);
         }
 
-        function handleRegister(e) {
+        // ── KIỂM TRA ĐÃ ĐĂNG NHẬP CHƯA ──
+        if (auth) {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    // Đã đăng nhập → về trang chủ
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        // ── ĐĂNG NHẬP ──
+        async function handleLogin(e) {
             e.preventDefault();
-            const pass = document.getElementById('reg-pass').value;
+            if (!auth) {
+                showToast('Firebase chưa được cấu hình. Xem console để biết thêm.', 'error');
+                return;
+            }
+            const email = document.getElementById('login-user').value.trim();
+            const pass  = document.getElementById('login-pass').value;
+            const btn   = document.getElementById('btn-login');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
+
+            try {
+                const cred = await auth.signInWithEmailAndPassword(email, pass);
+                // Lưu remember me
+                if (document.getElementById('remember-me').checked) {
+                    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                }
+                showToast('Đăng nhập thành công! Đang chuyển hướng...', 'success');
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } catch(err) {
+                const msgs = {
+                    'auth/user-not-found': 'Tài khoản không tồn tại',
+                    'auth/wrong-password': 'Mật khẩu không đúng',
+                    'auth/invalid-email': 'Email không hợp lệ',
+                    'auth/too-many-requests': 'Quá nhiều lần thử. Vui lòng thử lại sau.',
+                    'auth/invalid-credential': 'Email hoặc mật khẩu không đúng',
+                };
+                showToast(msgs[err.code] || 'Lỗi đăng nhập: ' + err.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bx bx-log-in"></i> Đăng nhập';
+            }
+        }
+
+        // ── ĐĂNG KÝ ──
+        async function handleRegister(e) {
+            e.preventDefault();
+            if (!auth) {
+                showToast('Firebase chưa được cấu hình.', 'error');
+                return;
+            }
+            const name  = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass  = document.getElementById('reg-pass').value;
             const pass2 = document.getElementById('reg-pass2').value;
+            const btn   = document.getElementById('btn-register');
+
             if (pass !== pass2) {
                 showToast('Mật khẩu nhập lại không khớp!', 'error');
                 return;
             }
-            const btn = document.getElementById('btn-register');
+            if (pass.length < 6) {
+                showToast('Mật khẩu tối thiểu 6 ký tự!', 'error');
+                return;
+            }
+
             btn.disabled = true;
-            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
-            setTimeout(() => {
-                // TODO: Firebase Auth integration (phiên sau)
-                showToast('Tính năng đang được phát triển!', 'error');
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang tạo tài khoản...';
+
+            try {
+                const cred = await auth.createUserWithEmailAndPassword(email, pass);
+                // Lưu thông tin user vào Firebase DB
+                if (db) {
+                    await db.ref('users/' + cred.user.uid).set({
+                        name: name,
+                        email: email,
+                        role: 'trial',
+                        createdAt: new Date().toISOString(),
+                        trialStart: Date.now()
+                    });
+                }
+                // Cập nhật display name
+                await cred.user.updateProfile({ displayName: name });
+                showToast('Tạo tài khoản thành công! Đang chuyển hướng...', 'success');
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } catch(err) {
+                const msgs = {
+                    'auth/email-already-in-use': 'Email này đã được đăng ký',
+                    'auth/invalid-email': 'Email không hợp lệ',
+                    'auth/weak-password': 'Mật khẩu quá yếu',
+                };
+                showToast(msgs[err.code] || 'Lỗi đăng ký: ' + err.message, 'error');
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bx bx-user-plus"></i> Tạo tài khoản';
-            }, 1200);
+            }
         }
     </script>
 </body>

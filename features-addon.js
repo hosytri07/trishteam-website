@@ -136,6 +136,34 @@ const calculateLoan = () => {
     
     document.getElementById('loan-result').style.display = 'block';
     showToast('✓ Đã tính toán xong');
+
+    // Vẽ Pie Chart vốn vs lãi
+    const loanCtx = document.getElementById('loan-chart');
+    if (loanCtx) {
+        if (window._loanChart) window._loanChart.destroy();
+        window._loanChart = new Chart(loanCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Vốn gốc', 'Tiền lãi'],
+                datasets: [{
+                    data: [Math.round(amount), Math.round(totalInterest)],
+                    backgroundColor: ['#667eea', '#764ba2'],
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '68%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#a09890', font: { size: 12 }, padding: 16 } },
+                    tooltip: {
+                        callbacks: { label: ctx => ' ' + formatNumber(ctx.raw) + ' ₫' }
+                    }
+                }
+            }
+        });
+    }
 };
 
 // Investment Calculator
@@ -170,6 +198,34 @@ const calculateInvestment = () => {
     
     document.getElementById('invest-result').style.display = 'block';
     showToast('✓ Đã tính toán xong');
+
+    // Vẽ Pie Chart vốn vs lợi nhuận
+    const investCtx = document.getElementById('invest-chart');
+    if (investCtx) {
+        if (window._investChart) window._investChart.destroy();
+        window._investChart = new Chart(investCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Vốn đầu tư', 'Lợi nhuận'],
+                datasets: [{
+                    data: [Math.round(totalInvested), Math.round(profit)],
+                    backgroundColor: ['#667eea', '#10b981'],
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '68%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#a09890', font: { size: 12 }, padding: 16 } },
+                    tooltip: {
+                        callbacks: { label: ctx => ' ' + formatNumber(ctx.raw) + ' ₫' }
+                    }
+                }
+            }
+        });
+    }
 };
 
 // Mortgage Calculator

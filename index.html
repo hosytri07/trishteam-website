@@ -864,17 +864,17 @@
             <div class="calc-panel">
                 <h3><i class="fas fa-hand-holding-usd"></i> Tính khoản vay</h3>
                 <div class="calc-form">
-                    <div class="form-group">
-                        <label>Số tiền vay (VNĐ):</label>
-                        <input type="number" id="loan-amount" class="input-field" placeholder="500000000" value="500000000">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Số tiền vay (VNĐ):</label>
+                        <input type="number" id="loan-amount" class="input-field" value="500000000">
                     </div>
-                    <div class="form-group">
-                        <label>Lãi suất (%/năm):</label>
-                        <input type="number" id="loan-rate" class="input-field" placeholder="8.5" value="8.5" step="0.1">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Lãi suất (%/năm):</label>
+                        <input type="number" id="loan-rate" class="input-field" value="8.5" step="0.1">
                     </div>
-                    <div class="form-group">
-                        <label>Thời gian vay (tháng):</label>
-                        <input type="number" id="loan-months" class="input-field" placeholder="240" value="240">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Thời gian vay (tháng):</label>
+                        <input type="number" id="loan-months" class="input-field" value="240">
                     </div>
                     <button onclick="calculateLoan()" class="btn btn-primary btn-block">
                         <i class="fas fa-calculator"></i> Tính toán
@@ -906,21 +906,21 @@
             <div class="calc-panel">
                 <h3><i class="fas fa-chart-line"></i> Tính lợi nhuận đầu tư</h3>
                 <div class="calc-form">
-                    <div class="form-group">
-                        <label>Vốn ban đầu (VNĐ):</label>
-                        <input type="number" id="invest-principal" class="input-field" placeholder="100000000" value="100000000">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Vốn ban đầu (VNĐ):</label>
+                        <input type="number" id="invest-principal" class="input-field" value="100000000">
                     </div>
-                    <div class="form-group">
-                        <label>Lợi nhuận (%/năm):</label>
-                        <input type="number" id="invest-return" class="input-field" placeholder="10" value="10" step="0.1">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Lợi nhuận (%/năm):</label>
+                        <input type="number" id="invest-return" class="input-field" value="10" step="0.1">
                     </div>
-                    <div class="form-group">
-                        <label>Số năm đầu tư:</label>
-                        <input type="number" id="invest-years" class="input-field" placeholder="10" value="10">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Số năm đầu tư:</label>
+                        <input type="number" id="invest-years" class="input-field" value="10">
                     </div>
-                    <div class="form-group">
-                        <label>Đóng góp hàng tháng (VNĐ):</label>
-                        <input type="number" id="invest-monthly" class="input-field" placeholder="5000000" value="5000000">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Đóng góp hàng tháng (VNĐ):</label>
+                        <input type="number" id="invest-monthly" class="input-field" value="5000000">
                     </div>
                     <button onclick="calculateInvestment()" class="btn btn-primary btn-block">
                         <i class="fas fa-calculator"></i> Tính toán
@@ -952,21 +952,21 @@
             <div class="calc-panel">
                 <h3><i class="fas fa-home"></i> Tính mua nhà trả góp</h3>
                 <div class="calc-form">
-                    <div class="form-group">
-                        <label>Giá nhà (VNĐ):</label>
-                        <input type="number" id="home-price" class="input-field" placeholder="2000000000" value="2000000000">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Giá nhà (VNĐ):</label>
+                        <input type="number" id="home-price" class="input-field" value="2000000000">
                     </div>
-                    <div class="form-group">
-                        <label>Tiền trả trước (%):</label>
-                        <input type="number" id="down-payment" class="input-field" placeholder="20" value="20" step="1">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Tiền trả trước (%):</label>
+                        <input type="number" id="down-payment" class="input-field" value="20" step="1">
                     </div>
-                    <div class="form-group">
-                        <label>Lãi suất (%/năm):</label>
-                        <input type="number" id="mortgage-rate" class="input-field" placeholder="9" value="9" step="0.1">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Lãi suất (%/năm):</label>
+                        <input type="number" id="mortgage-rate" class="input-field" value="9" step="0.1">
                     </div>
-                    <div class="form-group">
-                        <label>Thời gian vay (năm):</label>
-                        <input type="number" id="mortgage-years" class="input-field" placeholder="20" value="20">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Thời gian vay (năm):</label>
+                        <input type="number" id="mortgage-years" class="input-field" value="20">
                     </div>
                     <button onclick="calculateMortgage()" class="btn btn-primary btn-block">
                         <i class="fas fa-calculator"></i> Tính toán
@@ -997,17 +997,17 @@
             <div class="calc-panel">
                 <h3><i class="fas fa-piggy-bank"></i> Tính tiết kiệm</h3>
                 <div class="calc-form">
-                    <div class="form-group">
-                        <label">Mục tiêu tiết kiệm (VNĐ):</label>
-                        <input type="number" id="savings-goal" class="input-field" placeholder="500000000" value="500000000">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Mục tiêu tiết kiệm (VNĐ):</label>
+                        <input type="number" id="savings-goal" class="input-field" value="500000000">
                     </div>
-                    <div class="form-group">
-                        <label>Lãi suất (%/năm):</label>
-                        <input type="number" id="savings-rate" class="input-field" placeholder="6" value="6" step="0.1">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Lãi suất (%/năm):</label>
+                        <input type="number" id="savings-rate" class="input-field" value="6" step="0.1">
                     </div>
-                    <div class="form-group">
-                        <label>Thời gian (tháng):</label>
-                        <input type="number" id="savings-months" class="input-field" placeholder="60" value="60">
+                    <div class="calc-input-group">
+                        <label class="calc-label">Thời gian (tháng):</label>
+                        <input type="number" id="savings-months" class="input-field" value="60">
                     </div>
                     <button onclick="calculateSavings()" class="btn btn-primary btn-block">
                         <i class="fas fa-calculator"></i> Tính toán
@@ -1142,6 +1142,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="https://unpkg.com/lunar-javascript/lunar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="main.js"></script>

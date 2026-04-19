@@ -947,16 +947,17 @@ h1, h2, h3, .hero-title, .section-title {
     color: var(--text-primary);
 }
 .calc-panel h3 i { color: var(--accent-1); }
-.calc-panel .form-group {
+.calc-panel .form-group, .calc-input-group {
     margin-bottom: var(--spacing-sm);
 }
-.calc-panel .form-group label {
+.calc-panel .form-group label, .calc-label {
     display: block;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 0.35rem;
-    letter-spacing: 0.01em;
+    color: var(--text-tertiary);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 .calc-panel .input-field {
     width: 100%;
@@ -1024,10 +1025,14 @@ h1, h2, h3, .hero-title, .section-title {
     font-size: 1.6rem;
     color: white;
 }
-.result-item canvas {
-    max-width: 100%;
-    margin-top: var(--spacing-sm);
+
+/* ── CALC CHART CANVAS ── */
+.calc-result canvas {
+    margin-top: var(--spacing-md);
+    max-height: 220px;
+    width: 100% !important;
 }
+
 
 /* ── IDEA FORM ── */
 .idea-form { display: flex; gap: 0.6rem; margin-top: var(--spacing-md); }
