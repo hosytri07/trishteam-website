@@ -10,7 +10,7 @@
 :root{--bg:#0f0e0c;--bg2:#1a1814;--bg3:#242018;--card:#1e1c18;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f5f2ed;--muted:#a09890;--hint:#6b6560;--accent:#667eea;--grad:linear-gradient(135deg,#667eea,#764ba2);--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--r:10px;--r2:18px;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;background:rgba(26,24,20,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .topbar-brand{font-weight:800;font-size:1.1rem;color:var(--text);display:flex;align-items:center;gap:.4rem}
 .topbar-brand span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .back-btn{display:flex;align-items:center;gap:.4rem;padding:.4rem .85rem;border:1px solid var(--border);border-radius:30px;background:transparent;color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;transition:all .18s}
@@ -23,13 +23,13 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
 /* Layout */
 .admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px);display:none}
-.admin-sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1rem 0}
+.admin-sidebar{background:rgba(26,24,20,0.85);border-right:1px solid var(--border);padding:1rem 0;position:relative;z-index:1}
 .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.2rem;cursor:pointer;transition:all .15s;color:var(--muted);font-size:.88rem;font-weight:500;border:none;background:none;width:100%;text-align:left;font-family:inherit}
 .admin-nav-item:hover,.admin-nav-item.active{background:rgba(102,126,234,.1);color:var(--accent)}
 .admin-nav-item i{width:18px;text-align:center;font-size:.9rem}
 .nav-sep{height:1px;background:var(--border);margin:.5rem 0}
 .nav-label{font-size:.68rem;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;padding:.4rem 1.2rem}
-.admin-content{padding:1.5rem;overflow-y:auto}
+.admin-content{padding:1.5rem;overflow-y:auto;position:relative;z-index:1}
 
 /* Tab panels */
 .tab-panel{display:none}.tab-panel.active{display:block}
@@ -56,6 +56,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .btn-sm:hover{border-color:var(--accent);color:var(--accent)}
 .btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
 .btn-sm.primary{background:var(--grad);color:#fff;border:none}
+.btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
 
 /* Forms */
 .form-row{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.9rem}
@@ -94,6 +95,29 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   .admin-layout{grid-template-columns:1fr}
   .admin-sidebar{display:none}
   .form-grid{grid-template-columns:1fr}
+}
+
+/* ── GLOBAL ANIMATED BG ── */
+body::before {
+    content:'';position:fixed;inset:0;z-index:-2;
+    background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(102,126,234,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 70%, rgba(118,75,162,0.09) 0%, transparent 60%);
+    animation: gbgMove 25s ease-in-out infinite;
+    pointer-events:none;
+}
+body::after {
+    content:'';position:fixed;inset:0;z-index:-1;
+    background-image:
+        linear-gradient(rgba(102,126,234,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,0.04) 1px, transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+}
+@keyframes gbgMove {
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(18px,-12px) scale(1.02)}
+    66%{transform:translate(-12px,18px) scale(0.98)}
 }
 </style>
 </head>
@@ -384,10 +408,10 @@ async function loadUsers() {
         <div><div style="font-weight:700;font-size:.86rem">${u.name||'—'}</div><div style="font-size:.72rem;color:var(--hint)">${u.email||''}</div></div></div></td>
       <td><span style="display:inline-flex;align-items:center;gap:.3rem;padding:3px 9px;border-radius:20px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.05);color:${roleCol}">${roleIcon} ${(u.role||'trial').toUpperCase()}</span></td>
       <td style="color:var(--muted);font-size:.8rem">${date}</td>
-      <td style="display:flex;gap:.4rem">
-        <button class="btn-sm" onclick="setRole('${c.key}','admin')">Admin</button>
-        <button class="btn-sm" onclick="setRole('${c.key}','key')">Key</button>
-        <button class="btn-sm" onclick="setRole('${c.key}','trial')">Trial</button>
+      <td style="display:flex;gap:.35rem;flex-wrap:wrap">
+        ${(u.role||'trial')!=='admin'?`<button class="btn-sm primary" onclick="setRole('${c.key}','admin')">🛡️ → Admin</button>`:''}
+        ${(u.role||'trial')!=='key'?`<button class="btn-sm" onclick="setRole('${c.key}','key')">🔑 → Key</button>`:''}
+        ${(u.role||'trial')!=='trial'?`<button class="btn-sm danger" onclick="setRole('${c.key}','trial')">⏱ → Trial</button>`:''}
       </td>
     </tr>`);
   });
@@ -469,14 +493,20 @@ async function loadKeys() {
   const items = [];
   snap.forEach(c => {
     const k = c.val();
-    const cls = k.used ? 'key-status-used' : '';
-    items.push(`<div class="key-item">
+    const cls   = k.used ? 'key-status-used' : '';
+    const stCol = k.used ? 'var(--red)' : 'var(--green)';
+    const stTxt = k.used ? '🔴 Đã dùng' : '🟢 Còn hạn';
+    items.push(`<div class="key-item" style="position:relative;padding-right:2.2rem">
       <div class="key-code ${cls}">${c.key}</div>
-      <div style="font-size:.72rem;color:var(--muted);margin-top:3px">${k.expire} · ${k.used?'Đã dùng':'Còn hạn'}</div>
-      ${k.note?`<div style="font-size:.72rem;color:var(--hint)">${k.note}</div>`:''}
+      <div style="font-size:.71rem;color:var(--muted);margin-top:3px">${k.expire} · <span style="color:${stCol};font-weight:700">${stTxt}</span></div>
+      ${k.note ? `<div style="font-size:.71rem;color:var(--hint);margin-top:2px">📝 ${k.note}</div>` : ''}
+      <button onclick="deleteKey('${c.key}')" title="Xóa key"
+        style="position:absolute;top:.45rem;right:.45rem;width:22px;height:22px;border:none;background:rgba(239,68,68,.18);color:#ef4444;border-radius:50%;cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s"
+        onmouseover="this.style.background='rgba(239,68,68,.35)'"
+        onmouseout="this.style.background='rgba(239,68,68,.18)'">✕</button>
     </div>`);
   });
-  document.getElementById('keys-list').innerHTML = items.join('') || '<p style="color:var(--hint);font-size:.85rem">Chưa có key nào</p>';
+  document.getElementById('keys-list').innerHTML = items.join('') || '<p style="color:var(--hint);font-size:.85rem;padding:1rem">Chưa có key nào</p>';
 }
 
 // ── POSTS ──

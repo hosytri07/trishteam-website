@@ -64,6 +64,41 @@ body {
     line-height: 1.65;
     overflow-x: hidden;
     transition: background-color var(--transition-base), color var(--transition-base);
+    position: relative;
+}
+
+/* ── GLOBAL ANIMATED BACKGROUND ── */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(102,126,234,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 70%, rgba(118,75,162,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(102,126,234,0.05) 0%, transparent 60%);
+    animation: globalGradientMove 25s ease-in-out infinite;
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+        linear-gradient(rgba(102,126,234,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+@keyframes globalGradientMove {
+    0%   { transform: translate(0,0) scale(1); }
+    25%  { transform: translate(20px,-15px) scale(1.02); }
+    50%  { transform: translate(-15px,20px) scale(0.98); }
+    75%  { transform: translate(10px,10px) scale(1.01); }
+    100% { transform: translate(0,0) scale(1); }
 }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-md); }
 
@@ -223,8 +258,8 @@ h1, h2, h3, .hero-title, .section-title {
     top: -50%; left: -25%;
     width: 150%; height: 150%;
     background:
-        radial-gradient(circle at 30% 50%, rgba(102,126,234,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 75% 65%, rgba(118,75,162,0.12) 0%, transparent 50%);
+        radial-gradient(circle at 30% 50%, rgba(102,126,234,0.20) 0%, transparent 55%),
+        radial-gradient(circle at 75% 65%, rgba(118,75,162,0.18) 0%, transparent 55%);
     animation: gradientMove 20s ease-in-out infinite;
 }
 @keyframes gradientMove {
@@ -232,12 +267,7 @@ h1, h2, h3, .hero-title, .section-title {
     50%{transform:translate(25px,-25px) rotate(4deg)}
 }
 .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-        linear-gradient(var(--border-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-    background-size: 55px 55px;
-    opacity: 0.25;
+    display: none; /* Grid replaced by global animated bg */
 }
 
 /* Doodle dots decoration */
@@ -404,7 +434,8 @@ h1, h2, h3, .hero-title, .section-title {
 
 /* ── TOOLS SECTION — BENTO GRID ── */
 .tools-section {
-    background: var(--bg-secondary);
+    background: rgba(26,24,20,0.6);
+    backdrop-filter: blur(0px);
     padding: 60px 0;
 }
 .tools-filter {
@@ -545,7 +576,7 @@ h1, h2, h3, .hero-title, .section-title {
 }
 
 /* ── MYSTICAL SECTION ── */
-.mystical-section { background: var(--bg-primary); padding: 90px 0; }
+.mystical-section { background: rgba(15,14,12,0.5); padding: 90px 0; }
 .mystical-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -580,7 +611,7 @@ h1, h2, h3, .hero-title, .section-title {
 .mystical-features i { color: var(--accent-1); }
 
 /* ── UTILITIES SECTION ── */
-.utilities-section { background: var(--bg-secondary); padding: 60px 0; }
+.utilities-section { background: rgba(26,24,20,0.6); padding: 60px 0; }
 .utilities-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -624,7 +655,7 @@ h1, h2, h3, .hero-title, .section-title {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── CONTACT SECTION ── */
-.contact-section { background: var(--bg-primary); padding: 90px 0; }
+.contact-section { background: rgba(15,14,12,0.5); padding: 90px 0; }
 .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -901,7 +932,7 @@ h1, h2, h3, .hero-title, .section-title {
 .crypto-change.negative { color: #ef4444; }
 
 /* ── CALCULATORS SECTION ── */
-.calculators-section, .calculator-section { background: var(--bg-secondary); padding: 90px 0; }
+.calculators-section, .calculator-section { background: rgba(26,24,20,0.6); padding: 90px 0; }
 .calc-tabs { display: flex; gap: 0.5rem; margin-bottom: var(--spacing-xl); flex-wrap: wrap; }
 .calc-tab {
     padding: 0.6rem 1.3rem; border: 1.5px solid var(--border-color);
@@ -1623,7 +1654,7 @@ h1, h2, h3, .hero-title, .section-title {
 
 /* ==================== SOFTWARE SECTION ==================== */
 .software-section {
-    background: var(--bg-primary);
+    background: rgba(15,14,12,0.5);
     padding: 80px 0;
 }
 
@@ -2392,3 +2423,22 @@ section {
 .software-section, .contact-section, .calculators-section {
     transition: background-color var(--transition-base);
 }
+
+/* ── GLOBAL BG LIGHT THEME ADJUSTMENT ── */
+[data-theme="light"] body::before {
+    background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(102,126,234,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 70%, rgba(118,75,162,0.06) 0%, transparent 60%);
+}
+[data-theme="light"] body::after {
+    background-image:
+        linear-gradient(rgba(102,126,234,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+[data-theme="light"] .tools-section   { background: rgba(242,240,236,0.75); }
+[data-theme="light"] .utilities-section { background: rgba(242,240,236,0.75); }
+[data-theme="light"] .mystical-section { background: rgba(250,249,247,0.7); }
+[data-theme="light"] .contact-section  { background: rgba(250,249,247,0.7); }
+[data-theme="light"] .calculators-section, 
+[data-theme="light"] .calculator-section { background: rgba(242,240,236,0.75); }
