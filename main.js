@@ -374,14 +374,44 @@ document.addEventListener('DOMContentLoaded', () => {
 const handleContactForm = async (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const message = document.getElementById('contact-message').value;
-    
-    // Here you can add your form submission logic
-    // For now, just show a success message
-    showToast('✓ Tin nhắn đã được gửi thành công!');
-    e.target.reset();
+    const name = document.getElementById('contact-name').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const message = document.getElementById('contact-message').value.trim();
+    const btn = e.target.querySelector('button[type="submit"]');
+
+    if (!name || !email || !message) {
+        showToast('✗ Vui lòng điền đầy đủ thông tin!');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+
+    const BOT_TOKEN = '8668861015:AAES7-vHAOuuV2D4Nk2budyQIzgZ9arIYRU';
+    const CHAT_ID = '1687867690';
+    const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const text = `📬 <b>Liên hệ mới — TrishTeam</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email}\n💬 <b>Nội dung:</b>\n${message}\n\n🕐 ${now}`;
+
+    try {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' })
+        });
+        const data = await res.json();
+        if (data.ok) {
+            showToast('✓ Tin nhắn đã được gửi thành công!');
+            e.target.reset();
+        } else {
+            throw new Error(data.description || 'Telegram error');
+        }
+    } catch (err) {
+        console.error('Telegram error:', err);
+        showToast('✗ Lỗi gửi tin nhắn. Vui lòng thử lại sau!');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi tin nhắn';
+    }
 };
 
 // ==================== TOOL FUNCTIONS ====================
@@ -611,8 +641,8 @@ const loadUtilities = async () => {
     await Promise.all([
         loadGoldPrice(),
         loadUSDRate(),
-        loadLunarDate(),
-        loadWeather()
+        loadGasolinePrice(),
+        loadLunarDate()
     ]);
 };
 
@@ -659,6 +689,18 @@ const loadWeather = async () => {
     }
 };
 
+const loadGasolinePrice = async () => {
+    const priceEl = document.getElementById('gasoline-price');
+    
+    try {
+        await new Promise(resolve => setTimeout(resolve, 1300));
+        const price = 22450; // Mock data - replace with actual API
+        priceEl.innerHTML = formatNumber(price);
+    } catch (err) {
+        priceEl.textContent = 'N/A';
+    }
+};
+
 const loadLunarDate = async () => {
     const dateEl = document.getElementById('lunar-date');
     const yearEl = document.getElementById('lunar-year');
@@ -687,6 +729,200 @@ const loadLunarDate = async () => {
         yearEl.textContent = '---';
     }
 };
+
+// ==================== SOFTWARE SECTION ====================
+const initSoftwareTabs = () => {
+    const tabs = document.querySelectorAll('.software-tab');
+    const contents = document.querySelectorAll('.software-content');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+            
+            // Update active tab
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Update active content
+            contents.forEach(content => {
+                if (content.id === targetTab) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        });
+    });
+    
+    // Idea form submission
+    const ideaForm = document.getElementById('idea-form');
+    if (ideaForm) {
+        ideaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('✓ Cảm ơn bạn đã đóng góp ý tưởng!');
+            ideaForm.reset();
+        });
+    }
+};
+
+const downloadSoftware = (softwareId) => {
+    // In real app, this would trigger actual download
+    showToast(`Đang tải xuống ${softwareId.toUpperCase()}...`);
+    
+    // Simulate download
+    setTimeout(() => {
+        showToast('✓ Tải xuống thành công!');
+    }, 2000);
+};
+
+const viewSoftwareDetails = (softwareId) => {
+    const modal = document.getElementById('tool-modal');
+    const modalBody = document.getElementById('modal-body');
+    
+    const softwareDetails = {
+        'tkl': {
+            title: 'TKL - Tính Khối Lượng',
+            icon: 'fa-layer-group',
+            version: 'v2.5.1',
+            description: 'Phần mềm tính toán khối lượng đất đắp, đào tự động từ mặt cắt ngang. Hỗ trợ đa dạng loại mặt cắt và xuất bảng Excel.',
+            features: [
+                'Tính khối lượng đất đắp, đào tự động',
+                'Hỗ trợ nhiều loại mặt cắt ngang',
+                'Xuất kết quả ra Excel với định dạng đẹp',
+                'Tích hợp công thức tính toán chính xác',
+                'Hỗ trợ undo/redo',
+                'Tùy chỉnh layer và màu sắc'
+            ],
+            requirements: [
+                'AutoCAD 2010 trở lên',
+                'Windows 7/8/10/11',
+                'Visual LISP Runtime'
+            ],
+            changelog: [
+                { version: 'v2.5.1', date: '10/01/2026', changes: ['Sửa lỗi tính toán với mặt cắt đặc biệt', 'Cải thiện hiệu suất'] },
+                { version: 'v2.5.0', date: '05/12/2025', changes: ['Thêm tính năng xuất Excel nâng cao', 'Hỗ trợ thêm loại mặt cắt mới'] },
+                { version: 'v2.4.0', date: '20/10/2025', changes: ['Cập nhật giao diện', 'Tối ưu thuật toán tính toán'] }
+            ]
+        },
+        'cd': {
+            title: 'CD - Cắt Chân Dim',
+            icon: 'fa-ruler',
+            version: 'v1.8.0',
+            description: 'Cắt chân dimension theo tiêu chuẩn thiết kế. Tự động điều chỉnh vị trí và format text.',
+            features: [
+                'Cắt dimension theo tiêu chuẩn',
+                'Auto format text dimension',
+                'Hỗ trợ nhiều layer',
+                'Batch processing',
+                'Tùy chỉnh độ dài cắt',
+                'Preview trước khi áp dụng'
+            ],
+            requirements: [
+                'AutoCAD 2010 trở lên',
+                'Windows 7/8/10/11'
+            ],
+            changelog: [
+                { version: 'v1.8.0', date: '05/12/2025', changes: ['Thêm chức năng preview', 'Cải thiện độ chính xác'] },
+                { version: 'v1.7.5', date: '15/09/2025', changes: ['Sửa lỗi với dimension xoay', 'Tối ưu hiệu suất'] }
+            ]
+        },
+        'ntext': {
+            title: 'NTEXT - Nối Text',
+            icon: 'fa-font',
+            version: 'v1.3.2',
+            description: 'Nối text nhanh chóng với nhiều tùy chọn. Hỗ trợ format và sắp xếp tự động.',
+            features: [
+                'Nối text nhanh chóng',
+                'Nhiều tùy chọn nối',
+                'Auto format text',
+                'Undo/redo support',
+                'Giữ nguyên style gốc',
+                'Tùy chỉnh ký tự phân cách'
+            ],
+            requirements: [
+                'AutoCAD 2010 trở lên',
+                'Windows 7/8/10/11'
+            ],
+            changelog: [
+                { version: 'v1.3.2', date: '20/11/2025', changes: ['Sửa lỗi với text đặc biệt', 'Cải thiện UI'] },
+                { version: 'v1.3.0', date: '01/10/2025', changes: ['Thêm tùy chọn format mới', 'Tối ưu thuật toán'] }
+            ]
+        }
+    };
+    
+    const software = softwareDetails[softwareId];
+    if (!software) return;
+    
+    modalBody.innerHTML = `
+        <div class="software-detail">
+            <div class="detail-header">
+                <div class="software-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas ${software.icon}"></i>
+                </div>
+                <div>
+                    <h2>${software.title}</h2>
+                    <span class="version-badge">${software.version}</span>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Mô tả</h3>
+                <p>${software.description}</p>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Tính năng</h3>
+                <ul class="feature-list">
+                    ${software.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                </ul>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Yêu cầu hệ thống</h3>
+                <ul class="requirement-list">
+                    ${software.requirements.map(r => `<li><i class="fas fa-desktop"></i> ${r}</li>`).join('')}
+                </ul>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Lịch sử cập nhật</h3>
+                <div class="changelog">
+                    ${software.changelog.map(log => `
+                        <div class="changelog-item">
+                            <div class="changelog-header">
+                                <span class="version-badge">${log.version}</span>
+                                <span class="changelog-date">${log.date}</span>
+                            </div>
+                            <ul>
+                                ${log.changes.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="detail-actions">
+                <button class="btn btn-primary btn-block" onclick="downloadSoftware('${softwareId}')">
+                    <i class="fas fa-download"></i> Tải xuống ${software.version}
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+};
+
+// Add to initialization
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initNavigation();
+    initToolsFilter();
+    initSoftwareTabs();
+    loadUtilities();
+    
+    // Rest of initialization code...
+});
 
 // ==================== MYSTICAL FUNCTIONS ====================
 const getMysticalContent = (mysticalId) => {
