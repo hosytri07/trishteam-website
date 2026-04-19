@@ -413,6 +413,25 @@
                     <p class="utility-unit" id="lunar-year">---</p>
                     <div class="utility-update" id="lunar-holiday">Không có sự kiện</div>
                 </div>
+
+                <!-- Weather Card -->
+                <div class="utility-card weather-utility">
+                    <div class="utility-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                        <i class="fas fa-cloud-sun" id="weather-icon-small"></i>
+                    </div>
+                    <h3 class="utility-title">Thời Tiết</h3>
+                    <div class="utility-value" id="weather-main-temp" style="font-size:1.6rem;">
+                        <span class="loading-spinner"></span>
+                    </div>
+                    <p class="utility-unit" id="weather-main-desc">Đang tải...</p>
+                    <div class="utility-update">
+                        <div class="weather-detail-mini">
+                            <span><i class="fas fa-tint"></i> <span id="weather-humidity">--</span></span>
+                            <span><i class="fas fa-wind"></i> <span id="weather-wind">--</span></span>
+                        </div>
+                        <div style="margin-top:0.3rem;color:var(--text-tertiary)">Vị trí: Đà Nẵng</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -818,7 +837,7 @@
 </section>
 
 <!-- Advanced Calculator Section -->
-<section class="calculator-section" id="calculators">
+<section class="calculators-section calculator-section" id="calculators">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Máy tính nâng cao</h2>
@@ -1016,40 +1035,7 @@
     </div>
 </section>
 
-<!-- Weather Widget -->
-<section class="weather-widget" id="weather">
-    <div class="container">
-        <div class="weather-card">
-            <div class="weather-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Đà Nẵng, Việt Nam</span>
-            </div>
-            <div class="weather-main">
-                <div class="weather-icon" id="weather-icon">
-                    <i class="fas fa-sun"></i>
-                </div>
-                <div class="weather-info">
-                    <div class="weather-temp" id="weather-main-temp">28°C</div>
-                    <div class="weather-desc" id="weather-main-desc">Nắng đẹp</div>
-                </div>
-            </div>
-            <div class="weather-details">
-                <div class="detail-item">
-                    <i class="fas fa-tint"></i>
-                    <span>Độ ẩm: <strong id="weather-humidity">65%</strong></span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-wind"></i>
-                    <span>Gió: <strong id="weather-wind">15 km/h</strong></span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-compress"></i>
-                    <span>Áp suất: <strong id="weather-pressure">1013 hPa</strong></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
