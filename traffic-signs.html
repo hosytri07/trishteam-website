@@ -97,6 +97,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
 @media(max-width:600px){.signs-grid{grid-template-columns:1fr 1fr}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -126,8 +128,14 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <div class="wrap">
   <div class="page-hero">
     <div class="legal-badge"><i class="fas fa-gavel"></i> QC 41:2024/BGTVT — Bộ GTVT Việt Nam</div>
+    <div class="legal-badge" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--yellow)">
+      <i class="fas fa-shield-alt"></i> Dữ liệu do Admin kiểm soát — đang cập nhật đầy đủ
+    </div>
     <h1>Tra cứu <span>Biển báo & Vạch sơn</span></h1>
     <p>Toàn bộ biển báo giao thông đường bộ theo Quy chuẩn kỹ thuật quốc gia QC 41:2024/BGTVT</p>
+    <p style="font-size:.78rem;color:var(--hint);margin-top:.4rem">
+      <i class="fas fa-info-circle"></i> Dữ liệu hiển thị là bản mẫu — Admin đang nhập liệu đầy đủ từ file PDF QC41 chính thức
+    </p>
   </div>
 
   <div class="search-wrap">
@@ -148,7 +156,40 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 </div>
 
 <script>
-// ── DỮ LIỆU BIỂN BÁO QC 41:2024 ──
+// ── FIREBASE ──
+const FB = {
+  apiKey:"AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",
+  authDomain:"trishteam-e3ae4.firebaseapp.com",
+  databaseURL:"https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"trishteam-e3ae4",
+  storageBucket:"trishteam-e3ae4.firebasestorage.app",
+  messagingSenderId:"930627527626",
+  appId:"1:930627527626:web:9018c3afbcb6ee819ae533"
+};
+if (!firebase.apps.length) firebase.initializeApp(FB);
+const db_ts = firebase.database();
+
+// Load từ Firebase, fallback về data local
+db_ts.ref('traffic_signs').once('value').then(snap => {
+  if (snap.exists()) {
+    const fbData = [];
+    snap.forEach(c => fbData.push(c.val()));
+    if (fbData.length > 0) {
+      window.SIGNS_DATA = fbData;
+      render();
+      return;
+    }
+  }
+  // Fallback: dùng data local
+  window.SIGNS_DATA = SIGNS;
+  render();
+}).catch(() => {
+  window.SIGNS_DATA = SIGNS;
+  render();
+});
+
+// ── DỮ LIỆU BIỂN BÁO QC 41:2024 (Bản mẫu — fallback) ──
+const SIGNS = [
 const SIGNS = [
   // ── BIỂN CẤM ──
   {id:"P.101",cat:"cam",icon:"🚫",name:"Đường cấm",desc:"Cấm tất cả các loại xe và người đi bộ.",shape:"Hình tròn, nền trắng, viền đỏ, vạch chéo đỏ",usage:"Đặt ở đầu những đường cấm xe và người qua lại hoàn toàn.",usecase:"Đường đang thi công, khu vực an ninh, đường chuyên dụng."},
@@ -201,13 +242,13 @@ let currentCat = 'all';
 let searchVal  = '';
 
 function render() {
-  let filtered = SIGNS.filter(s => {
+  let filtered = (window.SIGNS_DATA||SIGNS).filter(s => {
     if (currentCat !== 'all' && s.cat !== currentCat) return false;
     const q = searchVal.toLowerCase();
     if (q && !s.name.toLowerCase().includes(q) && !s.id.toLowerCase().includes(q) && !s.desc.toLowerCase().includes(q) && !(s.usecase||'').toLowerCase().includes(q)) return false;
     return true;
   });
-  document.getElementById('result-info').textContent = `Hiển thị ${filtered.length} / ${SIGNS.length} mục`;
+  document.getElementById('result-info').textContent = `Hiển thị ${filtered.length} / ${(window.SIGNS_DATA||SIGNS).length} mục`;
   const grid = document.getElementById('signs-grid');
   if (!filtered.length) {
     grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><i class="fas fa-search"></i><br><br>Không tìm thấy kết quả cho "<strong>${searchVal}</strong>"</div>`;

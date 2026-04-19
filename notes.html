@@ -72,6 +72,21 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .tag-idea{background:rgba(239,68,68,.15);color:var(--red)}
 .tag-github{background:rgba(59,130,246,.15);color:var(--blue)}
 
+
+/* Deadline */
+.deadline-row{display:flex;align-items:center;gap:.5rem;padding:.45rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;background:var(--bg2)}
+.deadline-toggle{display:flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:var(--hint);cursor:pointer;padding:.2rem .5rem;border-radius:6px;border:1.5px dashed var(--border);background:transparent;font-family:inherit;transition:all .15s;white-space:nowrap}
+.deadline-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.deadline-toggle.active{border-color:var(--yellow);color:var(--yellow);border-style:solid}
+.deadline-inputs{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.deadline-inputs label{font-size:.72rem;font-weight:700;color:var(--hint);white-space:nowrap}
+.deadline-inputs input[type=date]{padding:.3rem .6rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;font-size:.78rem;transition:border-color .15s;cursor:pointer}
+.deadline-inputs input[type=date]:focus{outline:none;border-color:var(--accent)}
+.deadline-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:10px}
+.deadline-badge.overdue{background:rgba(239,68,68,.15);color:var(--red)}
+.deadline-badge.today{background:rgba(245,158,11,.15);color:var(--yellow)}
+.deadline-badge.upcoming{background:rgba(16,185,129,.15);color:var(--green)}
+.deadline-badge.nodate{display:none}
 .note-pin{position:absolute;top:.5rem;right:.5rem;color:var(--yellow);font-size:.7rem;opacity:0.8}
 
 .empty-state{text-align:center;padding:3rem 1rem;color:var(--hint)}
@@ -235,6 +250,18 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
           <button class="tag-chip" data-tag="idea" onclick="toggleTag(this)">Ý tưởng</button>
           <button class="tag-chip" data-tag="github" onclick="toggleTag(this)">GitHub</button>
         </div>
+        <div class="deadline-row" id="deadline-row">
+          <button class="deadline-toggle" id="deadline-toggle" onclick="toggleDeadline()">
+            <i class="fas fa-calendar-alt"></i> Đặt deadline
+          </button>
+          <div class="deadline-inputs" id="deadline-inputs" style="display:none">
+            <label>Bắt đầu:</label>
+            <input type="date" id="dl-start" onchange="saveDeadline()">
+            <label>Kết thúc:</label>
+            <input type="date" id="dl-end" onchange="saveDeadline()">
+            <button onclick="clearDeadline()" style="padding:.2rem .55rem;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--hint);cursor:pointer;font-size:.72rem;font-family:inherit">✕ Xoá</button>
+          </div>
+        </div>
         <div class="editor-body">
           <textarea class="note-textarea" id="note-body" placeholder="Bắt đầu viết ghi chú...&#10;&#10;Mẹo: Dùng # để tạo tiêu đề, - để tạo danh sách, [ ] để tạo checkbox" oninput="markUnsaved()"></textarea>
         </div>
@@ -330,6 +357,7 @@ function renderList() {
         <div class="note-item-meta">
           <span class="note-item-date">${date}</span>
           ${n.tag ? `<span class="note-item-tag tag-${n.tag}">${tagLabel(n.tag)}</span>` : ''}
+          ${deadlineBadge(n)}
         </div>
       </div>`;
   }).join('');
@@ -369,6 +397,13 @@ function openNote(id) {
   // Pin button
   document.getElementById('btn-pin').classList.toggle('active', !!n.pinned);
 
+  // Deadline
+  const hasDL = !!(n.dlStart || n.dlEnd);
+  document.getElementById('deadline-toggle').classList.toggle('active', hasDL);
+  document.getElementById('deadline-inputs').style.display = hasDL ? 'flex' : 'none';
+  document.getElementById('dl-start').value = n.dlStart || '';
+  document.getElementById('dl-end').value   = n.dlEnd   || '';
+
   updateWordCount();
   setSaveStatus('saved');
   renderList();
@@ -388,7 +423,9 @@ function saveActive() {
   const title = document.getElementById('note-title').value;
   const body  = document.getElementById('note-body').value;
   const now   = Date.now();
-  const upd   = { title, body, updatedAt: now };
+  const dlStart = document.getElementById('dl-start').value;
+  const dlEnd   = document.getElementById('dl-end').value;
+  const upd   = { title, body, updatedAt: now, dlStart: dlStart||'', dlEnd: dlEnd||'' };
   notes[activeId] = { ...notes[activeId], ...upd };
   db.ref(`notes/${currentUser.uid}/${activeId}`).update(upd)
     .then(() => { setSaveStatus('saved'); renderList(); })
@@ -541,6 +578,59 @@ function exportNote() {
 }
 
 function toggleView() { toast('Chế độ xem thẻ — sắp ra mắt!','info'); }
+
+// ── DEADLINE ──
+function deadlineBadge(n) {
+  if (!n.dlEnd) return '';
+  const end  = new Date(n.dlEnd + 'T23:59:59');
+  const now  = new Date();
+  const diff = Math.ceil((end - now) / 86400000);
+  if (diff < 0)  return '<span class="deadline-badge overdue"><i class="fas fa-exclamation-circle"></i> Quá hạn</span>';
+  if (diff === 0) return '<span class="deadline-badge today"><i class="fas fa-fire"></i> Hôm nay</span>';
+  if (diff <= 3)  return `<span class="deadline-badge upcoming"><i class="fas fa-clock"></i> Còn ${diff} ngày</span>`;
+  return `<span class="deadline-badge upcoming" style="background:transparent;color:var(--hint);font-size:.66rem"><i class="fas fa-calendar"></i> ${new Date(n.dlEnd).toLocaleDateString('vi-VN')}</span>`;
+}
+
+function toggleDeadline() {
+  if (!activeId) return;
+  const inputs = document.getElementById('deadline-inputs');
+  const btn    = document.getElementById('deadline-toggle');
+  const isOpen = inputs.style.display !== 'none';
+  if (isOpen) {
+    clearDeadline();
+  } else {
+    inputs.style.display = 'flex';
+    btn.classList.add('active');
+    // Default: today → 7 days
+    const today = new Date().toISOString().split('T')[0];
+    const next7 = new Date(Date.now()+7*86400000).toISOString().split('T')[0];
+    if (!document.getElementById('dl-start').value) document.getElementById('dl-start').value = today;
+    if (!document.getElementById('dl-end').value)   document.getElementById('dl-end').value   = next7;
+    saveDeadline();
+  }
+}
+
+function saveDeadline() {
+  if (!activeId) return;
+  const dlStart = document.getElementById('dl-start').value;
+  const dlEnd   = document.getElementById('dl-end').value;
+  notes[activeId].dlStart = dlStart;
+  notes[activeId].dlEnd   = dlEnd;
+  db.ref(`notes/${currentUser.uid}/${activeId}`).update({ dlStart, dlEnd });
+  renderList();
+}
+
+function clearDeadline() {
+  if (!activeId) return;
+  document.getElementById('dl-start').value = '';
+  document.getElementById('dl-end').value   = '';
+  document.getElementById('deadline-inputs').style.display = 'none';
+  document.getElementById('deadline-toggle').classList.remove('active');
+  notes[activeId].dlStart = '';
+  notes[activeId].dlEnd   = '';
+  db.ref(`notes/${currentUser.uid}/${activeId}`).update({ dlStart:'', dlEnd:'' });
+  renderList();
+}
 
 function toast(msg, type='ok') {
   const t = document.getElementById('toast');
