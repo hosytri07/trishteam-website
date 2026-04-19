@@ -43,8 +43,26 @@
                     <span>Đăng nhập</span>
                 </a>
                 <!-- Đã login - ẩn mặc định -->
+                <!-- Bell notification (hiện khi đã login) -->
+                <div class="nav-bell-wrap" id="nav-bell-wrap" style="display:none;position:relative">
+                    <button class="nav-bell-btn" id="nav-bell-btn" onclick="toggleNotifDrawer()" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="bell-badge" id="bell-badge" style="display:none">0</span>
+                    </button>
+                    <!-- Notification Drawer -->
+                    <div class="notif-drawer" id="notif-drawer">
+                        <div class="notif-drawer-header">
+                            <span class="notif-drawer-title">🔔 Thông báo</span>
+                            <button class="notif-mark-all" onclick="markAllRead()">Đọc tất cả</button>
+                        </div>
+                        <div class="notif-list" id="notif-list">
+                            <div class="notif-empty">Chưa có thông báo</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="nav-user-menu" id="nav-user-menu" style="display:none">
-                    <div class="nav-avatar">
+                    <div class="nav-avatar" id="nav-avatar">
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <span class="nav-user-name" id="nav-user-name">User</span>
@@ -134,30 +152,62 @@
             <div class="hero-grid"></div>
         </div>
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-sparkles"></i>
-                    <span>Phi thương mại • Miễn phí 100%</span>
+            <div class="hero-split">
+                <!-- LEFT: Text + Buttons -->
+                <div class="hero-left">
+                    <div class="hero-badge">
+                        <i class="fas fa-sparkles"></i>
+                        <span>Phi thương mại • Miễn phí 100%</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Hệ sinh thái
+                        <span class="gradient-text">Đa năng Workspace</span>
+                    </h1>
+                    <p class="hero-sub">Công cụ hàng ngày, ôn thi, ghi chú, tra cứu — tất cả trong một nơi.</p>
+                    <div class="hero-buttons">
+                        <a href="#tools" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i> Khám phá
+                        </a>
+                        <a href="login.html" class="btn btn-secondary">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                    </div>
                 </div>
-                <h1 class="hero-title">
-                    Hệ sinh thái
-                    <span class="gradient-text">Đa năng Workspace</span>
-                </h1>
-                <div class="hero-buttons">
-                    <a href="#tools" class="btn btn-primary">
-                        <i class="fas fa-rocket"></i>
-                        Khám phá
-                    </a>
-                    <a href="login.html" class="btn btn-secondary">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Đăng nhập
-                    </a>
-                    <a href="https://github.com/hosytri07" target="_blank" class="btn btn-secondary">
-                        <i class="fab fa-github"></i>
-                        GitHub
-                    </a>
+                <!-- RIGHT: Feature mini-cards -->
+                <div class="hero-right">
+                    <div class="hero-feat-grid">
+                        <a href="driving-test.html" class="hero-feat-card">
+                            <span class="hfc-icon">🚗</span>
+                            <span class="hfc-label">Ôn thi lái xe</span>
+                            <span class="hfc-sub">596 câu B/B1</span>
+                        </a>
+                        <a href="certificates.html" class="hero-feat-card">
+                            <span class="hfc-icon">🏗️</span>
+                            <span class="hfc-label">Chứng chỉ XD</span>
+                            <span class="hfc-sub">345 câu</span>
+                        </a>
+                        <a href="notes.html" class="hero-feat-card">
+                            <span class="hfc-icon">📝</span>
+                            <span class="hfc-label">Ghi chú</span>
+                            <span class="hfc-sub">Sync Firebase</span>
+                        </a>
+                        <a href="traffic-signs.html" class="hero-feat-card">
+                            <span class="hfc-icon">🚦</span>
+                            <span class="hfc-label">Biển báo</span>
+                            <span class="hfc-sub">143 biển QC41</span>
+                        </a>
+                        <a href="posts.html" class="hero-feat-card">
+                            <span class="hfc-icon">📰</span>
+                            <span class="hfc-label">Bảng tin</span>
+                            <span class="hfc-sub">Realtime feed</span>
+                        </a>
+                        <a href="#tools" class="hero-feat-card">
+                            <span class="hfc-icon">🛠️</span>
+                            <span class="hfc-label">Công cụ</span>
+                            <span class="hfc-sub">20+ tiện ích</span>
+                        </a>
+                    </div>
                 </div>
-            
             </div>
         </div>
         <div class="scroll-indicator">
@@ -1160,8 +1210,16 @@
                 if (loginBtn)   { loginBtn.classList.add('hidden'); }
                 if (userMenu)   { userMenu.classList.add('visible'); }
                 if (userNameEl) { userNameEl.textContent = user.displayName || user.email.split('@')[0]; }
+                // Avatar: hiện chữ cái đầu thay vì icon
+                const avatarEl = document.getElementById('nav-avatar');
+                if (avatarEl) {
+                    const letter = (user.displayName || user.email || 'U')[0].toUpperCase();
+                    avatarEl.innerHTML = `<span style="font-weight:800;font-size:.88rem">${letter}</span>`;
+                }
+                // Show bell
+                const bellWrap = document.getElementById('nav-bell-wrap');
+                if (bellWrap) bellWrap.style.display = 'flex';
                 if (sidebar)    {
-                    // Delay nhỏ để CSS transition kịp render
                     setTimeout(() => sidebar.classList.add('show'), 80);
                 }
                 // Lấy role từ DB
@@ -1172,12 +1230,17 @@
                         document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
                     }
                 });
+                // Subscribe notifications
+                subscribeNotifications(user.uid);
             } else {
                 // Chưa đăng nhập
                 if (loginBtn)  loginBtn.classList.remove('hidden');
                 if (userMenu)  userMenu.classList.remove('visible');
                 if (sidebar)   sidebar.classList.remove('show');
                 document.body.removeAttribute('data-role');
+                const bw = document.getElementById('nav-bell-wrap');
+                if (bw) bw.style.display = 'none';
+                if (window._notifListener) { window._notifListener.off(); }
             }
         });
 
@@ -1190,6 +1253,110 @@
     } catch(e) {
         console.warn('Firebase chưa cấu hình:', e.message);
     }
-    </script>
+    
+// ──────────────────────────────────────────────
+// NOTIFICATION BELL SYSTEM
+// ──────────────────────────────────────────────
+let _currentUid = null;
+
+function subscribeNotifications(uid) {
+    _currentUid = uid;
+    // Off old listener nếu có
+    if (window._notifListener) window._notifListener.off();
+    const ref = db.ref('notifications').orderByChild('timestamp');
+    window._notifListener = ref;
+    ref.on('value', snap => {
+        const items = [];
+        snap.forEach(c => items.unshift({ id: c.key, ...c.val() }));
+        renderNotifications(items, uid);
+    });
+}
+
+function renderNotifications(items, uid) {
+    // Filter: chỉ hiện thông báo cho role tương ứng hoặc 'all'
+    const role = document.body.getAttribute('data-role') || 'trial';
+    const visible = items.filter(n => {
+        const t = n.targetRole || 'all';
+        return t === 'all' || t === role;
+    });
+
+    // Count unread
+    const unread = visible.filter(n => !n.readBy || !n.readBy[uid]).length;
+    const badge = document.getElementById('bell-badge');
+    if (badge) {
+        badge.textContent = unread > 9 ? '9+' : unread;
+        badge.style.display = unread > 0 ? 'flex' : 'none';
+    }
+
+    // Render list
+    const list = document.getElementById('notif-list');
+    if (!list) return;
+    if (!visible.length) {
+        list.innerHTML = '<div class="notif-empty">Chưa có thông báo nào</div>';
+        return;
+    }
+
+    const TYPE_ICON = { info: 'ℹ️', success: '✅', warning: '⚠️' };
+    list.innerHTML = visible.map(n => {
+        const isRead = n.readBy && n.readBy[uid];
+        const ts = n.timestamp ? timeAgoNotif(n.timestamp) : '';
+        return `<div class="notif-item ${isRead ? 'read' : 'unread'}" onclick="markRead('${n.id}')">
+            <div class="notif-icon">${TYPE_ICON[n.type] || 'ℹ️'}</div>
+            <div class="notif-body">
+                <div class="notif-title">${n.title || ''}</div>
+                <div class="notif-text">${n.body || ''}</div>
+                <div class="notif-time">${ts}</div>
+            </div>
+            ${!isRead ? '<div class="notif-dot"></div>' : ''}
+        </div>`;
+    }).join('');
+}
+
+function markRead(id) {
+    if (!_currentUid) return;
+    db.ref(`notifications/${id}/readBy/${_currentUid}`).set(true);
+}
+
+function markAllRead() {
+    if (!_currentUid) return;
+    const list = document.getElementById('notif-list');
+    if (!list) return;
+    list.querySelectorAll('.notif-item.unread').forEach(el => {
+        // Extract ID from onclick
+        const m = el.getAttribute('onclick').match(/'([^']+)'/);
+        if (m) db.ref(`notifications/${m[1]}/readBy/${_currentUid}`).set(true);
+    });
+}
+
+function toggleNotifDrawer() {
+    const drawer = document.getElementById('notif-drawer');
+    if (!drawer) return;
+    const isOpen = drawer.classList.contains('open');
+    drawer.classList.toggle('open', !isOpen);
+    // Close when clicking outside
+    if (!isOpen) {
+        setTimeout(() => {
+            document.addEventListener('click', closeDrawerOnOutside, { once: true });
+        }, 50);
+    }
+}
+
+function closeDrawerOnOutside(e) {
+    const wrap = document.getElementById('nav-bell-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+        const drawer = document.getElementById('notif-drawer');
+        if (drawer) drawer.classList.remove('open');
+    }
+}
+
+function timeAgoNotif(ts) {
+    const s = Math.floor((Date.now()-ts)/1000);
+    if (s < 60)   return 'vừa xong';
+    if (s < 3600) return Math.floor(s/60) + ' phút trước';
+    if (s < 86400) return Math.floor(s/3600) + ' giờ trước';
+    return Math.floor(s/86400) + ' ngày trước';
+}
+
+</script>
 </body>
 </html>
