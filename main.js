@@ -374,13 +374,15 @@ document.addEventListener('DOMContentLoaded', () => {
 const handleContactForm = async (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('contact-name').value.trim();
-    const email = document.getElementById('contact-email').value.trim();
+    const name    = document.getElementById('contact-name').value.trim();
+    const email   = document.getElementById('contact-email').value.trim();
     const message = document.getElementById('contact-message').value.trim();
-    const btn = e.target.querySelector('button[type="submit"]');
+    const fileInput = document.getElementById('contact-file');
+    const file    = fileInput && fileInput.files[0];
+    const btn     = e.target.querySelector('button[type="submit"]');
 
-    if (!name || !email || !message) {
-        showToast('✗ Vui lòng điền đầy đủ thông tin!');
+    if (!name || !message) {
+        showToast('✗ Vui lòng điền tên và nội dung!');
         return;
     }
 
@@ -388,26 +390,40 @@ const handleContactForm = async (e) => {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
 
     const BOT_TOKEN = '8668861015:AAES7-vHAOuuV2D4Nk2budyQIzgZ9arIYRU';
-    const CHAT_ID = '1687867690';
+    const CHAT_ID   = '1687867690';
     const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-    const text = `📬 <b>Liên hệ mới — TrishTeam</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email}\n💬 <b>Nội dung:</b>\n${message}\n\n🕐 ${now}`;
+    const caption = `📬 <b>Liên hệ mới — TrishTeam</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email || 'Không có'}\n💬 <b>Nội dung:</b>\n${message}\n\n🕐 ${now}`;
 
     try {
-        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' })
-        });
-        const data = await res.json();
-        if (data.ok) {
-            showToast('✓ Tin nhắn đã được gửi thành công!');
-            e.target.reset();
+        if (file) {
+            // Gửi file kèm caption qua sendDocument
+            const form = new FormData();
+            form.append('chat_id', CHAT_ID);
+            form.append('document', file, file.name);
+            form.append('caption', caption);
+            form.append('parse_mode', 'HTML');
+            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                method: 'POST', body: form
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.description || 'File send error');
         } else {
-            throw new Error(data.description || 'Telegram error');
+            // Gửi text only
+            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: caption, parse_mode: 'HTML' })
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.description || 'Telegram error');
         }
+        showToast('✓ Tin nhắn đã được gửi thành công!');
+        e.target.reset();
+        const nameEl = document.getElementById('attach-name');
+        if (nameEl) { nameEl.textContent = 'Đính kèm file (tối đa 20MB)'; nameEl.style.color = ''; }
     } catch (err) {
         console.error('Telegram error:', err);
-        showToast('✗ Lỗi gửi tin nhắn. Vui lòng thử lại sau!');
+        showToast('✗ Lỗi gửi tin nhắn. Vui lòng thử lại!');
     } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi tin nhắn';
@@ -1453,3 +1469,52 @@ const calculateConstruction = () => {
         console.error(err);
     }
 };
+
+// ── SIDEBAR TOGGLE ──
+const sidebarToggle = document.getElementById('sidebar-toggle');
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+        const sidebar = document.getElementById('webapp-sidebar');
+        sidebar.classList.toggle('expanded');
+        const icon = sidebarToggle.querySelector('i');
+        if (sidebar.classList.contains('expanded')) {
+            icon.className = 'fas fa-chevron-left';
+            sidebarToggle.title = 'Thu gọn';
+        } else {
+            icon.className = 'fas fa-chevron-right';
+            sidebarToggle.title = 'Mở rộng';
+        }
+    });
+}
+
+// Sidebar active item theo scroll
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+        sidebarItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+    });
+});
+
+
+// ── CONTACT FILE ATTACHMENT ──
+function updateFileName(input) {
+    const nameEl = document.getElementById('attach-name');
+    if (!nameEl) return;
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+        if (file.size > 20 * 1024 * 1024) {
+            showToast('File quá lớn! Tối đa 20MB');
+            input.value = '';
+            nameEl.textContent = 'Đính kèm file (tối đa 20MB)';
+            return;
+        }
+        nameEl.textContent = `📎 ${file.name} (${sizeMB}MB)`;
+        nameEl.style.color = 'var(--accent-1)';
+    } else {
+        nameEl.textContent = 'Đính kèm file (tối đa 20MB)';
+        nameEl.style.color = '';
+    }
+}
+

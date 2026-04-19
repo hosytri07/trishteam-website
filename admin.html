@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — TrishTeam</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#0f0e0c;--bg2:#1a1814;--bg3:#242018;--card:#1e1c18;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f5f2ed;--muted:#a09890;--hint:#6b6560;--accent:#667eea;--grad:linear-gradient(135deg,#667eea,#764ba2);--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--r:10px;--r2:18px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar-brand{font-weight:800;font-size:1.1rem;color:var(--text);display:flex;align-items:center;gap:.4rem}
+.topbar-brand span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.back-btn{display:flex;align-items:center;gap:.4rem;padding:.4rem .85rem;border:1px solid var(--border);border-radius:30px;background:transparent;color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;transition:all .18s}
+.back-btn:hover{color:var(--text)}
+#gate{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 58px)}
+.gate-box{text-align:center;padding:3rem}
+.gate-box .icon{font-size:3rem;margin-bottom:1rem}
+.gate-box h2{font-size:1.4rem;font-weight:700;margin-bottom:.5rem}
+.gate-box p{color:var(--muted);margin-bottom:1.5rem;font-size:.9rem}
+
+/* Layout */
+.admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px);display:none}
+.admin-sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1rem 0}
+.admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.2rem;cursor:pointer;transition:all .15s;color:var(--muted);font-size:.88rem;font-weight:500;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.admin-nav-item:hover,.admin-nav-item.active{background:rgba(102,126,234,.1);color:var(--accent)}
+.admin-nav-item i{width:18px;text-align:center;font-size:.9rem}
+.nav-sep{height:1px;background:var(--border);margin:.5rem 0}
+.nav-label{font-size:.68rem;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;padding:.4rem 1.2rem}
+.admin-content{padding:1.5rem;overflow-y:auto}
+
+/* Tab panels */
+.tab-panel{display:none}.tab-panel.active{display:block}
+.panel-header{margin-bottom:1.2rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
+.panel-header h2{font-size:1.15rem;font-weight:800;margin-bottom:.2rem}
+.panel-header p{color:var(--muted);font-size:.83rem}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem;text-align:center}
+.stat-card .num{font-size:1.8rem;font-weight:900;color:var(--accent)}
+.stat-card .lbl{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.data-table th{text-align:left;padding:.55rem .75rem;border-bottom:1.5px solid var(--border);font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.data-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700}
+.badge-admin{background:rgba(245,158,11,.15);color:var(--yellow)}
+.badge-key{background:rgba(102,126,234,.15);color:var(--accent)}
+.badge-trial{background:rgba(160,152,144,.12);color:var(--muted)}
+.btn-sm{padding:.3rem .75rem;border-radius:var(--r);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);transition:all .15s}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
+.btn-sm.primary{background:var(--grad);color:#fff;border:none}
+
+/* Forms */
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.9rem}
+.form-row label{font-size:.78rem;font-weight:700;color:var(--muted)}
+.form-row input,.form-row textarea,.form-row select{padding:.65rem .9rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.88rem;transition:border-color .15s}
+.form-row input:focus,.form-row textarea:focus,.form-row select:focus{outline:none;border-color:var(--accent)}
+.form-row textarea{resize:vertical;min-height:100px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.btn-action{padding:.75rem 1.4rem;background:var(--grad);border:none;border-radius:40px;color:#fff;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-action:hover{box-shadow:0 4px 14px rgba(102,126,234,.35)}
+
+/* Post list */
+.post-row{display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:.5rem;transition:border-color .15s}
+.post-row:hover{border-color:var(--border2)}
+.post-thumb-mini{width:44px;height:44px;border-radius:var(--r);background:var(--bg3);object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.post-info{flex:1;min-width:0}
+.post-title-mini{font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-meta-mini{font-size:.72rem;color:var(--muted);margin-top:2px}
+.pub-toggle{width:34px;height:18px;border-radius:9px;cursor:pointer;border:none;position:relative;transition:background .2s;flex-shrink:0}
+.pub-toggle.on{background:var(--green)}
+.pub-toggle.off{background:var(--bg3)}
+
+/* Key gen */
+.key-box{font-family:monospace;font-size:1.1rem;font-weight:700;background:var(--bg3);padding:.6rem 1rem;border-radius:var(--r);color:var(--accent);letter-spacing:.08em;user-select:all}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:.75rem}
+.key-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:.7rem .9rem;font-size:.83rem}
+.key-code{font-family:monospace;font-weight:700;color:var(--accent);font-size:.9rem}
+.key-status-used{color:var(--muted);text-decoration:line-through}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1.5px solid var(--border2);border-radius:var(--r);padding:.6rem 1.2rem;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:.5rem;transition:transform .28s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok i{color:var(--green)}.toast.err i{color:var(--red)}.toast.info i{color:var(--accent)}
+
+@media(max-width:768px){
+  .admin-layout{grid-template-columns:1fr}
+  .admin-sidebar{display:none}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
+  <div class="topbar-brand">🛡️ <span>Admin</span> Panel</div>
+  <div style="width:90px"></div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="t-msg"></span></div>
+
+<!-- Gate: not admin -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="icon">🔒</div>
+    <h2>Khu vực Admin</h2>
+    <p>Chỉ dành cho tài khoản Admin.<br>Vui lòng đăng nhập bằng tài khoản có quyền Admin.</p>
+    <a href="login.html" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;background:var(--grad);border-radius:40px;color:#fff;text-decoration:none;font-weight:700;font-size:.9rem"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
+  </div>
+</div>
+
+<!-- Admin Layout -->
+<div class="admin-layout" id="admin-layout">
+  <!-- Sidebar -->
+  <div class="admin-sidebar">
+    <div class="nav-label">Tổng quan</div>
+    <button class="admin-nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+    <div class="nav-sep"></div>
+    <div class="nav-label">Quản lý</div>
+    <button class="admin-nav-item" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
+    <button class="admin-nav-item" onclick="switchTab('keys')"><i class="fas fa-key"></i> Quản lý Key</button>
+    <button class="admin-nav-item" onclick="switchTab('posts')"><i class="fas fa-newspaper"></i> Bài viết</button>
+    <button class="admin-nav-item" onclick="switchTab('notify')"><i class="fas fa-bell"></i> Thông báo</button>
+    <div class="nav-sep"></div>
+    <div class="nav-label">Nội dung</div>
+    <button class="admin-nav-item" onclick="switchTab('signs')"><i class="fas fa-road"></i> Biển báo</button>
+  </div>
+
+  <!-- Content -->
+  <div class="admin-content">
+
+    <!-- DASHBOARD -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="panel-header">
+        <h2>📊 Dashboard</h2>
+        <p>Tổng quan hệ sinh thái TrishTeam</p>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="num" id="stat-users">—</div><div class="lbl">Người dùng</div></div>
+        <div class="stat-card"><div class="num" id="stat-keys">—</div><div class="lbl">Keys đã cấp</div></div>
+        <div class="stat-card"><div class="num" id="stat-posts">—</div><div class="lbl">Bài viết</div></div>
+        <div class="stat-card"><div class="num" id="stat-notes">—</div><div class="lbl">Ghi chú (toàn hệ)</div></div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="tab-panel" id="tab-users">
+      <div class="panel-header">
+        <h2>👥 Người dùng</h2>
+        <p>Quản lý tài khoản và phân quyền</p>
+      </div>
+      <div id="users-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Tên</th><th>Email</th><th>Role</th><th>Ngày tham gia</th><th>Thao tác</th></tr></thead>
+          <tbody id="users-tbody"><tr><td colspan="5" style="text-align:center;color:var(--hint);padding:2rem">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- KEYS -->
+    <div class="tab-panel" id="tab-keys">
+      <div class="panel-header">
+        <h2>🔑 Quản lý Key kích hoạt</h2>
+        <p>Tạo và quản lý key cho user</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem">
+        <div>
+          <div class="form-row"><label>Thời hạn key</label>
+            <select id="key-expire">
+              <option value="lifetime">Vĩnh viễn</option>
+              <option value="365days">1 năm</option>
+              <option value="180days">6 tháng</option>
+              <option value="30days">1 tháng</option>
+            </select>
+          </div>
+          <div class="form-row"><label>Ghi chú (tùy chọn)</label>
+            <input type="text" id="key-note" placeholder="VD: Key tặng user X">
+          </div>
+          <button class="btn-action" onclick="generateKey()"><i class="fas fa-plus"></i> Tạo Key mới</button>
+        </div>
+        <div>
+          <div class="form-row"><label>Key vừa tạo (copy và gửi cho user)</label>
+            <div class="key-box" id="new-key-display">Chưa có key</div>
+          </div>
+          <button class="btn-sm" onclick="copyKey()"><i class="fas fa-copy"></i> Copy key</button>
+        </div>
+      </div>
+      <div class="panel-header" style="margin-top:.5rem">
+        <h2 style="font-size:1rem">Danh sách Key đã tạo</h2>
+      </div>
+      <div class="key-grid" id="keys-list">Đang tải...</div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="tab-panel" id="tab-posts">
+      <div class="panel-header">
+        <h2>📰 Quản lý Bài viết</h2>
+        <p>Thêm, sửa, xoá bài viết trên Bảng tin</p>
+      </div>
+      <!-- Add post form -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.2rem;margin-bottom:1.2rem">
+        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.9rem">➕ Đăng bài mới</h3>
+        <div class="form-grid">
+          <div class="form-row"><label>Tiêu đề *</label><input type="text" id="post-title" placeholder="Tiêu đề bài viết"></div>
+          <div class="form-row"><label>Category *</label>
+            <select id="post-cat">
+              <option value="cong-nghe">💻 Công nghệ</option>
+              <option value="the-thao">⚽ Thể thao</option>
+              <option value="thoi-su">📰 Thời sự</option>
+              <option value="kinh-te">📈 Kinh tế</option>
+              <option value="xa-hoi">👥 Xã hội</option>
+              <option value="giai-tri">🎬 Giải trí</option>
+              <option value="giao-thong">🚦 Giao thông</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row"><label>Mô tả ngắn (excerpt)</label>
+          <input type="text" id="post-excerpt" placeholder="1-2 câu mô tả hiển thị trong feed">
+        </div>
+        <div class="form-row"><label>Nội dung đầy đủ *</label>
+          <textarea id="post-content" rows="6" placeholder="Nội dung bài viết..."></textarea>
+        </div>
+        <div class="form-row"><label>Thumbnail URL (Google Drive / Cloudinary)</label>
+          <input type="text" id="post-thumb" placeholder="https://drive.google.com/uc?id=... hoặc Cloudinary URL">
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;margin-top:.5rem">
+          <button class="btn-action" onclick="publishPost()"><i class="fas fa-paper-plane"></i> Đăng bài</button>
+          <label style="display:flex;align-items:center;gap:.4rem;font-size:.83rem;color:var(--muted);cursor:pointer">
+            <input type="checkbox" id="post-draft" style="accent-color:var(--accent)"> Lưu nháp (ẩn)
+          </label>
+        </div>
+      </div>
+      <!-- Post list -->
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.75rem">Danh sách bài viết</h3>
+      <div id="posts-list">Đang tải...</div>
+    </div>
+
+    <!-- NOTIFY -->
+    <div class="tab-panel" id="tab-notify">
+      <div class="panel-header">
+        <h2>🔔 Broadcast Thông báo</h2>
+        <p>Gửi thông báo đến tất cả hoặc nhóm user</p>
+      </div>
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.2rem;max-width:540px">
+        <div class="form-row"><label>Tiêu đề thông báo</label>
+          <input type="text" id="notif-title" placeholder="VD: Tính năng mới đã ra mắt!">
+        </div>
+        <div class="form-row"><label>Nội dung</label>
+          <textarea id="notif-body" rows="3" placeholder="Chi tiết thông báo..."></textarea>
+        </div>
+        <div class="form-row"><label>Gửi đến</label>
+          <select id="notif-target">
+            <option value="all">🌐 Tất cả user</option>
+            <option value="key">🔑 Key users</option>
+            <option value="trial">⏱ Trial users</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Loại</label>
+          <select id="notif-type">
+            <option value="info">ℹ️ Thông tin</option>
+            <option value="success">✅ Thành công</option>
+            <option value="warning">⚠️ Cảnh báo</option>
+          </select>
+        </div>
+        <button class="btn-action" onclick="sendNotification()"><i class="fas fa-broadcast-tower"></i> Gửi thông báo</button>
+      </div>
+    </div>
+
+    <!-- SIGNS -->
+    <div class="tab-panel" id="tab-signs">
+      <div class="panel-header">
+        <h2>🚦 Quản lý Biển báo QC41</h2>
+        <p>Thêm/sửa biển báo hiển thị trên trang tra cứu</p>
+      </div>
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.2rem;margin-bottom:1.2rem">
+        <h3 style="font-size:.9rem;font-weight:700;margin-bottom:.85rem">➕ Thêm biển báo mới</h3>
+        <div class="form-grid">
+          <div class="form-row"><label>Mã hiệu (VD: P.101)</label><input type="text" id="sign-id" placeholder="P.101"></div>
+          <div class="form-row"><label>Loại</label>
+            <select id="sign-cat">
+              <option value="cam">Biển cấm</option>
+              <option value="nguy-hiem">Biển nguy hiểm</option>
+              <option value="hieu-lenh">Biển hiệu lệnh</option>
+              <option value="chi-dan">Biển chỉ dẫn</option>
+              <option value="phu">Biển phụ</option>
+              <option value="vach-son">Vạch sơn</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row"><label>Tên biển báo *</label><input type="text" id="sign-name" placeholder="VD: Đường cấm"></div>
+        <div class="form-row"><label>Mô tả / Công dụng</label><textarea id="sign-desc" rows="3" placeholder="Mô tả chức năng của biển báo này..."></textarea></div>
+        <div class="form-row"><label>Hình dạng</label><input type="text" id="sign-shape" placeholder="VD: Hình tròn, nền trắng, viền đỏ"></div>
+        <div class="form-row"><label>Vị trí đặt biển / Trường hợp sử dụng</label><input type="text" id="sign-usage" placeholder="VD: Đặt ở đầu đường cấm..."></div>
+        <div class="form-row"><label>URL hình ảnh biển thật (tùy chọn)</label><input type="text" id="sign-img" placeholder="https://..."></div>
+        <button class="btn-action" onclick="saveSign()"><i class="fas fa-save"></i> Lưu biển báo</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const FB = {apiKey:"AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",authDomain:"trishteam-e3ae4.firebaseapp.com",databaseURL:"https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"trishteam-e3ae4",storageBucket:"trishteam-e3ae4.firebasestorage.app",messagingSenderId:"930627527626",appId:"1:930627527626:web:9018c3afbcb6ee819ae533"};
+if (!firebase.apps.length) firebase.initializeApp(FB);
+const auth = firebase.auth();
+const db   = firebase.database();
+
+let currentAdmin = null;
+
+auth.onAuthStateChanged(async user => {
+  if (!user) { show('gate'); hide('admin-layout'); return; }
+  // Check role
+  const snap = await db.ref('users/'+user.uid+'/role').once('value');
+  const role = snap.val();
+  if (role !== 'admin') { show('gate'); hide('admin-layout'); return; }
+  currentAdmin = user;
+  hide('gate');
+  show('admin-layout', 'grid');
+  loadDashboard();
+  loadUsers();
+  loadKeys();
+  loadPosts();
+});
+
+function show(id, disp='block'){document.getElementById(id).style.display=disp;}
+function hide(id){document.getElementById(id).style.display='none';}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── DASHBOARD ──
+async function loadDashboard() {
+  const [usersSnap, keysSnap, postsSnap] = await Promise.all([
+    db.ref('users').once('value'),
+    db.ref('keys').once('value'),
+    db.ref('posts').once('value'),
+  ]);
+  document.getElementById('stat-users').textContent  = usersSnap.numChildren() || 0;
+  document.getElementById('stat-keys').textContent   = keysSnap.numChildren() || 0;
+  document.getElementById('stat-posts').textContent  = postsSnap.numChildren() || 0;
+  // Notes: count all note entries
+  let noteCount = 0;
+  const notesSnap = await db.ref('notes').once('value');
+  notesSnap.forEach(userNode => { noteCount += userNode.numChildren(); });
+  document.getElementById('stat-notes').textContent = noteCount;
+}
+
+// ── USERS ──
+async function loadUsers() {
+  const snap = await db.ref('users').once('value');
+  const rows = [];
+  snap.forEach(c => {
+    const u = c.val();
+    const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '--';
+    rows.push(`<tr>
+      <td><strong>${u.name||'—'}</strong></td>
+      <td style="color:var(--muted);font-size:.82rem">${u.email||'—'}</td>
+      <td><span class="badge badge-${u.role||'trial'}">${u.role||'trial'}</span></td>
+      <td style="color:var(--muted);font-size:.8rem">${date}</td>
+      <td style="display:flex;gap:.4rem">
+        <button class="btn-sm" onclick="setRole('${c.key}','admin')">Admin</button>
+        <button class="btn-sm" onclick="setRole('${c.key}','key')">Key</button>
+        <button class="btn-sm" onclick="setRole('${c.key}','trial')">Trial</button>
+      </td>
+    </tr>`);
+  });
+  document.getElementById('users-tbody').innerHTML = rows.join('') || '<tr><td colspan="5" style="text-align:center;color:var(--hint);padding:1rem">Chưa có user</td></tr>';
+}
+
+async function setRole(uid, role) {
+  await db.ref('users/'+uid+'/role').set(role);
+  toast(`Đã đổi role → ${role}`);
+  loadUsers();
+}
+
+// ── KEYS ──
+function genCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const seg = () => Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  return `TRISH-${seg()}-${seg()}`;
+}
+
+async function generateKey() {
+  const expire = document.getElementById('key-expire').value;
+  const note   = document.getElementById('key-note').value;
+  const code   = genCode();
+  await db.ref('keys/'+code).set({ expire, note, used: false, createdAt: Date.now() });
+  document.getElementById('new-key-display').textContent = code;
+  toast('Đã tạo key: ' + code);
+  loadKeys();
+}
+
+function copyKey() {
+  const key = document.getElementById('new-key-display').textContent;
+  if (key === 'Chưa có key') return;
+  navigator.clipboard.writeText(key).then(()=>toast('Đã copy key!'));
+}
+
+async function loadKeys() {
+  const snap = await db.ref('keys').once('value');
+  const items = [];
+  snap.forEach(c => {
+    const k = c.val();
+    const cls = k.used ? 'key-status-used' : '';
+    items.push(`<div class="key-item">
+      <div class="key-code ${cls}">${c.key}</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:3px">${k.expire} · ${k.used?'Đã dùng':'Còn hạn'}</div>
+      ${k.note?`<div style="font-size:.72rem;color:var(--hint)">${k.note}</div>`:''}
+    </div>`);
+  });
+  document.getElementById('keys-list').innerHTML = items.join('') || '<p style="color:var(--hint);font-size:.85rem">Chưa có key nào</p>';
+}
+
+// ── POSTS ──
+async function publishPost() {
+  const title   = document.getElementById('post-title').value.trim();
+  const content = document.getElementById('post-content').value.trim();
+  const category = document.getElementById('post-cat').value;
+  const excerpt  = document.getElementById('post-excerpt').value.trim();
+  const thumbnail = document.getElementById('post-thumb').value.trim();
+  const isDraft = document.getElementById('post-draft').checked;
+  if (!title || !content) { toast('Điền tiêu đề và nội dung!','err'); return; }
+  const id = 'p_' + Date.now();
+  await db.ref('posts/'+id).set({
+    title, content, excerpt: excerpt || content.slice(0,120),
+    category, thumbnail, published: !isDraft,
+    author: currentAdmin?.displayName || 'Admin',
+    timestamp: Date.now(), views: 0, likes: {}, hearts: {}
+  });
+  toast(isDraft ? 'Đã lưu nháp!' : 'Đã đăng bài!');
+  ['post-title','post-content','post-excerpt','post-thumb'].forEach(id => document.getElementById(id).value='');
+  loadPosts();
+}
+
+async function loadPosts() {
+  const snap = await db.ref('posts').orderByChild('timestamp').once('value');
+  const items = [];
+  snap.forEach(c => {
+    const p = c.val();
+    const pub = p.published;
+    items.unshift(`<div class="post-row">
+      <div class="post-thumb-mini">${p.thumbnail?`<img src="${p.thumbnail}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r)" onerror="this.style.display='none'">`:getCatEmoji(p.category)}</div>
+      <div class="post-info">
+        <div class="post-title-mini">${p.title}</div>
+        <div class="post-meta-mini">${p.category} · ${timeAgo(p.timestamp)} · ${p.views||0} views</div>
+      </div>
+      <button class="pub-toggle ${pub?'on':'off'}" onclick="togglePublish('${c.key}',${pub})" title="${pub?'Ẩn bài':'Hiện bài'}"></button>
+      <button class="btn-sm danger" onclick="deletePost('${c.key}')"><i class="fas fa-trash"></i></button>
+    </div>`);
+  });
+  document.getElementById('posts-list').innerHTML = items.join('') || '<p style="color:var(--hint);font-size:.85rem">Chưa có bài viết</p>';
+}
+
+async function togglePublish(id, current) {
+  await db.ref('posts/'+id+'/published').set(!current);
+  toast(current ? 'Đã ẩn bài' : 'Đã hiện bài');
+  loadPosts();
+}
+
+async function deletePost(id) {
+  if (!confirm('Xoá bài viết này?')) return;
+  await db.ref('posts/'+id).remove();
+  toast('Đã xoá bài');
+  loadPosts();
+}
+
+// ── NOTIFY ──
+async function sendNotification() {
+  const title  = document.getElementById('notif-title').value.trim();
+  const body   = document.getElementById('notif-body').value.trim();
+  const target = document.getElementById('notif-target').value;
+  const type   = document.getElementById('notif-type').value;
+  if (!title || !body) { toast('Điền tiêu đề và nội dung!','err'); return; }
+  const id = 'n_' + Date.now();
+  await db.ref('notifications/'+id).set({ title, body, type, targetRole: target, timestamp: Date.now(), readBy: {} });
+  toast('Đã gửi thông báo!');
+  document.getElementById('notif-title').value='';
+  document.getElementById('notif-body').value='';
+}
+
+// ── SIGNS ──
+async function saveSign() {
+  const id    = document.getElementById('sign-id').value.trim();
+  const name  = document.getElementById('sign-name').value.trim();
+  const cat   = document.getElementById('sign-cat').value;
+  const desc  = document.getElementById('sign-desc').value.trim();
+  const shape = document.getElementById('sign-shape').value.trim();
+  const usage = document.getElementById('sign-usage').value.trim();
+  const imgUrl = document.getElementById('sign-img').value.trim();
+  if (!id || !name) { toast('Điền mã hiệu và tên biển!','err'); return; }
+  await db.ref('traffic_signs/'+id.replace('.','_')).set({ id, name, cat, desc, shape, usage, imgUrl, icon:'📍' });
+  toast('Đã lưu biển báo '+id);
+  ['sign-id','sign-name','sign-desc','sign-shape','sign-usage','sign-img'].forEach(f=>document.getElementById(f).value='');
+}
+
+// ── UTILS ──
+function getCatEmoji(cat) {
+  return {'cong-nghe':'💻','the-thao':'⚽','thoi-su':'📰','kinh-te':'📈','xa-hoi':'👥','giai-tri':'🎬','giao-thong':'🚦'}[cat]||'📄';
+}
+function timeAgo(ts) {
+  const s = Math.floor((Date.now()-ts)/1000);
+  if (s<60) return 'vừa xong';
+  if (s<3600) return Math.floor(s/60)+' phút trước';
+  if (s<86400) return Math.floor(s/3600)+' giờ trước';
+  return Math.floor(s/86400)+' ngày trước';
+}
+function toast(msg, type='ok') {
+  const t=document.getElementById('toast');
+  const icons={ok:'check-circle',err:'times-circle',info:'info-circle'};
+  t.className='toast '+type+' show';
+  t.querySelector('i').className='fas fa-'+icons[type];
+  document.getElementById('t-msg').textContent=msg;
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>

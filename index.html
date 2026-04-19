@@ -32,8 +32,7 @@
                 <a href="#utilities" class="nav-link">Tiện ích</a>
                 <a href="#software" class="nav-link">Phần mềm</a>
                 <a href="posts.html" class="nav-link">Bảng tin</a>
-                <a href="#crypto" class="nav-link">Crypto</a> <!-- MỚI -->
-                <a href="#calculators" class="nav-link">Máy tính</a> <!-- MỚI -->
+                <a href="#calculators" class="nav-link">Máy tính</a>
                 <a href="#contact" class="nav-link">Liên hệ</a>
             </div>
 
@@ -115,7 +114,7 @@
             </div>
             <div class="sidebar-group admin-only" style="display:none">
                 <span class="sidebar-group-label">Quản trị</span>
-                <a href="#" class="sidebar-item" onclick="showToast('Admin Panel - Sắp ra mắt!')">
+                <a href="admin.html" class="sidebar-item">
                     <i class="fas fa-shield-alt"></i>
                     <span>Admin Panel</span>
                 </a>
@@ -141,37 +140,24 @@
                     <span>Phi thương mại • Miễn phí 100%</span>
                 </div>
                 <h1 class="hero-title">
-                    Hệ sinh thái<br>
+                    Hệ sinh thái
                     <span class="gradient-text">Đa năng Workspace</span>
                 </h1>
-                <p class="hero-desc">
-                    Tích hợp hơn 20+ công cụ hữu ích từ QR Generator, Phong thủy, Tử vi, 
-                    Thần số học đến các tiện ích hàng ngày. Tất cả trong một nơi.
-                </p>
                 <div class="hero-buttons">
                     <a href="#tools" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
-                        Khám phá ngay
+                        Khám phá
+                    </a>
+                    <a href="login.html" class="btn btn-secondary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Đăng nhập
                     </a>
                     <a href="https://github.com/hosytri07" target="_blank" class="btn btn-secondary">
                         <i class="fab fa-github"></i>
                         GitHub
                     </a>
                 </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">20+</div>
-                        <div class="stat-label">Công cụ</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Miễn phí</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">24/7</div>
-                        <div class="stat-label">Truy cập</div>
-                    </div>
-                </div>
+            
             </div>
         </div>
         <div class="scroll-indicator">
@@ -817,99 +803,6 @@
 <!-- Thêm vào sau Software Section trong index.html -->
 
 <!-- News Section -->
-<section class="news-section" id="news">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Tin tức công nghệ</h2>
-            <p class="section-subtitle">Cập nhật tin tức mới nhất</p>
-        </div>
-
-        <div class="news-grid" id="news-container">
-            <div class="news-card loading">
-                <div class="loading-skeleton"></div>
-            </div>
-            <div class="news-card loading">
-                <div class="loading-skeleton"></div>
-            </div>
-            <div class="news-card loading">
-                <div class="loading-skeleton"></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Crypto Prices Section -->
-<section class="crypto-section" id="crypto">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Thị trường Crypto</h2>
-            <p class="section-subtitle">Giá tiền điện tử real-time</p>
-        </div>
-
-        <div class="crypto-grid">
-            <!-- Bitcoin -->
-            <div class="crypto-card">
-                <div class="crypto-header">
-                    <span class="crypto-emoji">₿</span>
-                    <div>
-                        <h3>Bitcoin</h3>
-                        <span class="crypto-symbol">BTC</span>
-                    </div>
-                </div>
-                <div class="crypto-price" id="btc-price">
-                    <span class="loading-spinner"></span>
-                </div>
-                <div class="crypto-change" id="btc-change">--</div>
-            </div>
-
-            <!-- Ethereum -->
-            <div class="crypto-card">
-                <div class="crypto-header">
-                    <span class="crypto-emoji">Ξ</span>
-                    <div>
-                        <h3>Ethereum</h3>
-                        <span class="crypto-symbol">ETH</span>
-                    </div>
-                </div>
-                <div class="crypto-price" id="eth-price">
-                    <span class="loading-spinner"></span>
-                </div>
-                <div class="crypto-change" id="eth-change">--</div>
-            </div>
-
-            <!-- BNB -->
-            <div class="crypto-card">
-                <div class="crypto-header">
-                    <span class="crypto-emoji">◈</span>
-                    <div>
-                        <h3>BNB</h3>
-                        <span class="crypto-symbol">BNB</span>
-                    </div>
-                </div>
-                <div class="crypto-price" id="bnb-price">
-                    <span class="loading-spinner"></span>
-                </div>
-                <div class="crypto-change" id="bnb-change">--</div>
-            </div>
-
-            <!-- Cardano -->
-            <div class="crypto-card">
-                <div class="crypto-header">
-                    <span class="crypto-emoji">₳</span>
-                    <div>
-                        <h3>Cardano</h3>
-                        <span class="crypto-symbol">ADA</span>
-                    </div>
-                </div>
-                <div class="crypto-price" id="ada-price">
-                    <span class="loading-spinner"></span>
-                </div>
-                <div class="crypto-change" id="ada-change">--</div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Advanced Calculator Section -->
 <section class="calculators-section calculator-section" id="calculators">
     <div class="container">
@@ -1156,8 +1049,15 @@
                             <label>Email</label>
                         </div>
                         <div class="form-group">
-                            <textarea id="contact-message" required placeholder=" " rows="5"></textarea>
+                            <textarea id="contact-message" required placeholder=" " rows="4"></textarea>
                             <label>Nội dung tin nhắn</label>
+                        </div>
+                        <div class="form-group attach-group">
+                            <label class="attach-label">
+                                <i class="fas fa-paperclip"></i>
+                                <span id="attach-name">Đính kèm file (tối đa 20MB)</span>
+                                <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
+                            </label>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">
                             <i class="fas fa-paper-plane"></i>
