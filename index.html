@@ -38,10 +38,21 @@
             </div>
 
             <div class="nav-actions">
-                <a href="login.html" class="btn-login-nav">
+                <!-- Chưa login -->
+                <a href="login.html" class="btn-login-nav" id="nav-login-btn">
                     <i class="fas fa-user"></i>
                     <span>Đăng nhập</span>
                 </a>
+                <!-- Đã login - ẩn mặc định -->
+                <div class="nav-user-menu" id="nav-user-menu" style="display:none">
+                    <div class="nav-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <span class="nav-user-name" id="nav-user-name">User</span>
+                    <button class="btn-logout" onclick="doLogout()" title="Đăng xuất">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
                 <button class="theme-toggle" id="theme-toggle" title="Đổi theme">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -53,6 +64,58 @@
             </div>
         </div>
     </nav>
+
+    <!-- WebApp Sidebar (chỉ hiện sau khi đăng nhập) -->
+    <aside class="webapp-sidebar" id="webapp-sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-sparkles sidebar-logo"></i>
+            <span class="sidebar-title">TrishTeam</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Chính</span>
+                <a href="#home" class="sidebar-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="#tools" class="sidebar-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Công cụ</span>
+                </a>
+                <a href="#calculators" class="sidebar-item">
+                    <i class="fas fa-calculator"></i>
+                    <span>Máy tính</span>
+                </a>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Học tập</span>
+                <a href="#" class="sidebar-item" onclick="showToast('Sắp ra mắt!')">
+                    <i class="fas fa-car"></i>
+                    <span>Ôn thi bằng lái</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="showToast('Sắp ra mắt!')">
+                    <i class="fas fa-certificate"></i>
+                    <span>Ôn thi chứng chỉ</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="showToast('Sắp ra mắt!')">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Ghi chú</span>
+                </a>
+            </div>
+            <div class="sidebar-group admin-only" style="display:none">
+                <span class="sidebar-group-label">Quản trị</span>
+                <a href="#" class="sidebar-item" onclick="showToast('Admin Panel - Sắp ra mắt!')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin Panel</span>
+                </a>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Thu gọn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+    </aside>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -1141,6 +1204,10 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="https://unpkg.com/lunar-javascript/lunar.js"></script>
@@ -1150,5 +1217,62 @@
     <script src="api.js"></script>
     <script src="api_new.js"></script>
     <script src="features-addon.js"></script>
+
+    <script>
+    // ── FIREBASE CONFIG ── (điền sau khi có apiKey)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",
+        authDomain: "trishteam-e3ae4.firebaseapp.com",
+        databaseURL: "https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "trishteam-e3ae4",
+        storageBucket: "trishteam-e3ae4.firebasestorage.app",
+        messagingSenderId: "930627527626",
+        appId: "1:930627527626:web:9018c3afbcb6ee819ae533"
+    };
+
+    try {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db   = firebase.database();
+
+        auth.onAuthStateChanged(user => {
+            const loginBtn  = document.getElementById('nav-login-btn');
+            const userMenu  = document.getElementById('nav-user-menu');
+            const userNameEl = document.getElementById('nav-user-name');
+            const sidebar   = document.getElementById('webapp-sidebar');
+
+            if (user) {
+                // Đã đăng nhập
+                if (loginBtn)  loginBtn.style.display  = 'none';
+                if (userMenu)  userMenu.style.display  = 'flex';
+                if (userNameEl) userNameEl.textContent = user.displayName || user.email.split('@')[0];
+                if (sidebar)   sidebar.classList.add('show');
+                // Lấy role từ DB
+                db.ref('users/' + user.uid + '/role').once('value', snap => {
+                    const role = snap.val() || 'trial';
+                    document.body.setAttribute('data-role', role);
+                    if (role === 'admin') {
+                        document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+                    }
+                });
+            } else {
+                // Chưa đăng nhập
+                if (loginBtn)  loginBtn.style.display  = 'flex';
+                if (userMenu)  userMenu.style.display  = 'none';
+                if (sidebar)   sidebar.classList.remove('show');
+                document.body.removeAttribute('data-role');
+            }
+        });
+
+        // Đăng xuất
+        window.doLogout = () => {
+            auth.signOut().then(() => {
+                showToast('Đã đăng xuất!');
+            });
+        };
+    } catch(e) {
+        console.warn('Firebase chưa cấu hình:', e.message);
+    }
+    </script>
 </body>
 </html>
