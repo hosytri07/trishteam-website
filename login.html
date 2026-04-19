@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập — TrishTeam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f0e0c;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 30%, rgba(102,126,234,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 70%, rgba(118,75,162,0.15) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Dot grid */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Back link */
+        .back-link {
+            position: fixed;
+            top: 24px; left: 24px;
+            display: flex; align-items: center; gap: 0.4rem;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.9); }
+
+        /* Wrapper card */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            width: 420px;
+            background: rgba(26,24,20,0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 2.5rem 2.2rem;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+        }
+
+        /* Logo / Brand */
+        .brand {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        .brand-icon {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .brand-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: white;
+        }
+        .brand-name span {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .brand-tagline {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.2rem;
+        }
+
+        /* Tab switcher */
+        .tabs {
+            display: flex;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 1.8rem;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.45);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 2px 10px rgba(102,126,234,0.35);
+        }
+
+        /* Form panels */
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
+
+        /* Input box */
+        .input-box {
+            position: relative;
+            margin-bottom: 1.1rem;
+        }
+        .input-box input {
+            width: 100%;
+            height: 52px;
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            padding: 0 3rem 0 1.4rem;
+            color: white;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .input-box input::placeholder { color: rgba(255,255,255,0.3); }
+        .input-box input:focus {
+            border-color: #667eea;
+            background: rgba(102,126,234,0.08);
+        }
+        .input-box i {
+            position: absolute;
+            right: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.35);
+            font-size: 1.15rem;
+            pointer-events: none;
+        }
+        .input-box input:focus + i { color: #667eea; }
+
+        /* Remember & Forgot */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.4rem;
+            font-size: 0.83rem;
+        }
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .remember-forgot input[type="checkbox"] {
+            accent-color: #667eea;
+            width: 14px; height: 14px;
+        }
+        .remember-forgot a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .remember-forgot a:hover { text-decoration: underline; }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(102,126,234,0.35);
+            margin-bottom: 1.2rem;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 26px rgba(102,126,234,0.5);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Trial info */
+        .trial-info {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .trial-info a {
+            color: rgba(102,126,234,0.8);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .trial-info a:hover { color: #667eea; }
+
+        /* Divider */
+        .divider {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.78rem; color: rgba(255,255,255,0.2);
+        }
+        .divider::before, .divider::after {
+            content: ''; flex: 1;
+            height: 1px; background: rgba(255,255,255,0.08);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px; right: 24px;
+            background: rgba(26,24,20,0.95);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 0.8rem 1.2rem;
+            color: white;
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex; align-items: center; gap: 0.5rem;
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.success i { color: #10b981; }
+        .toast.error i { color: #ef4444; }
+
+        @media (max-width: 480px) {
+            .wrapper { width: 92vw; padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-link">
+        <i class="bx bx-arrow-back"></i> Về trang chủ
+    </a>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="bx bx-check-circle"></i>
+        <span id="toast-msg">Thông báo</span>
+    </div>
+
+    <div class="wrapper">
+
+        <!-- Brand -->
+        <div class="brand">
+            <span class="brand-icon">✨</span>
+            <div class="brand-name">Trish<span>TEAM</span></div>
+            <div class="brand-tagline">Đa năng Workspace — Phi thương mại</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">Đăng nhập</button>
+            <button class="tab-btn" data-tab="register" onclick="switchTab('register')">Đăng ký</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="form-panel active" id="panel-login">
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="input-box">
+                    <input type="text" id="login-user" placeholder="Email hoặc tên đăng nhập" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-pass" placeholder="Mật khẩu" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox" id="remember-me"> Ghi nhớ đăng nhập</label>
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn-submit" id="btn-login">
+                    <i class="bx bx-log-in"></i> Đăng nhập
+                </button>
+            </form>
+            <div class="divider">hoặc</div>
+            <p class="trial-info">
+                Chưa có tài khoản? <a href="#" onclick="switchTab('register')">Đăng ký ngay</a><br>
+                <br>⏱ Dùng thử 15 phút — <a href="index.html">Bỏ qua, về trang chủ</a>
+            </p>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div class="form-panel" id="panel-register">
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="input-box">
+                    <input type="text" id="reg-name" placeholder="Họ và tên" required>
+                    <i class="bx bxs-user-detail"></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="reg-email" placeholder="Email" required>
+                    <i class="bx bxs-envelope"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="reg-pass" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="reg-pass2" placeholder="Nhập lại mật khẩu" required>
+                    <i class="bx bxs-lock"></i>
+                </div>
+                <button type="submit" class="btn-submit" id="btn-register">
+                    <i class="bx bx-user-plus"></i> Tạo tài khoản
+                </button>
+            </form>
+            <div class="divider">hoặc</div>
+            <p class="trial-info">
+                Đã có tài khoản? <a href="#" onclick="switchTab('login')">Đăng nhập</a><br>
+                <br>Tài khoản Trial: <strong style="color:rgba(255,255,255,0.5)">15 phút dùng thử / phiên</strong>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`panel-${tab}`).classList.add('active');
+        }
+
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = t.querySelector('i');
+            document.getElementById('toast-msg').textContent = msg;
+            t.className = `toast ${type} show`;
+            icon.className = type === 'success' ? 'bx bx-check-circle' : 'bx bx-x-circle';
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // Placeholder handlers — Firebase Auth sẽ tích hợp ở phiên sau
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
+            setTimeout(() => {
+                // TODO: Firebase Auth integration (phiên sau)
+                showToast('Tính năng đang được phát triển!', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bx bx-log-in"></i> Đăng nhập';
+            }, 1200);
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const pass = document.getElementById('reg-pass').value;
+            const pass2 = document.getElementById('reg-pass2').value;
+            if (pass !== pass2) {
+                showToast('Mật khẩu nhập lại không khớp!', 'error');
+                return;
+            }
+            const btn = document.getElementById('btn-register');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang xử lý...';
+            setTimeout(() => {
+                // TODO: Firebase Auth integration (phiên sau)
+                showToast('Tính năng đang được phát triển!', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bx bx-user-plus"></i> Tạo tài khoản';
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
