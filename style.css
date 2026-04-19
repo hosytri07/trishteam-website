@@ -38,10 +38,10 @@
 }
 
 [data-theme="dark"] {
-    --bg-primary: #0f0e0c;
-    --bg-secondary: #1a1814;
+    --bg-primary: rgba(15,14,12,0.0);
+    --bg-secondary: rgba(26,24,20,0.0);
     --bg-tertiary: #242018;
-    --bg-card: #1a1814;
+    --bg-card: rgba(26,24,20,0.88);
     --text-primary: #f5f2ed;
     --text-secondary: #a09890;
     --text-tertiary: #6b6560;
@@ -59,7 +59,7 @@ html { scroll-behavior: smooth; font-size: 16px;
 }
 body {
     font-family: 'DM Sans', 'Be Vietnam Pro', -apple-system, sans-serif;
-    background: var(--bg-primary);
+    background: #0f0e0c;
     color: var(--text-primary);
     line-height: 1.65;
     overflow-x: hidden;
@@ -74,9 +74,10 @@ body::before {
     inset: 0;
     z-index: -2;
     background:
-        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(102,126,234,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 85% 70%, rgba(118,75,162,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(102,126,234,0.05) 0%, transparent 60%);
+        radial-gradient(ellipse 90% 70% at 5% 15%,  rgba(102,126,234,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 90% at 90% 75%, rgba(118,75,162,0.16) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 50% 50%, rgba(102,126,234,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 30% 85%, rgba(118,75,162,0.10) 0%, transparent 50%);
     animation: globalGradientMove 25s ease-in-out infinite;
     pointer-events: none;
 }
@@ -87,18 +88,19 @@ body::after {
     inset: 0;
     z-index: -1;
     background-image:
-        linear-gradient(rgba(102,126,234,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(102,126,234,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(102,126,234,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,0.055) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
 }
 
 @keyframes globalGradientMove {
-    0%   { transform: translate(0,0) scale(1); }
-    25%  { transform: translate(20px,-15px) scale(1.02); }
-    50%  { transform: translate(-15px,20px) scale(0.98); }
-    75%  { transform: translate(10px,10px) scale(1.01); }
-    100% { transform: translate(0,0) scale(1); }
+    0%   { transform: translate(0,0) scale(1) rotate(0deg); }
+    20%  { transform: translate(30px,-20px) scale(1.03) rotate(1deg); }
+    40%  { transform: translate(-20px,25px) scale(0.97) rotate(-1deg); }
+    60%  { transform: translate(15px,15px) scale(1.02) rotate(0.5deg); }
+    80%  { transform: translate(-10px,-15px) scale(0.99) rotate(-0.5deg); }
+    100% { transform: translate(0,0) scale(1) rotate(0deg); }
 }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-md); }
 
@@ -826,7 +828,7 @@ h1, h2, h3, .hero-title, .section-title {
 .modal-body { padding: var(--spacing-xl); }
 
 /* ── SOFTWARE SECTION (keep existing structure) ── */
-.software-section { background: var(--bg-primary); padding: 90px 0; }
+.software-section { background: transparent; padding: 90px 0; }
 .software-tabs { display: flex; gap: 0.5rem; margin-bottom: var(--spacing-xl); flex-wrap: wrap; }
 .software-tab {
     padding: 0.6rem 1.3rem;
@@ -886,7 +888,7 @@ h1, h2, h3, .hero-title, .section-title {
 .btn-docs:hover { border-color: var(--accent-1); color: var(--accent-1); }
 
 /* ── NEWS SECTION ── */
-.news-section { background: var(--bg-secondary); padding: 90px 0; }
+.news-section { background: transparent; padding: 90px 0; }
 .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); }
 .news-card {
     background: var(--bg-card); border: 1.5px solid var(--border-color);
@@ -903,7 +905,7 @@ h1, h2, h3, .hero-title, .section-title {
 .news-date { font-size: 0.76rem; color: var(--text-tertiary); }
 
 /* ── CRYPTO SECTION ── */
-.crypto-section { background: var(--bg-primary); padding: 90px 0; }
+.crypto-section { background: transparent; padding: 90px 0; }
 .crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); }
 .crypto-card {
     background: var(--bg-card); border: 1.5px solid var(--border-color);
@@ -1089,7 +1091,7 @@ h1, h2, h3, .hero-title, .section-title {
 
 /* ── WEATHER WIDGET ── */
 .weather-widget {
-    background: var(--bg-secondary);
+    background: transparent;
     padding: 0 0 48px;
 }
 .weather-card {
@@ -2436,9 +2438,9 @@ section {
         linear-gradient(90deg, rgba(102,126,234,0.03) 1px, transparent 1px);
     background-size: 60px 60px;
 }
-[data-theme="light"] .tools-section   { background: rgba(242,240,236,0.75); }
+[data-theme="light"] .tools-section { background: rgba(242,240,236,0.75); }
 [data-theme="light"] .utilities-section { background: rgba(242,240,236,0.75); }
 [data-theme="light"] .mystical-section { background: rgba(250,249,247,0.7); }
-[data-theme="light"] .contact-section  { background: rgba(250,249,247,0.7); }
+[data-theme="light"] .contact-section { background: rgba(250,249,247,0.7); }
 [data-theme="light"] .calculators-section, 
 [data-theme="light"] .calculator-section { background: rgba(242,240,236,0.75); }
