@@ -207,11 +207,11 @@ h1, h2, h3, .hero-title, .section-title {
 /* ── HERO SECTION ── */
 .hero {
     position: relative;
-    min-height: 55vh;
+    min-height: 45vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 100px 0 40px;
+    padding: 90px 0 30px;
     overflow: hidden;
 }
 .hero-bg {
@@ -352,10 +352,10 @@ h1, h2, h3, .hero-title, .section-title {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.85rem 1.8rem;
+    padding: 0.72rem 1.4rem;
     border: none;
     border-radius: 40px;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
@@ -405,7 +405,7 @@ h1, h2, h3, .hero-title, .section-title {
 /* ── TOOLS SECTION — BENTO GRID ── */
 .tools-section {
     background: var(--bg-secondary);
-    padding: 90px 0;
+    padding: 60px 0;
 }
 .tools-filter {
     display: flex;
@@ -2360,27 +2360,29 @@ body.has-sidebar .footer {
 .btn-settings:hover { background: var(--bg-secondary); color: var(--accent-1); transform: rotate(45deg); }
 
 /* ── CONTACT FILE ATTACH ── */
-.attach-group { margin-top: -0.5rem; }
+.attach-group { margin-top: 0; }
 .attach-label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    background: var(--bg-secondary);
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    background: transparent;
     border: 1.5px dashed var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: 30px;
     cursor: pointer;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
     transition: all var(--transition-fast);
+    width: auto;
+    max-width: 100%;
 }
 .attach-label:hover {
     border-color: var(--accent-1);
     color: var(--accent-1);
-    background: rgba(102,126,234,0.05);
 }
-.attach-label i { font-size: 1rem; flex-shrink: 0; }
-#attach-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.attach-label i { font-size: 0.82rem; flex-shrink: 0; }
+#attach-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px; }
 
 /* ── SMOOTH SECTION TRANSITIONS ── */
 section { 
