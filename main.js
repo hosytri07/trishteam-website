@@ -10,7 +10,7 @@
 // 3. Upload main.js lên GitHub (token cũ đã bị lộ, cần revoke ngay!)
 const TRISH_CONFIG = {
   telegram: {
-    botToken: 'YOUR_NEW_BOT_TOKEN_HERE',  // ← Thay bằng token mới sau khi revoke
+    botToken: '8668861015:AAHzxu99wVbt5dRB5GAv0ueR8VJuBv_PMxk',  // ← Thay bằng token mới sau khi revoke
     chatId:   '1687867690'
   }
 };
