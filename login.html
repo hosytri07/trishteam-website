@@ -110,7 +110,12 @@
             margin-top: 0.2rem;
         }
 
-        /* Tab switcher */
+        /* ── SLIDE ANIMATION (FEZ-inspired) ── */
+        .wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        /* Tabs */
         .tabs {
             display: flex;
             background: rgba(255,255,255,0.05);
@@ -118,6 +123,8 @@
             padding: 4px;
             margin-bottom: 1.8rem;
             border: 1px solid rgba(255,255,255,0.07);
+            position: relative;
+            z-index: 2;
         }
         .tab-btn {
             flex: 1;
@@ -137,10 +144,32 @@
             color: white;
             box-shadow: 0 2px 10px rgba(102,126,234,0.35);
         }
-
-        /* Form panels */
-        .form-panel { display: none; }
-        .form-panel.active { display: block; }
+        /* Form panels — slide animation */
+        .form-panel {
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateX(28px);
+            display: none;
+            position: relative;
+        }
+        .form-panel.slide-left {
+            transform: translateX(-28px);
+        }
+        .form-panel.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideIn 0.45s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        .form-panel.from-left { animation: slideInLeft 0.45s cubic-bezier(0.4,0,0.2,1) forwards; }
 
         /* Input box */
         .input-box {
@@ -395,11 +424,23 @@ body::after {
     </div>
 
     <script>
+        let currentTab = 'login';
         function switchTab(tab) {
+            if (tab === currentTab) return;
+            const fromRight = (tab === 'register');
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            document.getElementById(`panel-${tab}`).classList.add('active');
+            // Fade out current
+            const curr = document.getElementById(`panel-${currentTab}`);
+            curr.classList.remove('active');
+            curr.style.display = 'none';
+            // Slide in new
+            const next = document.getElementById(`panel-${tab}`);
+            next.style.display = 'block';
+            next.classList.remove('from-left');
+            if (!fromRight) next.classList.add('from-left');
+            requestAnimationFrame(() => next.classList.add('active'));
+            currentTab = tab;
         }
 
         function showToast(msg, type = 'success') {
@@ -414,7 +455,9 @@ body::after {
         // ── FIREBASE CONFIG ──
         // Lấy config từ: Firebase Console → Project Settings → Web App
         // Điền vào đây sau khi đăng ký Firebase project mới
-        const firebaseConfig = {
+        // Firebase API Key là client-side key, bình thường khi public
+// Nhưng cần restrict domain: Firebase Console → APIs → Credentials → Restrict key → trishteam.vercel.app
+const firebaseConfig = {
             apiKey: "AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",
             authDomain: "trishteam-e3ae4.firebaseapp.com",
             databaseURL: "https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",
