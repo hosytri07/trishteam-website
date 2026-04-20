@@ -389,6 +389,45 @@ body::after {
         <div class="form-row"><label>Vị trí đặt biển / Trường hợp sử dụng</label><input type="text" id="sign-usage" placeholder="VD: Đặt ở đầu đường cấm..."></div>
         <div class="form-row"><label>URL hình ảnh biển thật (tùy chọn)</label><input type="text" id="sign-img" placeholder="https://..."></div>
         <button class="btn-action" onclick="saveSign()"><i class="fas fa-save"></i> Lưu biển báo</button>
+        <button class="btn-sm" id="btn-cancel-sign-edit" onclick="cancelSignEdit()" style="display:none;margin-left:.5rem">✕ Hủy sửa</button>
+      </div>
+
+      <!-- Danh sách biển báo từ Firebase -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.85rem;flex-wrap:wrap">
+          <h4 style="font-size:.88rem;font-weight:700;color:var(--muted)">DANH SÁCH BIỂN BÁO TRONG FIREBASE</h4>
+          <button class="btn-sm" onclick="loadSignsList()" style="font-size:.78rem"><i class="fas fa-sync-alt"></i> Tải</button>
+          <div style="display:flex;gap:.4rem;margin-left:auto;flex-wrap:wrap">
+            <select id="signs-filter-cat" onchange="filterSignsList()"
+              style="padding:.35rem .6rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.8rem">
+              <option value="">Tất cả</option>
+              <option value="cam">Biển cấm</option>
+              <option value="nguy-hiem">Nguy hiểm</option>
+              <option value="hieu-lenh">Hiệu lệnh</option>
+              <option value="chi-dan">Chỉ dẫn</option>
+              <option value="phu">Biển phụ</option>
+              <option value="vach-son">Vạch sơn</option>
+            </select>
+            <input type="text" id="signs-search" placeholder="🔍 Tìm mã/tên..." oninput="filterSignsList()"
+              style="padding:.35rem .7rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.8rem;max-width:160px">
+          </div>
+          <span id="signs-list-count" style="font-size:.72rem;color:var(--hint)"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="signs-table">
+            <thead>
+              <tr>
+                <th>Mã hiệu</th><th>Tên biển</th><th>Loại</th>
+                <th>Hình dạng</th><th style="width:80px">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="signs-tbody">
+              <tr><td colspan="5" style="text-align:center;color:var(--hint);padding:1.5rem">
+                Bấm "Tải" để xem danh sách biển báo từ Firebase
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -783,6 +822,8 @@ async function sendNotification() {
 }
 
 // ── SIGNS ──
+let _editSignKey = null;
+
 async function saveSign() {
   const id    = document.getElementById('sign-id').value.trim();
   const name  = document.getElementById('sign-name').value.trim();
@@ -792,9 +833,84 @@ async function saveSign() {
   const usage = document.getElementById('sign-usage').value.trim();
   const imgUrl = document.getElementById('sign-img').value.trim();
   if (!id || !name) { toast('Điền mã hiệu và tên biển!','err'); return; }
-  await db.ref('traffic_signs/'+id.replace('.','_')).set({ id, name, cat, desc, shape, usage, imgUrl, icon:'📍' });
-  toast('Đã lưu biển báo '+id);
-  ['sign-id','sign-name','sign-desc','sign-shape','sign-usage','sign-img'].forEach(f=>document.getElementById(f).value='');
+  const key = _editSignKey || id.replace(/\./g,'_');
+  await db.ref('traffic_signs/'+key).set({ id, name, cat, desc, shape, usage, usecase:'', imgUrl, icon: getCatIcon(cat) });
+  toast(_editSignKey ? 'Đã cập nhật biển '+id : 'Đã thêm biển '+id);
+  cancelSignEdit();
+  loadSignsList();
+}
+
+function cancelSignEdit() {
+  _editSignKey = null;
+  ['sign-id','sign-name','sign-desc','sign-shape','sign-usage','sign-img'].forEach(f=>{
+    const el = document.getElementById(f); if(el) el.value='';
+  });
+  document.getElementById('btn-cancel-sign-edit').style.display='none';
+}
+
+let _allSigns = [];
+
+async function loadSignsList() {
+  const tbody = document.getElementById('signs-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1rem"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>';
+  const snap = await db.ref('traffic_signs').once('value');
+  _allSigns = [];
+  if (snap.exists()) {
+    snap.forEach(c => _allSigns.push({ key: c.key, ...c.val() }));
+  }
+  filterSignsList();
+}
+
+function filterSignsList() {
+  const cat    = document.getElementById('signs-filter-cat')?.value || '';
+  const search = (document.getElementById('signs-search')?.value || '').toLowerCase();
+  const filtered = _allSigns.filter(s =>
+    (!cat || s.cat === cat) &&
+    (!search || (s.id||'').toLowerCase().includes(search) || (s.name||'').toLowerCase().includes(search))
+  );
+  const CAT_LABELS = {cam:'🔴 Cấm','nguy-hiem':'⚠️ Nguy hiểm','hieu-lenh':'🔵 Hiệu lệnh','chi-dan':'🟢 Chỉ dẫn','phu':'🟣 Biển phụ','vach-son':'🟠 Vạch sơn'};
+  const tbody = document.getElementById('signs-tbody');
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--hint);padding:1rem">Không tìm thấy biển báo nào</td></tr>';
+    document.getElementById('signs-list-count').textContent = '0 biển';
+    return;
+  }
+  tbody.innerHTML = filtered.map(s => `<tr>
+    <td><span style="font-family:monospace;font-weight:700;color:var(--accent)">${s.id||s.key}</span></td>
+    <td>${s.name||''}</td>
+    <td><span style="font-size:.72rem;font-weight:700">${CAT_LABELS[s.cat]||s.cat||''}</span></td>
+    <td style="font-size:.78rem;color:var(--muted)">${(s.shape||'').slice(0,40)}${(s.shape||'').length>40?'...':''}</td>
+    <td style="display:flex;gap:.3rem">
+      <button class="btn-sm" onclick="editSignFromList('${s.key}')" title="Sửa"><i class="fas fa-edit"></i></button>
+      <button class="btn-sm danger" onclick="deleteSign('${s.key}','${(s.id||s.key).replace(/'/g,'')}')" title="Xóa"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+  document.getElementById('signs-list-count').textContent = filtered.length + '/' + _allSigns.length + ' biển';
+}
+
+async function editSignFromList(key) {
+  const s = _allSigns.find(x => x.key === key);
+  if (!s) return;
+  _editSignKey = key;
+  document.getElementById('sign-id').value    = s.id || '';
+  document.getElementById('sign-cat').value   = s.cat || 'cam';
+  document.getElementById('sign-name').value  = s.name || '';
+  document.getElementById('sign-desc').value  = s.desc || '';
+  document.getElementById('sign-shape').value = s.shape || '';
+  document.getElementById('sign-usage').value = s.usage || '';
+  document.getElementById('sign-img').value   = s.imgUrl || '';
+  document.getElementById('btn-cancel-sign-edit').style.display = 'inline-flex';
+  // Scroll to form
+  document.getElementById('sign-id').scrollIntoView({ behavior:'smooth', block:'center' });
+  toast('Đang sửa biển: ' + (s.name||s.id), 'info');
+}
+
+async function deleteSign(key, id) {
+  if (!confirm('Xóa biển báo ' + id + '?')) return;
+  await db.ref('traffic_signs/'+key).remove();
+  toast('Đã xóa biển ' + id);
+  loadSignsList();
 }
 
 
