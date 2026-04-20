@@ -277,7 +277,22 @@ body::after {
         </div>
       </div>
       <!-- Post list -->
-      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.75rem">Danh sách bài viết</h3>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap">
+        <h3 style="font-size:.95rem;font-weight:700">Danh sách bài viết</h3>
+        <input type="text" id="post-search" placeholder="🔍 Tìm bài viết..." oninput="filterPostsList()"
+          style="flex:1;min-width:160px;padding:.4rem .8rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.82rem">
+        <select id="post-filter-cat" onchange="filterPostsList()"
+          style="padding:.4rem .7rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.82rem">
+          <option value="">Tất cả category</option>
+          <option value="cong-nghe">💻 Công nghệ</option>
+          <option value="the-thao">⚽ Thể thao</option>
+          <option value="thoi-su">📰 Thời sự</option>
+          <option value="kinh-te">📈 Kinh tế</option>
+          <option value="xa-hoi">👥 Xã hội</option>
+          <option value="giai-tri">🎬 Giải trí</option>
+          <option value="giao-thong">🚦 Giao thông</option>
+        </select>
+      </div>
       <div id="posts-list">Đang tải...</div>
     </div>
 
@@ -585,26 +600,84 @@ function cancelEditPost() {
   document.getElementById('post-form-title').textContent = '➕ Đăng bài mới';
   document.getElementById('btn-post-submit').innerHTML   = '<i class="fas fa-paper-plane"></i> Đăng bài';
   document.getElementById('btn-cancel-edit').style.display = 'none';
+  const tp = document.getElementById('thumb-preview');
+  if (tp) tp.style.display = 'none';
+}
+
+// Cloudinary upload cho post image
+async function uploadPostImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10*1024*1024) { toast('Ảnh quá lớn! Tối đa 10MB','err'); return; }
+  
+  const preview = document.getElementById('thumb-preview');
+  const uploading = document.getElementById('thumb-uploading');
+  const img = document.getElementById('thumb-img');
+  preview.style.display = 'flex';
+  uploading.style.display = 'inline';
+  img.style.display = 'none';
+  
+  // Thử Cloudinary trước
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', 'trishteam_unsigned');
+    fd.append('folder', 'posts');
+    const res = await fetch('https://api.cloudinary.com/v1_1/trishteam/image/upload', { method:'POST', body:fd });
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('post-thumb').value = data.secure_url;
+      img.src = data.secure_url;
+      img.style.display = 'block';
+      uploading.style.display = 'none';
+      toast('Upload ảnh thành công!');
+      return;
+    }
+  } catch(e) {}
+  
+  // Fallback: ObjectURL preview (chưa có Cloudinary)
+  const url = URL.createObjectURL(file);
+  img.src = url;
+  img.style.display = 'block';
+  uploading.style.display = 'none';
+  toast('Chưa cấu hình Cloudinary. Dán URL ảnh thủ công.','info');
+}
+
+// Cache posts for filtering
+window._allPosts = [];
+
+function filterPostsList() {
+  const search = (document.getElementById('post-search')?.value || '').toLowerCase();
+  const cat    = document.getElementById('post-filter-cat')?.value || '';
+  const filtered = window._allPosts.filter(p => {
+    const matchCat    = !cat || p.category === cat;
+    const matchSearch = !search || p.title.toLowerCase().includes(search) || (p.excerpt||'').toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+  const container = document.getElementById('posts-list');
+  container.innerHTML = filtered.map(p => buildPostRow(p.id, p)).join('') || 
+    '<p style="color:var(--hint);font-size:.85rem;padding:.5rem">Không tìm thấy bài viết</p>';
+}
+
+function buildPostRow(pid, p) {
+  const pub = p.published;
+  return `<div class="post-row">
+    <div class="post-thumb-mini">${p.thumbnail?`<img src="${p.thumbnail}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r)" onerror="this.style.display='none'">`:getCatEmoji(p.category)}</div>
+    <div class="post-info">
+      <div class="post-title-mini">${p.title}</div>
+      <div class="post-meta-mini">${p.category} · ${timeAgo(p.timestamp)} · ${p.views||0} views · <span style="color:${pub?'var(--green)':'var(--muted)'}">${pub?'✓ Đã đăng':'Draft'}</span></div>
+    </div>
+    <button class="btn-sm" onclick="editPost('${pid}')" title="Sửa bài"><i class="fas fa-edit"></i></button>
+    <button class="pub-toggle ${pub?'on':'off'}" onclick="togglePublish('${pid}',${pub})" title="${pub?'Ẩn bài':'Hiện bài'}"></button>
+    <button class="btn-sm danger" onclick="deletePost('${pid}')"><i class="fas fa-trash"></i></button>
+  </div>`;
 }
 
 async function loadPosts() {
   const snap = await db.ref('posts').orderByChild('timestamp').once('value');
-  const items = [];
-  snap.forEach(c => {
-    const p = c.val();
-    const pub = p.published;
-    items.unshift(`<div class="post-row">
-      <div class="post-thumb-mini">${p.thumbnail?`<img src="${p.thumbnail}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r)" onerror="this.style.display='none'">`:getCatEmoji(p.category)}</div>
-      <div class="post-info">
-        <div class="post-title-mini">${p.title}</div>
-        <div class="post-meta-mini">${p.category} · ${timeAgo(p.timestamp)} · ${p.views||0} views</div>
-      </div>
-      <button class="btn-sm" onclick="editPost('${c.key}')" title="Sửa bài"><i class="fas fa-edit"></i></button>
-      <button class="pub-toggle ${pub?'on':'off'}" onclick="togglePublish('${c.key}',${pub})" title="${pub?'Ẩn bài':'Hiện bài'}"></button>
-      <button class="btn-sm danger" onclick="deletePost('${c.key}')"><i class="fas fa-trash"></i></button>
-    </div>`);
-  });
-  document.getElementById('posts-list').innerHTML = items.join('') || '<p style="color:var(--hint);font-size:.85rem">Chưa có bài viết</p>';
+  window._allPosts = [];
+  snap.forEach(c => { window._allPosts.unshift({ id: c.key, ...c.val() }); });
+  filterPostsList();
 }
 
 async function togglePublish(id, current) {
