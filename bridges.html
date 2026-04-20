@@ -27,6 +27,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;
   linear-gradient(90deg,rgba(102,126,234,0.04) 1px,transparent 1px);
   background-size:60px 60px;pointer-events:none}
 @keyframes gbgMove{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(18px,-12px) scale(1.02)}66%{transform:translate(-12px,18px) scale(0.98)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:60px;background:rgba(26,24,20,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .topbar-brand{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1.1rem;text-decoration:none;color:var(--text)}
@@ -235,7 +236,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
   <!-- RESULTS -->
   <div class="result-bar">
-    <div class="result-count">Hiển thị <strong id="result-count">0</strong> / <strong>7,844</strong> cầu</div>
+    <div class="result-count">Hiển thị <strong id="result-count">0</strong> / <strong id="total-count">7,897</strong> cầu</div>
+    <div id="load-status" style="display:none;align-items:center;gap:.5rem;font-size:.82rem;color:var(--muted)">
+      <span style="width:14px;height:14px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;display:inline-block;animation:spin .7s linear infinite"></span>
+      Đang tải dữ liệu VBMS...
+    </div>
     <button class="export-btn" onclick="exportCSV()"><i class="fas fa-download"></i> Xuất CSV</button>
   </div>
   <div class="table-wrap">
@@ -269,8 +274,42 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 <script>
-// Data loaded from bridges_data.js
-const BRIDGES = typeof BRIDGES_DATA !== "undefined" ? BRIDGES_DATA : [];
+// ── VBMS DATA — fetch từ Google Drive ──
+const DRIVE_URL = 'https://drive.google.com/uc?export=download&id=1GSG9FrSKBLqUlDcZMqHn3xR2SlaFA0-Q';
+let BRIDGES = [];
+
+async function loadBridgesData() {
+  const loadEl = document.getElementById('load-status');
+  if (loadEl) loadEl.style.display = 'flex';
+  try {
+    const res = await fetch(DRIVE_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    BRIDGES = (json.data || []).map((b, i) => ({
+      id: i + 1,
+      t:  b.ten_cau || '',
+      q:  b.quoc_lo || '',
+      l:  b.ly_trinh || '',
+      p:  b.tinh_tp || b.tinh || '',
+      dv: b.don_vi_ql || '',
+      v:  b.doi_tuong_vuot || '',
+      d:  b.chieu_dai || '',
+      r:  b.chieu_rong || '',
+      k:  b.ket_cau_nhip || '',
+      tr: b.tai_trong_tk || b.tai_trong_kt || '',
+      n:  b.nam_xay || b.nam_kt || '',
+      tt: b.tinh_trang || '',
+      s:  'VBMS 2026 — ' + (b.tinh || '')
+    }));
+    const totalEl = document.getElementById('total-count');
+    if (totalEl) totalEl.textContent = BRIDGES.length.toLocaleString('vi-VN');
+    if (loadEl) loadEl.style.display = 'none';
+    doSearch();
+  } catch(e) {
+    if (loadEl) loadEl.innerHTML = '<span style="color:#ef4444">⚠️ Không tải được dữ liệu. Vui lòng tải lại trang.</span>';
+    console.error('VBMS load error:', e);
+  }
+}
 
 // ── STATE ──
 let filtered = [];
@@ -408,9 +447,8 @@ function exportCSV() {
   a.click();
 }
 
-// Init
-doSearch();
+// Init — load data từ Drive rồi mới search
+loadBridgesData();
 </script>
-<script src="bridges_data.js"></script>
 </body>
 </html>
