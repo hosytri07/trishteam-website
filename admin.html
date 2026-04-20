@@ -242,7 +242,10 @@ body::after {
       </div>
       <!-- Add post form -->
       <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.2rem;margin-bottom:1.2rem">
-        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.9rem">➕ Đăng bài mới</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem">
+          <h3 style="font-size:.95rem;font-weight:700" id="post-form-title">➕ Đăng bài mới</h3>
+          <button id="btn-cancel-edit" onclick="cancelEditPost()" style="display:none;font-size:.78rem;padding:.3rem .7rem;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:inherit">✕ Hủy sửa</button>
+        </div>
         <div class="form-grid">
           <div class="form-row"><label>Tiêu đề *</label><input type="text" id="post-title" placeholder="Tiêu đề bài viết"></div>
           <div class="form-row"><label>Category *</label>
@@ -267,7 +270,7 @@ body::after {
           <input type="text" id="post-thumb" placeholder="https://drive.google.com/uc?id=... hoặc Cloudinary URL">
         </div>
         <div style="display:flex;align-items:center;gap:.75rem;margin-top:.5rem">
-          <button class="btn-action" onclick="publishPost()"><i class="fas fa-paper-plane"></i> Đăng bài</button>
+          <button class="btn-action" id="btn-post-submit" onclick="submitPost()"><i class="fas fa-paper-plane"></i> Đăng bài</button>
           <label style="display:flex;align-items:center;gap:.4rem;font-size:.83rem;color:var(--muted);cursor:pointer">
             <input type="checkbox" id="post-draft" style="accent-color:var(--accent)"> Lưu nháp (ẩn)
           </label>
@@ -510,13 +513,20 @@ async function loadKeys() {
 }
 
 // ── POSTS ──
+let _editPostId = null;
+
+function submitPost() {
+  if (_editPostId) updatePost();
+  else publishPost();
+}
+
 async function publishPost() {
-  const title   = document.getElementById('post-title').value.trim();
-  const content = document.getElementById('post-content').value.trim();
+  const title    = document.getElementById('post-title').value.trim();
+  const content  = document.getElementById('post-content').value.trim();
   const category = document.getElementById('post-cat').value;
   const excerpt  = document.getElementById('post-excerpt').value.trim();
   const thumbnail = document.getElementById('post-thumb').value.trim();
-  const isDraft = document.getElementById('post-draft').checked;
+  const isDraft  = document.getElementById('post-draft').checked;
   if (!title || !content) { toast('Điền tiêu đề và nội dung!','err'); return; }
   const id = 'p_' + Date.now();
   await db.ref('posts/'+id).set({
@@ -528,6 +538,53 @@ async function publishPost() {
   toast(isDraft ? 'Đã lưu nháp!' : 'Đã đăng bài!');
   ['post-title','post-content','post-excerpt','post-thumb'].forEach(id => document.getElementById(id).value='');
   loadPosts();
+}
+
+async function editPost(pid) {
+  // Load post data vào form
+  const snap = await db.ref('posts/'+pid).once('value');
+  const p = snap.val();
+  if (!p) return;
+  _editPostId = pid;
+  document.getElementById('post-title').value   = p.title||'';
+  document.getElementById('post-cat').value     = p.category||'cong-nghe';
+  document.getElementById('post-excerpt').value = p.excerpt||'';
+  document.getElementById('post-content').value = p.content||'';
+  document.getElementById('post-thumb').value   = p.thumbnail||'';
+  document.getElementById('post-draft').checked = !p.published;
+  // Update form UI
+  document.getElementById('post-form-title').textContent = '✏️ Sửa bài viết';
+  document.getElementById('btn-post-submit').innerHTML   = '<i class="fas fa-save"></i> Lưu thay đổi';
+  document.getElementById('btn-cancel-edit').style.display = '';
+  // Scroll to form
+  document.getElementById('post-form-title').scrollIntoView({ behavior:'smooth', block:'start' });
+  toast('Đang chỉnh sửa bài: '+p.title.slice(0,30),'info');
+}
+
+async function updatePost() {
+  const title    = document.getElementById('post-title').value.trim();
+  const content  = document.getElementById('post-content').value.trim();
+  const category = document.getElementById('post-cat').value;
+  const excerpt  = document.getElementById('post-excerpt').value.trim();
+  const thumbnail= document.getElementById('post-thumb').value.trim();
+  const isDraft  = document.getElementById('post-draft').checked;
+  if (!title || !content) { toast('Điền tiêu đề và nội dung!','err'); return; }
+  await db.ref('posts/'+_editPostId).update({
+    title, content, excerpt: excerpt || content.slice(0,120),
+    category, thumbnail, published: !isDraft
+  });
+  toast('Đã cập nhật bài viết!');
+  cancelEditPost();
+  loadPosts();
+}
+
+function cancelEditPost() {
+  _editPostId = null;
+  ['post-title','post-content','post-excerpt','post-thumb'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('post-draft').checked = false;
+  document.getElementById('post-form-title').textContent = '➕ Đăng bài mới';
+  document.getElementById('btn-post-submit').innerHTML   = '<i class="fas fa-paper-plane"></i> Đăng bài';
+  document.getElementById('btn-cancel-edit').style.display = 'none';
 }
 
 async function loadPosts() {
@@ -542,6 +599,7 @@ async function loadPosts() {
         <div class="post-title-mini">${p.title}</div>
         <div class="post-meta-mini">${p.category} · ${timeAgo(p.timestamp)} · ${p.views||0} views</div>
       </div>
+      <button class="btn-sm" onclick="editPost('${c.key}')" title="Sửa bài"><i class="fas fa-edit"></i></button>
       <button class="pub-toggle ${pub?'on':'off'}" onclick="togglePublish('${c.key}',${pub})" title="${pub?'Ẩn bài':'Hiện bài'}"></button>
       <button class="btn-sm danger" onclick="deletePost('${c.key}')"><i class="fas fa-trash"></i></button>
     </div>`);

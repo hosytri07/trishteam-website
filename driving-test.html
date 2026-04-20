@@ -186,6 +186,7 @@ body::after {
         <h3>Hạng A1</h3>
         <p>Xe máy dưới 175cc</p>
         <span class="badge">25 câu · 19 phút</span>
+        <div style="font-size:.68rem;color:var(--green);margin-top:.3rem;font-weight:600">✓ 242 câu A1 mới</div>
       </div>
       <div class="grade-card" data-grade="A2" data-q="25" data-t="19" onclick="selectGrade(this)">
         <div class="icon">🏍️</div>
@@ -328,7 +329,15 @@ function shuffle(arr) {
 
 // ── START ──
 function startQuiz() {
-  const pool = typeof DRIVING_QUESTIONS !== 'undefined' ? DRIVING_QUESTIONS : SAMPLE_Q;
+  let pool;
+  const grade = state.grade;
+  // A1/A: dùng bộ câu A1 nếu có
+  if ((grade === 'A1' || grade === 'A2') && typeof DRIVING_QUESTIONS_A1 !== 'undefined' && DRIVING_QUESTIONS_A1.length > 0) {
+    pool = DRIVING_QUESTIONS_A1;
+  } else {
+    // B1/B2/C: dùng bộ 600 câu B
+    pool = typeof DRIVING_QUESTIONS !== 'undefined' ? DRIVING_QUESTIONS : SAMPLE_Q;
+  }
   state.questions = shuffle(pool).slice(0, Math.min(state.totalQ, pool.length));
   state.current   = 0;
   state.answers   = {};

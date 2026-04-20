@@ -36,7 +36,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 /* Profile card */
 .profile-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.8rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1.2rem}
 .avatar-wrap{position:relative;flex-shrink:0}
-.avatar{width:72px;height:72px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff;font-family:'Be Vietnam Pro',sans-serif}
+.avatar{width:72px;height:72px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff;font-family:'Be Vietnam Pro',sans-serif;overflow:hidden;transition:all .2s;position:relative}
+.avatar:hover #av-overlay{display:flex!important}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .role-badge{position:absolute;bottom:-4px;right:-4px;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em}
 .role-admin{background:#f59e0b;color:#000}
 .role-key{background:var(--accent);color:#fff}
@@ -158,8 +160,12 @@ body::after {
   <!-- Profile Card -->
   <div class="profile-card">
     <div class="avatar-wrap">
-      <div class="avatar" id="av-letter">T</div>
+      <div class="avatar" id="av-letter" onclick="document.getElementById('av-upload').click()" title="Đổi ảnh đại diện" style="cursor:pointer;position:relative">
+        T
+        <div id="av-overlay" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;font-size:.9rem">📷</div>
+      </div>
       <span class="role-badge" id="av-role">trial</span>
+      <input type="file" id="av-upload" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
     </div>
     <div class="profile-info">
       <h2 id="p-name">Đang tải...</h2>
@@ -187,9 +193,27 @@ body::after {
     <!-- Key User -->
     <div id="key-info-section" style="display:none">
       <div class="key-info">
-        <div class="key-row"><span class="key-label">Loại gói</span><span class="key-val" id="k-type">Key User</span></div>
-        <div class="key-row"><span class="key-label">Hạn sử dụng</span><span class="key-val exp" id="k-expire">--</span></div>
-        <div class="key-row"><span class="key-label">Trạng thái</span><span class="key-val inf" id="k-status">Đang hoạt động</span></div>
+        <div class="key-row">
+          <span class="key-label">Loại gói</span>
+          <span class="key-val">🔑 Key User</span>
+        </div>
+        <div class="key-row">
+          <span class="key-label">Hạn sử dụng</span>
+          <span class="key-val exp" id="k-expire">--</span>
+        </div>
+        <div class="key-row">
+          <span class="key-label">Trạng thái</span>
+          <span class="key-val" id="k-status">
+            <span style="display:inline-flex;align-items:center;gap:.3rem;color:var(--green);font-weight:700">
+              <span style="width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block"></span>
+              Đang hoạt động
+            </span>
+          </span>
+        </div>
+        <div class="key-row" id="k-countdown-row" style="display:none">
+          <span class="key-label">Còn lại</span>
+          <span class="key-val" id="k-countdown" style="color:var(--yellow);font-weight:700">--</span>
+        </div>
       </div>
     </div>
     <!-- Trial -->
@@ -310,7 +334,13 @@ async function loadProfile(user) {
   document.getElementById('inp-email').value = email;
   document.getElementById('p-name').textContent  = name;
   document.getElementById('p-email').textContent  = email;
-  document.getElementById('av-letter').textContent = name[0].toUpperCase();
+  // Avatar: photo or letter
+  const avEl = document.getElementById('av-letter');
+  if (user.photoURL) {
+    avEl.innerHTML = `<img src="${user.photoURL}" alt="av" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    avEl.innerHTML = `<span style="font-weight:800;font-size:1.8rem">${name[0].toUpperCase()}</span>`;
+  }
 
   // Load from DB
   try {
@@ -327,16 +357,17 @@ async function loadProfile(user) {
     if (userRole === 'key') {
       document.getElementById('key-info-section').style.display = 'block';
       document.getElementById('trial-info-section').style.display = 'none';
-      document.getElementById('k-expire').textContent = data.keyExpire || 'Vĩnh viễn';
-      if (data.keyExpire === 'lifetime') document.getElementById('k-expire').textContent = 'Vĩnh viễn';
+      showKeyCountdown(data.keyExpire || 'lifetime');
     } else if (userRole === 'trial') {
       document.getElementById('trial-info-section').style.display = 'block';
       document.getElementById('key-info-section').style.display = 'none';
       document.getElementById('key-input-row').style.display = 'block';
+      document.getElementById('key-input-row').style.display = 'block';
     } else if (userRole === 'admin') {
       document.getElementById('key-info-section').style.display = 'block';
       document.getElementById('k-type').textContent   = 'Admin';
-      document.getElementById('k-expire').textContent = 'Vĩnh viễn';
+      // handled by showKeyCountdown
+        showKeyCountdown = 'Vĩnh viễn';
       document.getElementById('k-expire').className   = 'key-val inf';
     }
   } catch(e) {
@@ -370,7 +401,13 @@ async function saveSettings() {
 
     // Update UI
     document.getElementById('p-name').textContent   = name;
-    document.getElementById('av-letter').textContent = name[0].toUpperCase();
+    // Avatar: photo or letter
+  const avEl = document.getElementById('av-letter');
+  if (user.photoURL) {
+    avEl.innerHTML = `<img src="${user.photoURL}" alt="av" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    avEl.innerHTML = `<span style="font-weight:800;font-size:1.8rem">${name[0].toUpperCase()}</span>`;
+  }
     document.getElementById('inp-pw').value  = '';
     document.getElementById('inp-pw2').value = '';
     toast('Lưu thành công!', true);
@@ -431,6 +468,84 @@ function toast(msg, ok) {
   document.getElementById('t-msg').textContent = msg;
   setTimeout(() => t.classList.remove('show'), 3500);
 }
+
+// ── AVATAR UPLOAD via Cloudinary ──
+async function uploadAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5*1024*1024) { showToast('Ảnh quá lớn! Tối đa 5MB','err'); return; }
+  
+  showToast('Đang upload ảnh...','info');
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', 'trishteam_unsigned');
+  fd.append('folder', 'avatars');
+  
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/trishteam/image/upload', {
+      method: 'POST', body: fd
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    const url = data.secure_url;
+    
+    // Cập nhật avatar hiển thị
+    const av = document.getElementById('av-letter');
+    av.innerHTML = `<img src="${url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    
+    // Lưu vào Firebase + Auth profile
+    const user = auth.currentUser;
+    if (user) {
+      await user.updateProfile({ photoURL: url });
+      await db.ref('users/' + user.uid + '/photoURL').set(url);
+    }
+    showToast('Đã cập nhật ảnh đại diện!');
+  } catch (err) {
+    // Cloudinary chưa config → dùng initials
+    showToast('Chưa cấu hình Cloudinary. Đang dùng chữ cái đại diện.','info');
+  }
+}
+
+// ── KEY COUNTDOWN ──
+function showKeyCountdown(expireStr) {
+  if (!expireStr || expireStr === 'lifetime') {
+    // handled by showKeyCountdown
+        showKeyCountdown = '♾️ Vĩnh viễn';
+    return;
+  }
+  // Parse expire: "365days", "180days", "30days" or actual date
+  const countRow = document.getElementById('k-countdown-row');
+  const countEl  = document.getElementById('k-countdown');
+  
+  // If it's a timestamp
+  if (!isNaN(expireStr) && Number(expireStr) > 1000000000) {
+    const expDate = new Date(Number(expireStr));
+    const now = new Date();
+    const diff = expDate - now;
+    if (diff <= 0) {
+      // handled by showKeyCountdown
+        showKeyCountdown = '⏰ Đã hết hạn';
+      document.getElementById('k-status').innerHTML = '<span style="color:var(--red);font-weight:700">⛔ Hết hạn</span>';
+      return;
+    }
+    const days = Math.ceil(diff / 86400000);
+    // handled by showKeyCountdown
+        showKeyCountdown = expDate.toLocaleDateString('vi-VN');
+    if (countRow && countEl) {
+      countRow.style.display = '';
+      countEl.textContent = days + ' ngày';
+      if (days <= 7) countEl.style.color = 'var(--red)';
+      else if (days <= 30) countEl.style.color = 'var(--yellow)';
+      else countEl.style.color = 'var(--green)';
+    }
+  } else {
+    // String like "lifetime", "365days"
+    const map = { lifetime:'♾️ Vĩnh viễn', '365days':'1 năm', '180days':'6 tháng', '30days':'1 tháng' };
+    // handled by showKeyCountdown
+        showKeyCountdown = map[expireStr] || expireStr;
+  }
+}
+
 </script>
 </body>
 </html>
