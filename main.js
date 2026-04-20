@@ -1,4 +1,20 @@
 // ==================== GLOBAL STATE ====================
+// ═══════════════════════════════════════════════════════
+// TRISH TEAM CONFIG — Tách ra để dễ cập nhật
+// Lưu ý: Firebase config là client-side public key, bình thường
+// Telegram token: hãy restrict trong BotFather nếu cần
+// ═══════════════════════════════════════════════════════
+// ⚠️ HÀNH ĐỘNG BẮT BUỘC:
+// 1. Vào @BotFather trên Telegram → /revoke → chọn @TrishTeam_Feedback_bot → xác nhận
+// 2. @BotFather sẽ cấp token mới → copy vào chỗ 'YOUR_NEW_BOT_TOKEN_HERE'
+// 3. Upload main.js lên GitHub (token cũ đã bị lộ, cần revoke ngay!)
+const TRISH_CONFIG = {
+  telegram: {
+    botToken: 'YOUR_NEW_BOT_TOKEN_HERE',  // ← Thay bằng token mới sau khi revoke
+    chatId:   '1687867690'
+  }
+};
+
 const state = {
     currentTool: null,
     theme: localStorage.getItem('theme') || 'dark',
@@ -389,8 +405,8 @@ const handleContactForm = async (e) => {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
 
-    const BOT_TOKEN = '8668861015:AAES7-vHAOuuV2D4Nk2budyQIzgZ9arIYRU';
-    const CHAT_ID   = '1687867690';
+    const BOT_TOKEN = TRISH_CONFIG.telegram.botToken;
+    const CHAT_ID   = TRISH_CONFIG.telegram.chatId;
     const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
     const caption = `📬 <b>Liên hệ mới — TrishTeam</b>\n\n👤 <b>Tên:</b> ${name}\n📧 <b>Email:</b> ${email || 'Không có'}\n💬 <b>Nội dung:</b>\n${message}\n\n🕐 ${now}`;
 
