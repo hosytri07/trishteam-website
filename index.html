@@ -26,13 +26,12 @@
             </a>
             
             <div class="nav-menu" id="nav-menu">
-                <a href="#home" class="nav-link active">Trang chủ</a>
-                <a href="#tools" class="nav-link">Công cụ</a>
-                <a href="#mystical" class="nav-link">Phong thủy</a>
-                <a href="#utilities" class="nav-link">Tiện ích</a>
-                <a href="#software" class="nav-link">Phần mềm</a>
+                <a href="#home" class="nav-link active">Dashboard</a>
+                <a href="driving-test.html" class="nav-link">Ôn thi lái xe</a>
+                <a href="certificates.html" class="nav-link">Chứng chỉ XD</a>
+                <a href="traffic-signs.html" class="nav-link">Biển báo</a>
+                <a href="bridges.html" class="nav-link">Cầu VN</a>
                 <a href="posts.html" class="nav-link">Bảng tin</a>
-                <a href="#calculators" class="nav-link">Máy tính</a>
                 <a href="#contact" class="nav-link">Liên hệ</a>
             </div>
 
@@ -94,17 +93,9 @@
         <nav class="sidebar-nav">
             <div class="sidebar-group">
                 <span class="sidebar-group-label">Chính</span>
-                <a href="#home" class="sidebar-item active">
+                <a href="index.html" class="sidebar-item active">
                     <i class="fas fa-home"></i>
-                    <span>Trang chủ</span>
-                </a>
-                <a href="#tools" class="sidebar-item">
-                    <i class="fas fa-tools"></i>
-                    <span>Công cụ</span>
-                </a>
-                <a href="#calculators" class="sidebar-item">
-                    <i class="fas fa-calculator"></i>
-                    <span>Máy tính</span>
+                    <span>Dashboard</span>
                 </a>
                 <a href="posts.html" class="sidebar-item">
                     <i class="fas fa-newspaper"></i>
@@ -115,19 +106,26 @@
                 <span class="sidebar-group-label">Học tập</span>
                 <a href="driving-test.html" class="sidebar-item">
                     <i class="fas fa-car"></i>
-                    <span>Ôn thi bằng lái</span>
+                    <span>Ôn thi lái xe</span>
                 </a>
                 <a href="certificates.html" class="sidebar-item">
                     <i class="fas fa-certificate"></i>
-                    <span>Ôn thi chứng chỉ</span>
+                    <span>Chứng chỉ XD</span>
                 </a>
                 <a href="notes.html" class="sidebar-item">
                     <i class="fas fa-sticky-note"></i>
-                    <span>Ghi chú</span>
+                    <span>TrishNotes</span>
                 </a>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Tra cứu</span>
                 <a href="traffic-signs.html" class="sidebar-item">
                     <i class="fas fa-road"></i>
-                    <span>Tra biển báo</span>
+                    <span>Biển báo</span>
+                </a>
+                <a href="bridges.html" class="sidebar-item">
+                    <i class="fas fa-water"></i>
+                    <span>Cầu VN (VBMS)</span>
                 </a>
             </div>
             <div class="sidebar-group admin-only" style="display:none">
@@ -145,984 +143,247 @@
         </div>
     </aside>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-bg">
-            <div class="hero-gradient"></div>
-            <div class="hero-grid"></div>
-        </div>
-        <div class="container">
-            <div class="hero-split">
-                <!-- LEFT: Text + Buttons -->
-                <div class="hero-left">
-                    <div class="hero-badge">
-                        <i class="fas fa-sparkles"></i>
-                        <span>Phi thương mại • Miễn phí 100%</span>
-                    </div>
-                    <h1 class="hero-title">
-                        Hệ sinh thái
-                        <span class="gradient-text">Đa năng Workspace</span>
-                    </h1>
-                    <p class="hero-sub">Công cụ hàng ngày, ôn thi, ghi chú, tra cứu — tất cả trong một nơi.</p>
-                    <div class="hero-buttons">
-                        <a href="#tools" class="btn btn-primary">
-                            <i class="fas fa-rocket"></i> Khám phá
-                        </a>
-                        <a href="login.html" class="btn btn-secondary">
-                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                        </a>
-                    </div>
-                </div>
-                <!-- RIGHT: Feature mini-cards -->
-                <div class="hero-right">
-                    <div class="hero-feat-grid">
-                        <a href="driving-test.html" class="hero-feat-card">
-                            <span class="hfc-icon">🚗</span>
-                            <span class="hfc-label">Ôn thi lái xe</span>
-                            <span class="hfc-sub">596 câu B/B1</span>
-                        </a>
-                        <a href="certificates.html" class="hero-feat-card">
-                            <span class="hfc-icon">🏗️</span>
-                            <span class="hfc-label">Chứng chỉ XD</span>
-                            <span class="hfc-sub">345 câu</span>
-                        </a>
-                        <a href="notes.html" class="hero-feat-card">
-                            <span class="hfc-icon">📝</span>
-                            <span class="hfc-label">Ghi chú</span>
-                            <span class="hfc-sub">Sync Firebase</span>
-                        </a>
-                        <a href="traffic-signs.html" class="hero-feat-card">
-                            <span class="hfc-icon">🚦</span>
-                            <span class="hfc-label">Biển báo</span>
-                            <span class="hfc-sub">143 biển QC41</span>
-                        </a>
-                        <a href="posts.html" class="hero-feat-card">
-                            <span class="hfc-icon">📰</span>
-                            <span class="hfc-label">Bảng tin</span>
-                            <span class="hfc-sub">Realtime feed</span>
-                        </a>
-                        <a href="#tools" class="hero-feat-card">
-                            <span class="hfc-icon">🛠️</span>
-                            <span class="hfc-label">Công cụ</span>
-                            <span class="hfc-sub">20+ tiện ích</span>
-                        </a>
-                        <a href="bridges.html" class="hero-feat-card">
-                            <span class="hfc-icon">🌉</span>
-                            <span class="hfc-label">Cầu VN</span>
-                            <span class="hfc-sub">7.844 cầu</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
 
-    <!-- Tools Grid -->
-    <section class="tools-section" id="tools">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title"><span class="doodle-underline">Bộ sưu tập</span> công cụ</h2>
-                <p class="section-subtitle">Chọn công cụ bạn cần và bắt đầu sử dụng ngay</p>
-            </div>
+    <!-- ═══════════════════════════════════════════════════════
+         DASHBOARD MAIN AREA
+         Hiện với mọi người — nội dung thay đổi theo auth state
+    ═══════════════════════════════════════════════════════ -->
+    <div class="dashboard-wrap" id="dashboard-wrap">
 
-            <div class="tools-filter">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-th"></i> Tất cả
-                </button>
-                <button class="filter-btn" data-filter="generator">
-                    <i class="fas fa-magic"></i> Tạo mã
-                </button>
-                <button class="filter-btn" data-filter="converter">
-                    <i class="fas fa-exchange-alt"></i> Chuyển đổi
-                </button>
-                <button class="filter-btn" data-filter="calculator">
-                    <i class="fas fa-calculator"></i> Tính toán
-                </button>
-                <button class="filter-btn" data-filter="text">
-                    <i class="fas fa-font"></i> Văn bản
-                </button>
-            </div>
+      <!-- ── ROW 1: Widgets (Clock + Weather + Stats) ── -->
+      <div class="dash-row dash-row-widgets">
 
-            <div class="tools-grid">
-                <!-- QR Generator -->
-                <div class="tool-card" data-category="generator" data-tool="qr-generator">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <i class="fas fa-qrcode"></i>
-                    </div>
-                    <h3 class="tool-title">QR Generator</h3>
-                    <p class="tool-desc">Tạo mã QR từ Google Drive link</p>
-                    <div class="tool-tags">
-                        <span class="tag">QR Code</span>
-                        <span class="tag">Drive</span>
-                    </div>
-                </div>
-
-                <!-- Password Generator -->
-                <div class="tool-card" data-category="generator" data-tool="password-gen">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <h3 class="tool-title">Password Generator</h3>
-                    <p class="tool-desc">Tạo mật khẩu mạnh và an toàn</p>
-                    <div class="tool-tags">
-                        <span class="tag">Bảo mật</span>
-                    </div>
-                </div>
-
-                <!-- Color Picker -->
-                <div class="tool-card" data-category="generator" data-tool="color-picker">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3 class="tool-title">Color Picker</h3>
-                    <p class="tool-desc">Bảng màu và tạo gradient</p>
-                    <div class="tool-tags">
-                        <span class="tag">Màu sắc</span>
-                        <span class="tag">Design</span>
-                    </div>
-                </div>
-
-                <!-- Base64 Converter -->
-                <div class="tool-card" data-category="converter" data-tool="base64">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="tool-title">Base64 Encoder</h3>
-                    <p class="tool-desc">Encode/Decode Base64</p>
-                    <div class="tool-tags">
-                        <span class="tag">Base64</span>
-                    </div>
-                </div>
-
-                <!-- Unit Converter -->
-                <div class="tool-card" data-category="converter" data-tool="unit-converter">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-                    <h3 class="tool-title">Unit Converter</h3>
-                    <p class="tool-desc">Chuyển đổi đơn vị đo lường</p>
-                    <div class="tool-tags">
-                        <span class="tag">Đơn vị</span>
-                    </div>
-                </div>
-
-                <!-- BMI Calculator -->
-                <div class="tool-card" data-category="calculator" data-tool="bmi-calc">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                        <i class="fas fa-weight"></i>
-                    </div>
-                    <h3 class="tool-title">BMI Calculator</h3>
-                    <p class="tool-desc">Tính chỉ số khối cơ thể</p>
-                    <div class="tool-tags">
-                        <span class="tag">Sức khỏe</span>
-                    </div>
-                </div>
-
-                <!-- Age Calculator -->
-                <div class="tool-card" data-category="calculator" data-tool="age-calc">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <h3 class="tool-title">Age Calculator</h3>
-                    <p class="tool-desc">Tính tuổi chính xác</p>
-                    <div class="tool-tags">
-                        <span class="tag">Tuổi</span>
-                    </div>
-                </div>
-
-                <!-- JSON Formatter -->
-                <div class="tool-card" data-category="text" data-tool="json-formatter">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
-                        <i class="fas fa-brackets-curly"></i>
-                    </div>
-                    <h3 class="tool-title">JSON Formatter</h3>
-                    <p class="tool-desc">Format và validate JSON</p>
-                    <div class="tool-tags">
-                        <span class="tag">JSON</span>
-                    </div>
-                </div>
-
-                <!-- Markdown Editor -->
-                <div class="tool-card" data-category="text" data-tool="markdown-editor">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);">
-                        <i class="fab fa-markdown"></i>
-                    </div>
-                    <h3 class="tool-title">Markdown Editor</h3>
-                    <p class="tool-desc">Soạn thảo Markdown live</p>
-                    <div class="tool-tags">
-                        <span class="tag">Editor</span>
-                    </div>
-                </div>
-
-                <!-- Text Case Converter -->
-                <div class="tool-card" data-category="text" data-tool="text-case">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
-                        <i class="fas fa-font"></i>
-                    </div>
-                    <h3 class="tool-title">Text Case</h3>
-                    <p class="tool-desc">Chuyển đổi chữ hoa/thường</p>
-                    <div class="tool-tags">
-                        <span class="tag">Text</span>
-                    </div>
-                </div>
-
-                <!-- World Clock -->
-                <div class="tool-card" data-category="calculator" data-tool="world-clock">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%);">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3 class="tool-title">World Clock</h3>
-                    <p class="tool-desc">Đồng hồ thế giới</p>
-                    <div class="tool-tags">
-                        <span class="tag">Thời gian</span>
-                    </div>
-                </div>
-
-                <!-- Pomodoro Timer -->
-                <div class="tool-card" data-category="calculator" data-tool="pomodoro">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3 class="tool-title">Pomodoro Timer</h3>
-                    <p class="tool-desc">Quản lý thời gian làm việc</p>
-                    <div class="tool-tags">
-                        <span class="tag">Timer</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mystical Section -->
-    <section class="mystical-section" id="mystical">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Phong thủy & <span class="doodle-underline">Tử vi</span></h2>
-                <p class="section-subtitle">Khám phá bản mệnh và vận số của bạn</p>
-            </div>
-
-            <div class="mystical-grid">
-                <!-- Tử Vi -->
-                <div class="mystical-card" data-mystical="tu-vi">
-                    <div class="mystical-header">
-                        <i class="fas fa-yin-yang"></i>
-                        <h3>Lá Số Tử Vi</h3>
-                    </div>
-                    <p>Xem lá số tử vi chi tiết với 12 cung</p>
-                    <div class="mystical-features">
-                        <span><i class="fas fa-check"></i> Bát tự ngày sinh</span>
-                        <span><i class="fas fa-check"></i> Ngũ hành mệnh</span>
-                        <span><i class="fas fa-check"></i> Cung phi tinh</span>
-                        <span><i class="fas fa-check"></i> Hướng tốt</span>
-                    </div>
-                </div>
-
-                <!-- Thần Số Học -->
-                <div class="mystical-card" data-mystical="numerology">
-                    <div class="mystical-header">
-                        <i class="fas fa-calculator-alt"></i>
-                        <h3>Thần Số Học</h3>
-                    </div>
-                    <p>Phân tích con số chủ đạo và vận mệnh</p>
-                    <div class="mystical-features">
-                        <span><i class="fas fa-check"></i> Số chủ đạo</span>
-                        <span><i class="fas fa-check"></i> Động lực bên trong</span>
-                        <span><i class="fas fa-check"></i> Năng lực tự nhiên</span>
-                        <span><i class="fas fa-check"></i> Nhân cách bên ngoài</span>
-                    </div>
-                </div>
-
-                <!-- Lịch Âm -->
-                <div class="mystical-card" data-mystical="lunar-calendar">
-                    <div class="mystical-header">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h3>Lịch Vạn Niên</h3>
-                    </div>
-                    <p>Tra cứu âm dương lịch và ngày tốt xấu</p>
-                    <div class="mystical-features">
-                        <span><i class="fas fa-check"></i> Âm dương lịch</span>
-                        <span><i class="fas fa-check"></i> Can chi năm</span>
-                        <span><i class="fas fa-check"></i> Sao tốt xấu</span>
-                        <span><i class="fas fa-check"></i> Ngày hoàng đạo</span>
-                    </div>
-                </div>
-
-                <!-- Tuổi Xây Dựng -->
-                <div class="mystical-card" data-mystical="construction-age">
-                    <div class="mystical-header">
-                        <i class="fas fa-home"></i>
-                        <h3>Tuổi Xây Dựng</h3>
-                    </div>
-                    <p>Xem tuổi xây nhà và hướng nhà hợp phong thủy</p>
-                    <div class="mystical-features">
-                        <span><i class="fas fa-check"></i> Tuổi hợp xây</span>
-                        <span><i class="fas fa-check"></i> Hướng nhà</span>
-                        <span><i class="fas fa-check"></i> Màu sơn hợp</span>
-                        <span><i class="fas fa-check"></i> Ngày tốt</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Utilities Section -->
-    <section class="utilities-section" id="utilities">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Tiện ích <span class="doodle-underline">thông tin</span></h2>
-                <p class="section-subtitle">Thông tin thời gian thực và hữu ích</p>
-            </div>
-
-            <div class="utilities-grid">
-                <!-- Gold Price -->
-                <div class="utility-card">
-                    <div class="utility-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <h3 class="utility-title">Giá Vàng SJC</h3>
-                    <div class="utility-value" id="gold-price">
-                        <span class="loading-spinner"></span>
-                    </div>
-                    <p class="utility-unit">VNĐ/Lượng</p>
-                    <div class="utility-update">Cập nhật: <span id="gold-update">--:--</span></div>
-                </div>
-
-                <!-- USD Rate -->
-                <div class="utility-card">
-                    <div class="utility-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3 class="utility-title">Tỷ Giá USD</h3>
-                    <div class="utility-value" id="usd-rate">
-                        <span class="loading-spinner"></span>
-                    </div>
-                    <p class="utility-unit">VNĐ</p>
-                    <div class="utility-update">Nguồn: Vietcombank</div>
-                </div>
-
-                <!-- Gasoline Price -->
-                <div class="utility-card">
-                    <div class="utility-icon">
-                        <i class="fas fa-gas-pump"></i>
-                    </div>
-                    <h3 class="utility-title">Giá Xăng RON95</h3>
-                    <div class="utility-value" id="gasoline-price">
-                        <span class="loading-spinner"></span>
-                    </div>
-                    <p class="utility-unit">VNĐ/Lít</p>
-                    <div class="utility-update">Nguồn: Petrolimex</div>
-                </div>
-
-                <!-- Lunar Date -->
-                <div class="utility-card">
-                    <div class="utility-icon">
-                        <i class="fas fa-calendar"></i>
-                    </div>
-                    <h3 class="utility-title">Âm Lịch Hôm Nay</h3>
-                    <div class="utility-value" id="lunar-date">
-                        <span class="loading-spinner"></span>
-                    </div>
-                    <p class="utility-unit" id="lunar-year">---</p>
-                    <div class="utility-update" id="lunar-holiday">Không có sự kiện</div>
-                </div>
-
-                <!-- Weather Card -->
-                <div class="utility-card weather-utility">
-                    <div class="utility-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
-                        <i class="fas fa-cloud-sun" id="weather-icon-small"></i>
-                    </div>
-                    <h3 class="utility-title">Thời Tiết</h3>
-                    <div class="utility-value" id="weather-main-temp" style="font-size:1.6rem;">
-                        <span class="loading-spinner"></span>
-                    </div>
-                    <p class="utility-unit" id="weather-main-desc">Đang tải...</p>
-                    <div class="utility-update">
-                        <div class="weather-detail-mini">
-                            <span><i class="fas fa-tint"></i> <span id="weather-humidity">--</span></span>
-                            <span><i class="fas fa-wind"></i> <span id="weather-wind">--</span></span>
-                        </div>
-                        <div style="margin-top:0.3rem;color:var(--text-tertiary)">Vị trí: Đà Nẵng</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Software Portfolio Section -->
-    <section class="software-section" id="software">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Bộ sưu tập phần mềm</h2>
-                <p class="section-subtitle">Các phần mềm AutoLISP hỗ trợ thiết kế giao thông</p>
-            </div>
-
-            <!-- Software Tabs -->
-            <div class="software-tabs">
-                <button class="software-tab active" data-tab="released">
-                    <i class="fas fa-check-circle"></i>
-                    Đã phát hành
-                </button>
-                <button class="software-tab" data-tab="upcoming">
-                    <i class="fas fa-clock"></i>
-                    Sắp ra mắt
-                </button>
-                <button class="software-tab" data-tab="ideas">
-                    <i class="fas fa-lightbulb"></i>
-                    Đang lên ý tưởng
-                </button>
-            </div>
-
-            <!-- Released Software -->
-            <div class="software-content active" id="released">
-                <div class="software-grid">
-                    <!-- Software 1 -->
-                    <div class="software-card">
-                        <div class="software-header">
-                            <div class="software-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <div class="software-version">
-                                <span class="version-badge">v2.5.1</span>
-                                <span class="status-badge status-stable">Ổn định</span>
-                            </div>
-                        </div>
-                        <h3 class="software-title">TKL - Tính Khối Lượng</h3>
-                        <p class="software-desc">Tính toán khối lượng đất đắp, đào tự động từ mặt cắt ngang. Hỗ trợ đa dạng loại mặt cắt và xuất bảng Excel.</p>
-                        
-                        <div class="software-features">
-                            <span><i class="fas fa-check"></i> Tính khối lượng đất</span>
-                            <span><i class="fas fa-check"></i> Xuất Excel tự động</span>
-                            <span><i class="fas fa-check"></i> Hỗ trợ nhiều loại MCN</span>
-                            <span><i class="fas fa-check"></i> Tích hợp công thức</span>
-                        </div>
-
-                        <div class="software-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>Phát hành: 15/03/2024</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-sync"></i>
-                                <span>Cập nhật: 10/01/2026</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>2,347 lượt tải</span>
-                            </div>
-                        </div>
-
-                        <div class="software-actions">
-                            <button class="btn btn-primary btn-sm" onclick="downloadSoftware('tkl')">
-                                <i class="fas fa-download"></i> Tải xuống
-                            </button>
-                            <button class="btn btn-secondary btn-sm" onclick="viewSoftwareDetails('tkl')">
-                                <i class="fas fa-info-circle"></i> Chi tiết
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Software 2 -->
-                    <div class="software-card">
-                        <div class="software-header">
-                            <div class="software-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                <i class="fas fa-ruler"></i>
-                            </div>
-                            <div class="software-version">
-                                <span class="version-badge">v1.8.0</span>
-                                <span class="status-badge status-stable">Ổn định</span>
-                            </div>
-                        </div>
-                        <h3 class="software-title">CD - Cắt Chân Dim</h3>
-                        <p class="software-desc">Cắt chân dimension theo tiêu chuẩn thiết kế. Tự động điều chỉnh vị trí và format text.</p>
-                        
-                        <div class="software-features">
-                            <span><i class="fas fa-check"></i> Cắt dim chuẩn</span>
-                            <span><i class="fas fa-check"></i> Auto format text</span>
-                            <span><i class="fas fa-check"></i> Hỗ trợ nhiều layer</span>
-                            <span><i class="fas fa-check"></i> Batch processing</span>
-                        </div>
-
-                        <div class="software-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>Phát hành: 20/06/2023</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-sync"></i>
-                                <span>Cập nhật: 05/12/2025</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>1,892 lượt tải</span>
-                            </div>
-                        </div>
-
-                        <div class="software-actions">
-                            <button class="btn btn-primary btn-sm" onclick="downloadSoftware('cd')">
-                                <i class="fas fa-download"></i> Tải xuống
-                            </button>
-                            <button class="btn btn-secondary btn-sm" onclick="viewSoftwareDetails('cd')">
-                                <i class="fas fa-info-circle"></i> Chi tiết
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Software 3 -->
-                    <div class="software-card">
-                        <div class="software-header">
-                            <div class="software-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                                <i class="fas fa-font"></i>
-                            </div>
-                            <div class="software-version">
-                                <span class="version-badge">v1.3.2</span>
-                                <span class="status-badge status-stable">Ổn định</span>
-                            </div>
-                        </div>
-                        <h3 class="software-title">NTEXT - Nối Text</h3>
-                        <p class="software-desc">Nối text nhanh chóng với nhiều tùy chọn. Hỗ trợ format và sắp xếp tự động.</p>
-                        
-                        <div class="software-features">
-                            <span><i class="fas fa-check"></i> Nối text nhanh</span>
-                            <span><i class="fas fa-check"></i> Nhiều tùy chọn</span>
-                            <span><i class="fas fa-check"></i> Auto format</span>
-                            <span><i class="fas fa-check"></i> Undo support</span>
-                        </div>
-
-                        <div class="software-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>Phát hành: 10/09/2023</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-sync"></i>
-                                <span>Cập nhật: 20/11/2025</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>1,456 lượt tải</span>
-                            </div>
-                        </div>
-
-                        <div class="software-actions">
-                            <button class="btn btn-primary btn-sm" onclick="downloadSoftware('ntext')">
-                                <i class="fas fa-download"></i> Tải xuống
-                            </button>
-                            <button class="btn btn-secondary btn-sm" onclick="viewSoftwareDetails('ntext')">
-                                <i class="fas fa-info-circle"></i> Chi tiết
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Upcoming Software -->
-            <div class="software-content" id="upcoming">
-                <div class="software-grid">
-                    <div class="software-card upcoming">
-                        <div class="software-header">
-                            <div class="software-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                                <i class="fas fa-road"></i>
-                            </div>
-                            <div class="software-version">
-                                <span class="version-badge">v1.0.0</span>
-                                <span class="status-badge status-beta">Beta</span>
-                            </div>
-                        </div>
-                        <h3 class="software-title">AUTO-SECTION - Tạo MCN Tự Động</h3>
-                        <p class="software-desc">Tạo mặt cắt ngang tự động từ trắc dọc và số liệu khảo sát. Tích hợp AI để tối ưu thiết kế.</p>
-                        
-                        <div class="release-info">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%;"></div>
-                            </div>
-                            <p class="release-text">
-                                <i class="fas fa-hourglass-half"></i>
-                                Dự kiến: Q2 2026 (75% hoàn thành)
-                            </p>
-                        </div>
-
-                        <div class="software-features">
-                            <span><i class="fas fa-star"></i> AI-powered design</span>
-                            <span><i class="fas fa-star"></i> Tạo MCN tự động</span>
-                            <span><i class="fas fa-star"></i> Tối ưu thiết kế</span>
-                            <span><i class="fas fa-star"></i> Export nhiều định dạng</span>
-                        </div>
-                    </div>
-
-                    <div class="software-card upcoming">
-                        <div class="software-header">
-                            <div class="software-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="software-version">
-                                <span class="version-badge">v1.0.0</span>
-                                <span class="status-badge status-alpha">Alpha</span>
-                            </div>
-                        </div>
-                        <h3 class="software-title">COST-ESTIMATOR - Dự Toán Nhanh</h3>
-                        <p class="software-desc">Tính dự toán chi phí xây dựng theo đơn giá mới nhất. Cập nhật định mức tự động.</p>
-                        
-                        <div class="release-info">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 45%;"></div>
-                            </div>
-                            <p class="release-text">
-                                <i class="fas fa-hourglass-half"></i>
-                                Dự kiến: Q3 2026 (45% hoàn thành)
-                            </p>
-                        </div>
-
-                        <div class="software-features">
-                            <span><i class="fas fa-star"></i> Dự toán tự động</span>
-                            <span><i class="fas fa-star"></i> Cập nhật đơn giá</span>
-                            <span><i class="fas fa-star"></i> Export Excel</span>
-                            <span><i class="fas fa-star"></i> Database đầy đủ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ideas Section -->
-            <div class="software-content" id="ideas">
-                <div class="ideas-container">
-                    <div class="ideas-intro">
-                        <i class="fas fa-lightbulb idea-icon"></i>
-                        <h3>Góp ý tưởng phần mềm mới</h3>
-                        <p>Bạn có ý tưởng cho công cụ AutoLISP hữu ích? Chia sẻ với chúng tôi!</p>
-                    </div>
-
-                    <div class="ideas-list">
-                        <div class="idea-card">
-                            <div class="idea-header">
-                                <h4><i class="fas fa-drafting-compass"></i> Công cụ Vẽ Nhanh</h4>
-                                <span class="votes">
-                                    <i class="fas fa-thumbs-up"></i> 45 votes
-                                </span>
-                            </div>
-                            <p>Vẽ các chi tiết kỹ thuật thường dùng (giằng, móng, cọc) với một lệnh.</p>
-                            <div class="idea-meta">
-                                <span><i class="fas fa-user"></i> Nguyễn V.A</span>
-                                <span><i class="fas fa-calendar"></i> 15/03/2026</span>
-                            </div>
-                        </div>
-
-                        <div class="idea-card">
-                            <div class="idea-header">
-                                <h4><i class="fas fa-file-export"></i> Export to BIM</h4>
-                                <span class="votes">
-                                    <i class="fas fa-thumbs-up"></i> 38 votes
-                                </span>
-                            </div>
-                            <p>Chuyển đổi bản vẽ 2D sang định dạng BIM (IFC, Revit) tự động.</p>
-                            <div class="idea-meta">
-                                <span><i class="fas fa-user"></i> Trần M.B</span>
-                                <span><i class="fas fa-calendar"></i> 10/03/2026</span>
-                            </div>
-                        </div>
-
-                        <div class="idea-card">
-                            <div class="idea-header">
-                                <h4><i class="fas fa-layer-group"></i> Layer Manager Pro</h4>
-                                <span class="votes">
-                                    <i class="fas fa-thumbs-up"></i> 32 votes
-                                </span>
-                            </div>
-                            <p>Quản lý layer nâng cao với template, batch operations và auto-cleanup.</p>
-                            <div class="idea-meta">
-                                <span><i class="fas fa-user"></i> Lê T.C</span>
-                                <span><i class="fas fa-calendar"></i> 05/03/2026</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <form class="idea-form" id="idea-form">
-                        <h4>Đề xuất ý tưởng của bạn</h4>
-                        <div class="form-row">
-                            <input type="text" placeholder="Tên của bạn" class="input-field" required>
-                            <input type="email" placeholder="Email (không bắt buộc)" class="input-field">
-                        </div>
-                        <input type="text" placeholder="Tiêu đề ý tưởng" class="input-field" required>
-                        <textarea placeholder="Mô tả chi tiết ý tưởng của bạn..." rows="5" class="input-field" required></textarea>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Gửi ý tưởng
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ==================== BONUS FEATURES ==================== -->
-<!-- Thêm vào sau Software Section trong index.html -->
-
-<!-- News Section -->
-<!-- Advanced Calculator Section -->
-<section class="calculators-section calculator-section" id="calculators">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Máy tính nâng cao</h2>
-            <p class="section-subtitle">Công cụ tính toán chuyên dụng</p>
+        <!-- Clock Widget (FEZ Digital Clock) -->
+        <div class="dash-widget widget-clock" id="widget-clock">
+          <div class="widget-label">Đồng hồ</div>
+          <div class="clock-display">
+            <span class="clock-time" id="clock-time">00:00:00</span>
+            <span class="clock-date" id="clock-date">--/--/----</span>
+          </div>
         </div>
 
-        <div class="calculator-tabs">
-            <button class="calc-tab active" data-calc="loan">
-                <i class="fas fa-hand-holding-usd"></i> Vay vốn
+        <!-- Weather Widget -->
+        <div class="dash-widget widget-weather" id="widget-weather">
+          <div class="widget-label">Thời tiết · Đà Nẵng</div>
+          <div class="weather-main">
+            <span class="weather-icon" id="weather-icon">🌤</span>
+            <span class="weather-temp" id="weather-temp">--°C</span>
+          </div>
+          <div class="weather-desc" id="weather-desc">Đang tải...</div>
+          <div class="weather-sub">
+            <span id="weather-humidity">💧 --%</span>
+            <span id="weather-wind">🌬 -- km/h</span>
+          </div>
+        </div>
+
+        <!-- Stats cards (guest: info; user: personal stats) -->
+        <div class="dash-widget widget-stats" id="widget-stats">
+          <div class="widget-label">Tổng quan</div>
+          <div class="stats-mini-grid">
+            <div class="stats-mini-item">
+              <div class="stats-mini-num">838</div>
+              <div class="stats-mini-lbl">Câu lái xe</div>
+            </div>
+            <div class="stats-mini-item">
+              <div class="stats-mini-num">345</div>
+              <div class="stats-mini-lbl">Câu chứng chỉ</div>
+            </div>
+            <div class="stats-mini-item">
+              <div class="stats-mini-num">143</div>
+              <div class="stats-mini-lbl">Biển báo</div>
+            </div>
+            <div class="stats-mini-item">
+              <div class="stats-mini-num">7.897</div>
+              <div class="stats-mini-lbl">Cầu VN</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── ROW 2: Quick Access + Recent Activity ── -->
+      <div class="dash-row dash-row-main">
+
+        <!-- Quick Access Bento Grid -->
+        <div class="dash-card card-quick">
+          <div class="card-header">
+            <span class="card-title">Truy cập nhanh</span>
+          </div>
+          <div class="quick-grid">
+            <a href="driving-test.html" class="quick-item">
+              <span class="quick-icon">🚗</span>
+              <span class="quick-name">Ôn thi lái xe</span>
+              <span class="quick-sub">A1 / B1 / B2 / C</span>
+            </a>
+            <a href="certificates.html" class="quick-item">
+              <span class="quick-icon">🏗️</span>
+              <span class="quick-name">Chứng chỉ XD</span>
+              <span class="quick-sub">345 câu hỏi</span>
+            </a>
+            <a href="notes.html" class="quick-item quick-item-needs-login" data-require-login="true">
+              <span class="quick-icon">📝</span>
+              <span class="quick-name">TrishNotes</span>
+              <span class="quick-sub">Ghi chú cá nhân</span>
+            </a>
+            <a href="traffic-signs.html" class="quick-item">
+              <span class="quick-icon">🚦</span>
+              <span class="quick-name">Biển báo</span>
+              <span class="quick-sub">QC41:2024</span>
+            </a>
+            <a href="bridges.html" class="quick-item">
+              <span class="quick-icon">🌉</span>
+              <span class="quick-name">Cầu VN</span>
+              <span class="quick-sub">7.897 cầu</span>
+            </a>
+            <a href="posts.html" class="quick-item">
+              <span class="quick-icon">📰</span>
+              <span class="quick-name">Bảng tin</span>
+              <span class="quick-sub">Tin tức & chia sẻ</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Recent Activity (thay đổi theo login state) -->
+        <div class="dash-card card-activity">
+          <div class="card-header">
+            <span class="card-title">Hoạt động gần đây</span>
+            <a href="user-settings.html" class="card-link-sm" id="activity-link" style="display:none">Xem tất cả →</a>
+          </div>
+          <!-- Guest view -->
+          <div id="activity-guest">
+            <div class="activity-cta">
+              <div class="activity-cta-icon">👋</div>
+              <div class="activity-cta-text">Đăng nhập để theo dõi tiến độ ôn thi, ghi chú và hoạt động cá nhân.</div>
+              <a href="login.html" class="activity-cta-btn">Đăng nhập ngay</a>
+            </div>
+          </div>
+          <!-- Logged-in view -->
+          <div id="activity-user" style="display:none">
+            <div class="activity-list" id="activity-list">
+              <div class="activity-empty">Chưa có hoạt động nào</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── ROW 3: Posts Feed Preview ── -->
+      <div class="dash-row dash-row-feed">
+        <div class="dash-card card-feed">
+          <div class="card-header">
+            <span class="card-title">📰 Bảng tin mới nhất</span>
+            <a href="posts.html" class="card-link-sm">Xem tất cả →</a>
+          </div>
+          <div class="feed-grid" id="home-feed-grid">
+            <div class="feed-loading">Đang tải bài viết...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ROW 4: Tools Grid (giữ lại nhưng compact hơn) ── -->
+      <div class="dash-row dash-row-tools">
+        <div class="dash-card card-tools">
+          <div class="card-header">
+            <span class="card-title">🛠 Công cụ nhanh</span>
+          </div>
+          <div class="tools-compact-grid">
+            <div class="tool-compact" data-tool="qr-generator">
+              <span class="tc-icon">📱</span>
+              <span class="tc-name">QR Code</span>
+            </div>
+            <div class="tool-compact" data-tool="password-gen">
+              <span class="tc-icon">🔑</span>
+              <span class="tc-name">Mật khẩu</span>
+            </div>
+            <div class="tool-compact" data-tool="base64">
+              <span class="tc-icon">💻</span>
+              <span class="tc-name">Base64</span>
+            </div>
+            <div class="tool-compact" data-tool="color-picker">
+              <span class="tc-icon">🎨</span>
+              <span class="tc-name">Màu sắc</span>
+            </div>
+            <div class="tool-compact" data-tool="unit-converter">
+              <span class="tc-icon">📐</span>
+              <span class="tc-name">Đổi đơn vị</span>
+            </div>
+            <div class="tool-compact" data-tool="loan-calculator">
+              <span class="tc-icon">🏦</span>
+              <span class="tc-name">Vay vốn</span>
+            </div>
+            <div class="tool-compact" data-tool="json-formatter">
+              <span class="tc-icon">📋</span>
+              <span class="tc-name">JSON</span>
+            </div>
+            <div class="tool-compact" data-tool="markdown-editor">
+              <span class="tc-icon">✍️</span>
+              <span class="tc-name">Markdown</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact section giữ lại nhưng compact hơn -->
+      <div class="dash-row dash-row-contact">
+        <div class="dash-card card-contact">
+          <div class="card-header">
+            <span class="card-title">📬 Liên hệ & Hỗ trợ</span>
+          </div>
+          <div class="contact-grid-compact">
+            <div class="contact-info-compact">
+              <p class="contact-intro">Tôi là <strong>Hồ Sỹ Trí</strong>, kỹ sư thiết kế hạ tầng giao thông. Đam mê phát triển công cụ tự động hóa cho kỹ sư.</p>
+              <div class="contact-links">
+                <a href="mailto:trishteam.official@gmail.com" class="contact-link-item">
+                  <i class="fas fa-envelope"></i> trishteam.official@gmail.com
+                </a>
+                <a href="https://github.com/hosytri07" target="_blank" class="contact-link-item">
+                  <i class="fab fa-github"></i> @hosytri07
+                </a>
+                <a href="https://zalo.me/0969580657" target="_blank" class="contact-link-item">
+                  <i class="fas fa-comments"></i> Zalo: 0969 580 657
+                </a>
+              </div>
+            </div>
+            <form class="contact-form-compact" id="contact-form">
+              <div class="form-group">
+                <input type="text" id="contact-name" required placeholder=" ">
+                <label>Họ và tên</label>
+              </div>
+              <div class="form-group">
+                <input type="email" id="contact-email" required placeholder=" ">
+                <label>Email</label>
+              </div>
+              <div class="form-group">
+                <textarea id="contact-message" required placeholder=" " rows="3"></textarea>
+                <label>Nội dung</label>
+              </div>
+              <div class="form-group attach-group">
+                <label class="attach-label">
+                  <i class="fas fa-paperclip"></i>
+                  <span id="attach-name">Đính kèm file (tối đa 20MB)</span>
+                  <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-paper-plane"></i> Gửi tin nhắn
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard-wrap -->
+
+    <!-- Tool Modal (giữ nguyên từ bản cũ) -->
+    <div class="modal" id="tool-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
             </button>
-            <button class="calc-tab" data-calc="investment">
-                <i class="fas fa-chart-line"></i> Đầu tư
-            </button>
-            <button class="calc-tab" data-calc="mortgage">
-                <i class="fas fa-home"></i> Mua nhà
-            </button>
-            <button class="calc-tab" data-calc="savings">
-                <i class="fas fa-piggy-bank"></i> Tiết kiệm
-            </button>
-        </div>
-
-        <!-- Loan Calculator -->
-        <div class="calc-content active" id="loan">
-            <div class="calc-panel">
-                <h3><i class="fas fa-hand-holding-usd"></i> Tính khoản vay</h3>
-                <div class="calc-form">
-                    <div class="calc-input-group">
-                        <label class="calc-label">Số tiền vay (VNĐ):</label>
-                        <input type="number" id="loan-amount" class="input-field" value="500000000">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Lãi suất (%/năm):</label>
-                        <input type="number" id="loan-rate" class="input-field" value="8.5" step="0.1">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Thời gian vay (tháng):</label>
-                        <input type="number" id="loan-months" class="input-field" value="240">
-                    </div>
-                    <button onclick="calculateLoan()" class="btn btn-primary btn-block">
-                        <i class="fas fa-calculator"></i> Tính toán
-                    </button>
-                </div>
-                
-                <div id="loan-result" class="calc-result" style="display: none;">
-                    <div class="result-grid">
-                        <div class="result-item highlight">
-                            <span class="label">Trả hàng tháng</span>
-                            <span class="value" id="loan-monthly">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tổng lãi phải trả</span>
-                            <span class="value" id="loan-interest">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tổng phải trả</span>
-                            <span class="value" id="loan-total">--</span>
-                        </div>
-                    </div>
-                    <canvas id="loan-chart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Investment Calculator -->
-        <div class="calc-content" id="investment">
-            <div class="calc-panel">
-                <h3><i class="fas fa-chart-line"></i> Tính lợi nhuận đầu tư</h3>
-                <div class="calc-form">
-                    <div class="calc-input-group">
-                        <label class="calc-label">Vốn ban đầu (VNĐ):</label>
-                        <input type="number" id="invest-principal" class="input-field" value="100000000">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Lợi nhuận (%/năm):</label>
-                        <input type="number" id="invest-return" class="input-field" value="10" step="0.1">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Số năm đầu tư:</label>
-                        <input type="number" id="invest-years" class="input-field" value="10">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Đóng góp hàng tháng (VNĐ):</label>
-                        <input type="number" id="invest-monthly" class="input-field" value="5000000">
-                    </div>
-                    <button onclick="calculateInvestment()" class="btn btn-primary btn-block">
-                        <i class="fas fa-calculator"></i> Tính toán
-                    </button>
-                </div>
-                
-                <div id="invest-result" class="calc-result" style="display: none;">
-                    <div class="result-grid">
-                        <div class="result-item highlight">
-                            <span class="label">Giá trị cuối kỳ</span>
-                            <span class="value" id="invest-final">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tổng đầu tư</span>
-                            <span class="value" id="invest-total">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Lợi nhuận</span>
-                            <span class="value" id="invest-profit">--</span>
-                        </div>
-                    </div>
-                    <canvas id="invest-chart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mortgage Calculator -->
-        <div class="calc-content" id="mortgage">
-            <div class="calc-panel">
-                <h3><i class="fas fa-home"></i> Tính mua nhà trả góp</h3>
-                <div class="calc-form">
-                    <div class="calc-input-group">
-                        <label class="calc-label">Giá nhà (VNĐ):</label>
-                        <input type="number" id="home-price" class="input-field" value="2000000000">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Tiền trả trước (%):</label>
-                        <input type="number" id="down-payment" class="input-field" value="20" step="1">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Lãi suất (%/năm):</label>
-                        <input type="number" id="mortgage-rate" class="input-field" value="9" step="0.1">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Thời gian vay (năm):</label>
-                        <input type="number" id="mortgage-years" class="input-field" value="20">
-                    </div>
-                    <button onclick="calculateMortgage()" class="btn btn-primary btn-block">
-                        <i class="fas fa-calculator"></i> Tính toán
-                    </button>
-                </div>
-                
-                <div id="mortgage-result" class="calc-result" style="display: none;">
-                    <div class="result-grid">
-                        <div class="result-item highlight">
-                            <span class="label">Trả hàng tháng</span>
-                            <span class="value" id="mortgage-monthly">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tiền trả trước</span>
-                            <span class="value" id="mortgage-down">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tổng lãi</span>
-                            <span class="value" id="mortgage-interest">--</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Savings Calculator -->
-        <div class="calc-content" id="savings">
-            <div class="calc-panel">
-                <h3><i class="fas fa-piggy-bank"></i> Tính tiết kiệm</h3>
-                <div class="calc-form">
-                    <div class="calc-input-group">
-                        <label class="calc-label">Mục tiêu tiết kiệm (VNĐ):</label>
-                        <input type="number" id="savings-goal" class="input-field" value="500000000">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Lãi suất (%/năm):</label>
-                        <input type="number" id="savings-rate" class="input-field" value="6" step="0.1">
-                    </div>
-                    <div class="calc-input-group">
-                        <label class="calc-label">Thời gian (tháng):</label>
-                        <input type="number" id="savings-months" class="input-field" value="60">
-                    </div>
-                    <button onclick="calculateSavings()" class="btn btn-primary btn-block">
-                        <i class="fas fa-calculator"></i> Tính toán
-                    </button>
-                </div>
-                
-                <div id="savings-result" class="calc-result" style="display: none;">
-                    <div class="result-grid">
-                        <div class="result-item highlight">
-                            <span class="label">Gửi hàng tháng</span>
-                            <span class="value" id="savings-monthly">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Tổng gửi</span>
-                            <span class="value" id="savings-total">--</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">Lãi nhận được</span>
-                            <span class="value" id="savings-interest">--</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="modal-body" id="modal-body"></div>
         </div>
     </div>
-</section>
-
-
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h2 class="section-title">Liên hệ & <span class="doodle-underline">Hỗ trợ</span></h2>
-                    <p class="contact-desc">
-                        Tôi là <strong>Hồ Sỹ Trí</strong>, kỹ sư thiết kế hạ tầng giao thông. Đam mê phát triển các công cụ tự động hóa giúp tối ưu quy trình làm việc.
-                    </p>
-                    <div class="contact-methods">
-                        <a href="mailto:trishteam.official@gmail.com" class="contact-method">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <div class="method-label">Email</div>
-                                <div class="method-value">trishteam.official@gmail.com</div>
-                            </div>
-                        </a>
-                        <a href="tel:0969580657" class="contact-method">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <div class="method-label">Điện thoại</div>
-                                <div class="method-value">0969 580 657</div>
-                            </div>
-                        </a>
-                        <a href="https://github.com/hosytri07" target="_blank" class="contact-method">
-                            <i class="fab fa-github"></i>
-                            <div>
-                                <div class="method-label">GitHub</div>
-                                <div class="method-value">@hosytri07</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="contact-form-wrapper">
-                    <form class="contact-form" id="contact-form">
-                        <div class="form-group">
-                            <input type="text" id="contact-name" required placeholder=" ">
-                            <label>Họ và tên</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="contact-email" required placeholder=" ">
-                            <label>Email</label>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="contact-message" required placeholder=" " rows="4"></textarea>
-                            <label>Nội dung tin nhắn</label>
-                        </div>
-                        <div class="form-group attach-group">
-                            <label class="attach-label">
-                                <i class="fas fa-paperclip"></i>
-                                <span id="attach-name">Đính kèm file (tối đa 20MB)</span>
-                                <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-paper-plane"></i>
-                            Gửi tin nhắn
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1179,10 +440,10 @@
     <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.5/lunar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="main.js"></script>
-    <!-- Thêm JavaScript cho tính năng mới -->
-    <script src="api.js"></script>
+    <!-- Thêm JavaScript cho tính năng mới -->    <script src="api.js"></script>
     <script src="api_new.js"></script>
     <script src="features-addon.js"></script>
+    <script src="dashboard_widgets.js"></script>
 
     <script>
     // ── FIREBASE CONFIG ── (điền sau khi có apiKey)
@@ -1237,6 +498,7 @@
                 });
                 // Subscribe notifications
                 subscribeNotifications(user.uid);
+                if (typeof updateDashActivity === 'function') updateDashActivity(user);
             } else {
                 // Chưa đăng nhập
                 if (loginBtn)  loginBtn.classList.remove('hidden');
