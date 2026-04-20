@@ -119,6 +119,21 @@ body::after {
     33%{transform:translate(18px,-12px) scale(1.02)}
     66%{transform:translate(-12px,18px) scale(0.98)}
 }
+
+.rss-source-card{display:flex;align-items:center;gap:.6rem;padding:.65rem .85rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);transition:border-color .15s}
+.rss-source-card:hover{border-color:var(--accent)}
+.rss-source-icon{font-size:1.2rem;flex-shrink:0}
+.rss-source-name{font-size:.83rem;font-weight:700}
+.rss-source-url{font-size:.7rem;color:var(--hint)}
+.rss-item{display:flex;gap:.75rem;padding:.85rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:.5rem;transition:border-color .15s}
+.rss-item:hover{border-color:var(--border2)}
+.rss-item-body{flex:1;min-width:0}
+.rss-item-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rss-item-meta{font-size:.73rem;color:var(--hint);margin-bottom:.35rem}
+.rss-item-desc{font-size:.8rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.btn-post-rss{padding:.35rem .8rem;border-radius:20px;font-family:inherit;font-size:.76rem;font-weight:700;cursor:pointer;border:1.5px solid var(--accent);background:transparent;color:var(--accent);transition:all .15s;white-space:nowrap;flex-shrink:0}
+.btn-post-rss:hover{background:var(--grad);color:#fff;border-color:transparent}
+.btn-post-rss.posted{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.1)}
 </style>
 </head>
 <body>
@@ -159,6 +174,7 @@ body::after {
     <div class="nav-sep"></div>
     <div class="nav-label">Nội dung</div>
     <button class="admin-nav-item" onclick="switchTab('signs')"><i class="fas fa-road"></i> Biển báo</button>
+    <button class="admin-nav-item" onclick="switchTab('rss')"><i class="fas fa-rss"></i> RSS Inbox</button>
   </div>
 
   <!-- Content -->
@@ -333,6 +349,25 @@ body::after {
         <h2>🚦 Quản lý Biển báo QC41</h2>
         <p>Thêm/sửa biển báo hiển thị trên trang tra cứu</p>
       </div>
+      <!-- Bulk import -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem;margin-bottom:1rem">
+        <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.6rem;color:var(--muted)">NHẬP HÀNG LOẠT (JSON)</h4>
+        <div style="font-size:.78rem;color:var(--hint);margin-bottom:.55rem">
+          Dán mảng JSON: <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">[{"id":"P.101","cat":"cam","name":"Đường cấm",...}]</code>
+        </div>
+        <textarea id="signs-bulk-json" rows="4" placeholder='[{"id":"P.101","cat":"cam","name":"Đường cấm","desc":"...","shape":"...","usage":"..."}]'
+          style="width:100%;padding:.6rem .8rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:monospace;font-size:.78rem;resize:vertical"></textarea>
+        <div style="display:flex;gap:.5rem;margin-top:.55rem;align-items:center">
+          <button class="btn-action" style="font-size:.82rem;padding:.55rem 1rem" onclick="bulkImportSigns()">
+            <i class="fas fa-file-import"></i> Import
+          </button>
+          <button class="btn-sm" onclick="loadQC41Sample()" style="font-size:.78rem">
+            <i class="fas fa-download"></i> Load 143 biển QC41
+          </button>
+          <span style="font-size:.72rem;color:var(--hint)" id="bulk-sign-status"></span>
+        </div>
+      </div>
+
       <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.2rem;margin-bottom:1.2rem">
         <h3 style="font-size:.9rem;font-weight:700;margin-bottom:.85rem">➕ Thêm biển báo mới</h3>
         <div class="form-grid">
@@ -354,6 +389,46 @@ body::after {
         <div class="form-row"><label>Vị trí đặt biển / Trường hợp sử dụng</label><input type="text" id="sign-usage" placeholder="VD: Đặt ở đầu đường cấm..."></div>
         <div class="form-row"><label>URL hình ảnh biển thật (tùy chọn)</label><input type="text" id="sign-img" placeholder="https://..."></div>
         <button class="btn-action" onclick="saveSign()"><i class="fas fa-save"></i> Lưu biển báo</button>
+      </div>
+    </div>
+
+
+    <!-- RSS INBOX -->
+    <div class="tab-panel" id="tab-rss">
+      <div class="panel-header">
+        <h2>📡 RSS Inbox — Tin tức tự động</h2>
+        <p>Tin tức GTVT từ các nguồn RSS · Chọn bài → đăng lên Bảng tin</p>
+      </div>
+
+      <!-- RSS Sources -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem;margin-bottom:1.2rem">
+        <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;color:var(--muted)">NGUỒN RSS ĐANG THEO DÕI</h4>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px" id="rss-sources">
+          <div class="rss-source-card" data-url="https://baogiaothong.vn/rss/tin-moi.rss">
+            <span class="rss-source-icon">📰</span>
+            <div><div class="rss-source-name">Báo Giao Thông</div><div class="rss-source-url">baogiaothong.vn</div></div>
+          </div>
+          <div class="rss-source-card" data-url="https://vnexpress.net/rss/giao-thong.rss">
+            <span class="rss-source-icon">📰</span>
+            <div><div class="rss-source-name">VnExpress Giao Thông</div><div class="rss-source-url">vnexpress.net/giao-thong</div></div>
+          </div>
+          <div class="rss-source-card" data-url="https://tuoitre.vn/rss/xe-co.rss">
+            <span class="rss-source-icon">📰</span>
+            <div><div class="rss-source-name">Tuổi Trẻ Xe & Công nghệ</div><div class="rss-source-url">tuoitre.vn/xe-co</div></div>
+          </div>
+        </div>
+        <button class="btn-action" style="margin-top:.85rem;font-size:.83rem;padding:.6rem 1.2rem" onclick="fetchRSS()">
+          <i class="fas fa-sync-alt"></i> Tải tin mới nhất
+        </button>
+        <span style="font-size:.75rem;color:var(--hint);margin-left:.75rem">Dùng RSS2JSON API (miễn phí)</span>
+      </div>
+
+      <!-- RSS Feed -->
+      <div id="rss-feed-list">
+        <div style="text-align:center;padding:2rem;color:var(--hint);font-size:.88rem">
+          <i class="fas fa-rss" style="font-size:2rem;display:block;margin-bottom:.75rem;opacity:.3"></i>
+          Bấm "Tải tin mới nhất" để cào tin từ các nguồn RSS
+        </div>
       </div>
     </div>
 
@@ -720,6 +795,147 @@ async function saveSign() {
   await db.ref('traffic_signs/'+id.replace('.','_')).set({ id, name, cat, desc, shape, usage, imgUrl, icon:'📍' });
   toast('Đã lưu biển báo '+id);
   ['sign-id','sign-name','sign-desc','sign-shape','sign-usage','sign-img'].forEach(f=>document.getElementById(f).value='');
+}
+
+
+
+// ── BULK IMPORT SIGNS ──
+async function bulkImportSigns() {
+  const raw = document.getElementById('signs-bulk-json').value.trim();
+  if (!raw) { toast('Dán JSON vào trước!','err'); return; }
+  let signs;
+  try { signs = JSON.parse(raw); } catch(e) { toast('JSON không hợp lệ!','err'); return; }
+  if (!Array.isArray(signs)) { toast('Cần dạng mảng [...]','err'); return; }
+  
+  const status = document.getElementById('bulk-sign-status');
+  status.textContent = 'Đang import...';
+  
+  const updates = {};
+  let count = 0;
+  for (const s of signs) {
+    if (!s.id || !s.name) continue;
+    const key = s.id.replace(/\./g, '_');
+    updates['traffic_signs/' + key] = {
+      id:     s.id,
+      cat:    s.cat || 'cam',
+      name:   s.name,
+      desc:   s.desc || s.name + '.',
+      shape:  s.shape || '',
+      usage:  s.usage || '',
+      usecase:s.usecase || '',
+      imgUrl: s.imgUrl || '',
+      icon:   s.icon || getCatIcon(s.cat),
+    };
+    count++;
+  }
+  
+  await db.ref().update(updates);
+  status.textContent = '✓ Đã import ' + count + ' biển';
+  status.style.color = 'var(--green)';
+  toast('Import thành công ' + count + ' biển báo!');
+  document.getElementById('signs-bulk-json').value = '';
+}
+
+function getCatIcon(cat) {
+  return {cam:'🚫','nguy-hiem':'⚠️','hieu-lenh':'🔵','chi-dan':'🟢','phu':'🟣','vach-son':'🟠'}[cat]||'📍';
+}
+
+function loadQC41Sample() {
+  // Load từ traffic-signs.html local data
+  const sample = [
+    {"id":"P.101","cat":"cam","name":"Đường cấm","desc":"Cấm tất cả các loại phương tiện đi lại cả hai hướng.","shape":"Hình tròn, nền trắng, viền đỏ, vạch chéo đỏ"},
+    {"id":"P.102","cat":"cam","name":"Cấm đi ngược chiều","desc":"Cấm xe đi vào theo chiều đặt biển.","shape":"Hình tròn, nền đỏ, mũi tên trắng"},
+    {"id":"P.104","cat":"cam","name":"Cấm xe máy","desc":"Cấm xe mô tô, xe máy đi qua.","shape":"Hình tròn, nền trắng, viền đỏ"},
+    {"id":"W.201a","cat":"nguy-hiem","name":"Chỗ ngoặt nguy hiểm bên trái","desc":"Cảnh báo khúc cua nguy hiểm hướng trái.","shape":"Tam giác đều, nền vàng, viền đỏ"},
+    {"id":"R.301","cat":"hieu-lenh","name":"Hướng phải theo","desc":"Bắt buộc đi theo hướng chỉ định.","shape":"Hình tròn, nền xanh lam"},
+    {"id":"I.410","cat":"chi-dan","name":"Bãi đỗ xe","desc":"Chỉ dẫn nơi đỗ xe.","shape":"Hình chữ nhật, nền xanh lam, chữ P trắng"},
+  ];
+  document.getElementById('signs-bulk-json').value = JSON.stringify(sample, null, 2);
+  document.getElementById('bulk-sign-status').textContent = 'Đã load mẫu 6 biển — chỉnh sửa hoặc import thêm';
+  document.getElementById('bulk-sign-status').style.color = 'var(--muted)';
+}
+
+// ── RSS INBOX ──
+async function fetchRSS() {
+  const sources = document.querySelectorAll('.rss-source-card');
+  const container = document.getElementById('rss-feed-list');
+  container.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>';
+  
+  const allItems = [];
+  // Use rss2json.com free API (cors-friendly)
+  const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  
+  for (const src of sources) {
+    const url = src.dataset.url;
+    const name = src.querySelector('.rss-source-name').textContent;
+    try {
+      const res = await fetch(RSS2JSON + encodeURIComponent(url) + '&count=8');
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.status !== 'ok') continue;
+      data.items.forEach(item => {
+        allItems.push({
+          title:     item.title || '',
+          link:      item.link  || '',
+          desc:      item.description?.replace(/<[^>]*>/g,'').slice(0,200) || '',
+          pubDate:   item.pubDate || '',
+          thumbnail: item.thumbnail || item.enclosure?.link || '',
+          source:    name,
+          sourceUrl: url,
+        });
+      });
+    } catch(e) { console.warn('RSS fetch failed:', url, e); }
+  }
+  
+  if (!allItems.length) {
+    container.innerHTML = '<p style="text-align:center;color:var(--hint);padding:1.5rem">Không tải được tin nào. Kiểm tra kết nối hoặc RSS URL.</p>';
+    return;
+  }
+  
+  // Sort by date
+  allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+  
+  container.innerHTML = allItems.map((item, idx) => `
+    <div class="rss-item" id="rss-${idx}">
+      ${item.thumbnail ? `<img src="${item.thumbnail}" style="width:72px;height:72px;object-fit:cover;border-radius:var(--r);flex-shrink:0" onerror="this.style.display='none'" alt="">` : ''}
+      <div class="rss-item-body">
+        <div class="rss-item-title"><a href="${item.link}" target="_blank" style="color:var(--text);text-decoration:none;hover:color:var(--accent)">${item.title}</a></div>
+        <div class="rss-item-meta">${item.source} · ${item.pubDate ? new Date(item.pubDate).toLocaleDateString('vi-VN') : ''}</div>
+        <div class="rss-item-desc">${item.desc}</div>
+      </div>
+      <button class="btn-post-rss" onclick="postRSSItem(${idx})" id="btn-rss-${idx}">
+        <i class="fas fa-plus"></i> Đăng bài
+      </button>
+    </div>
+  `).join('');
+  
+  window._rssItems = allItems;
+  toast('Đã tải ' + allItems.length + ' tin!');
+}
+
+async function postRSSItem(idx) {
+  const item = window._rssItems?.[idx];
+  if (!item || !currentAdmin) return;
+  const btn = document.getElementById('btn-rss-' + idx);
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  
+  const id = 'p_' + Date.now();
+  await db.ref('posts/' + id).set({
+    title:     item.title,
+    excerpt:   item.desc.slice(0, 160),
+    content:   item.desc + '\n\n🔗 Nguồn: ' + item.link,
+    category:  'giao-thong',
+    thumbnail: item.thumbnail || '',
+    author:    item.source,
+    timestamp: Date.now(),
+    published: false,  // draft — admin review trước
+    views: 0, likes: {}, hearts: {}
+  });
+  
+  btn.className = 'btn-post-rss posted';
+  btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu';
+  toast('Đã lưu nháp: ' + item.title.slice(0,30) + '...');
 }
 
 // ── UTILS ──
