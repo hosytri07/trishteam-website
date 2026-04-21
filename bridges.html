@@ -278,14 +278,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 <script>
 // ── VBMS DATA — Multi-source fetch với fallback ──
-// Ưu tiên: jsDelivr CDN → raw GitHub → Drive (với confirm)
+// Ưu tiên: Vercel (cùng domain) → jsDelivr → raw GitHub
 const BRIDGES_SOURCES = [
-  // 1. jsDelivr CDN (CORS OK, nhanh nhất) — dùng sau khi upload file lên GitHub
+  // 1. Vercel (cùng domain trishteam.vercel.app, không cần CORS) — NHANH NHẤT
+  '/bridges_all.json',
+  // 2. jsDelivr CDN (CORS OK)
   'https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bridges_all.json',
-  // 2. raw.githubusercontent.com (CORS OK)
+  // 3. raw.githubusercontent.com
   'https://raw.githubusercontent.com/hosytri07/trishteam-website/main/bridges_all.json',
-  // 3. Google Drive với confirm=t (fallback cuối)
-  'https://drive.google.com/uc?export=download&confirm=t&id=1GSG9FrSKBLqUlDcZMqHn3xR2SlaFA0-Q'
 ];
 let BRIDGES = [];
 
