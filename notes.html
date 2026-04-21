@@ -335,7 +335,8 @@ body::after {
   <div class="topbar-actions">
     <button class="btn-icon-sm" onclick="toggleView()" title="Đổi chế độ xem" id="view-toggle"><i class="fas fa-th"></i></button>
     <button class="btn-icon-sm" onclick="toggleCalendar()" title="Xem lịch deadline" id="btn-calendar" style="position:relative"><i class="fas fa-calendar-alt"></i></button>
-    <button class="btn-icon-sm" onclick="exportNote()" title="Xuất ghi chú"><i class="fas fa-download"></i></button>
+    <button class="btn-icon-sm" onclick="exportNote()" title="Xuất Markdown (.md)"><i class="fas fa-file-alt"></i></button>
+    <button class="btn-icon-sm" onclick="exportPDF()" title="Xuất PDF" id="btn-export-pdf"><i class="fas fa-file-pdf"></i></button>
   </div>
 </div>
 
@@ -982,6 +983,172 @@ function openNoteFromCalendar(noteId) {
 // Refresh calendar khi notes thay đổi
 function refreshCalendarIfOpen() {
   if (calOpen) renderCalendar();
+}
+
+// ── EXPORT PDF ──
+async function exportPDF() {
+  if (!activeId || !notes[activeId]) { toast('Chọn ghi chú cần xuất!','info'); return; }
+  const n = notes[activeId];
+  const btn = document.getElementById('btn-export-pdf');
+
+  // Load jsPDF nếu chưa có
+  if (!window.jspdf) {
+    if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true; }
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+    if (btn) { btn.innerHTML = '<i class="fas fa-file-pdf"></i>'; btn.disabled = false; }
+  }
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+    // Fonts và màu
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const MARGIN = 18;
+    const CONTENT_W = W - MARGIN * 2;
+    let y = MARGIN;
+
+    // Header bar
+    doc.setFillColor(102, 126, 234);
+    doc.rect(0, 0, W, 12, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TrishTeam — TrishNotes', MARGIN, 8);
+    doc.text(new Date().toLocaleDateString('vi-VN'), W - MARGIN, 8, { align: 'right' });
+    y = 20;
+
+    // Tiêu đề
+    doc.setTextColor(26, 24, 20);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    const titleLines = doc.splitTextToSize(n.title || 'Không có tiêu đề', CONTENT_W);
+    doc.text(titleLines, MARGIN, y);
+    y += titleLines.length * 7 + 4;
+
+    // Meta (tag, deadline)
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(160, 152, 144);
+    const metaParts = [];
+    if (n.tag) metaParts.push('Tag: ' + n.tag);
+    if (n.dlEnd) metaParts.push('Deadline: ' + new Date(n.dlEnd).toLocaleDateString('vi-VN'));
+    const updDate = n.updatedAt ? new Date(n.updatedAt).toLocaleString('vi-VN') : '';
+    if (updDate) metaParts.push('Cập nhật: ' + updDate);
+    if (metaParts.length) {
+      doc.text(metaParts.join('  ·  '), MARGIN, y);
+      y += 5;
+    }
+
+    // Divider
+    doc.setDrawColor(221, 216, 208);
+    doc.setLineWidth(0.3);
+    doc.line(MARGIN, y, W - MARGIN, y);
+    y += 6;
+
+    // Nội dung — xử lý từng dòng
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(26, 24, 20);
+    const body = (n.body || '').replace(/\r\n/g, '\n');
+    const rawLines = body.split('\n');
+
+    for (const raw of rawLines) {
+      // Check page break
+      if (y > H - MARGIN - 8) {
+        doc.addPage();
+        doc.setFillColor(102, 126, 234);
+        doc.rect(0, 0, W, 8, 'F');
+        y = 16;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(26, 24, 20);
+      }
+
+      if (raw.startsWith('# ')) {
+        doc.setFontSize(15); doc.setFont('helvetica', 'bold');
+        doc.setTextColor(102, 126, 234);
+        const lines = doc.splitTextToSize(raw.slice(2), CONTENT_W);
+        doc.text(lines, MARGIN, y);
+        y += lines.length * 6 + 3;
+        doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+        doc.setTextColor(26, 24, 20);
+      } else if (raw.startsWith('## ')) {
+        doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+        doc.setTextColor(52, 52, 52);
+        const lines = doc.splitTextToSize(raw.slice(3), CONTENT_W);
+        doc.text(lines, MARGIN, y);
+        y += lines.length * 5.5 + 2;
+        doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+        doc.setTextColor(26, 24, 20);
+      } else if (raw.startsWith('### ')) {
+        doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+        doc.setTextColor(80, 80, 80);
+        const lines = doc.splitTextToSize(raw.slice(4), CONTENT_W);
+        doc.text(lines, MARGIN, y);
+        y += lines.length * 5 + 2;
+        doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+        doc.setTextColor(26, 24, 20);
+      } else if (raw.match(/^[-*] /)) {
+        // Bullet
+        doc.setFillColor(102, 126, 234);
+        doc.circle(MARGIN + 1.5, y - 1.5, 1.2, 'F');
+        const lines = doc.splitTextToSize(raw.slice(2), CONTENT_W - 6);
+        doc.text(lines, MARGIN + 5, y);
+        y += lines.length * 5 + 1;
+      } else if (raw.match(/^\[[ x]\] /)) {
+        // Checkbox
+        const checked = raw[1] === 'x';
+        doc.setDrawColor(102, 126, 234);
+        doc.setLineWidth(0.5);
+        doc.rect(MARGIN, y - 3.5, 4, 4);
+        if (checked) {
+          doc.setDrawColor(102, 126, 234);
+          doc.line(MARGIN + 0.5, y - 1.5, MARGIN + 1.8, y - 0.2);
+          doc.line(MARGIN + 1.8, y - 0.2, MARGIN + 3.5, y - 3.5);
+        }
+        const lines = doc.splitTextToSize(raw.slice(4), CONTENT_W - 7);
+        if (checked) { doc.setTextColor(160, 152, 144); }
+        doc.text(lines, MARGIN + 6, y);
+        doc.setTextColor(26, 24, 20);
+        y += lines.length * 5 + 1;
+      } else if (raw === '') {
+        y += 3; // blank line
+      } else {
+        const lines = doc.splitTextToSize(raw, CONTENT_W);
+        doc.text(lines, MARGIN, y);
+        y += lines.length * 5 + 1;
+      }
+    }
+
+    // Footer
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFillColor(245, 242, 237);
+      doc.rect(0, H - 8, W, 8, 'F');
+      doc.setFontSize(7);
+      doc.setTextColor(160, 152, 144);
+      doc.text('TrishTeam · trishteam.vercel.app', MARGIN, H - 2.5);
+      doc.text(`Trang ${i} / ${totalPages}`, W - MARGIN, H - 2.5, { align: 'right' });
+    }
+
+    // Save
+    const filename = (n.title || 'ghi-chu').replace(/[^\w\sÀ-ỹ]/g, '').trim().replace(/\s+/g, '_') + '.pdf';
+    doc.save(filename);
+    toast('Đã xuất PDF thành công! 📄');
+
+  } catch(err) {
+    console.error('PDF export error:', err);
+    toast('Lỗi xuất PDF. Thử lại!', 'err');
+    if (btn) { btn.innerHTML = '<i class="fas fa-file-pdf"></i>'; btn.disabled = false; }
+  }
 }
 
 </script>
