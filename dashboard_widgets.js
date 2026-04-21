@@ -193,6 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initDashTools();
     // Delay feed một chút chờ Firebase init
     setTimeout(loadDashFeed, 1200);
+    // Activity re-check sau 1.5s và 3s (Firebase auth có thể chậm)
+    const _retryActivity = (delay) => setTimeout(() => {
+        const user = window._firebaseUser ||
+            (typeof firebase !== 'undefined' && firebase.apps?.length
+                ? firebase.auth().currentUser : null);
+        if (user && typeof updateDashActivity === 'function') {
+            updateDashActivity(user);
+        }
+    }, delay);
+    _retryActivity(1500);
+    _retryActivity(3000);
 });
 
 // ═══════════════════════════════════════════════════════

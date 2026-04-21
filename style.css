@@ -851,7 +851,7 @@ h1, h2, h3, .hero-title, .section-title {
 }
 .software-content { display: none; }
 .software-content.active { display: block; }
-.software-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--spacing-lg); }
+/* software-grid moved to dashboard section */
 .software-card {
     background: var(--bg-card); border: 1.5px solid var(--border-color);
     border-radius: var(--radius-lg); padding: var(--spacing-lg);
@@ -1712,11 +1712,7 @@ h1, h2, h3, .hero-title, .section-title {
     animation: fadeIn 0.5s ease-out;
 }
 
-.software-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: var(--spacing-lg);
-}
+/* software-grid duplicate removed */
 
 .software-card {
     background: var(--bg-secondary);
@@ -2917,13 +2913,13 @@ section {
     gap: 0.7rem;
 }
 .quick-item {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: 0.75rem 0.5rem;
-    background: rgba(102,126,234,0.05);
-    border: 1.5px solid var(--border-color);
+    padding: 0.85rem 0.5rem;
+    background: rgba(102,126,234,0.08);
+    border: 1.5px solid rgba(102,126,234,0.2);
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--text-primary);
@@ -3065,8 +3061,8 @@ section {
     align-items: center;
     gap: 5px;
     padding: 0.75rem 0.4rem;
-    background: rgba(102,126,234,0.04);
-    border: 1px solid var(--border-color);
+    background: rgba(102,126,234,0.07);
+    border: 1px solid rgba(102,126,234,0.2);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -3176,8 +3172,8 @@ body[data-theme="light"] { background: #faf9f7; }
     transition: border-color var(--transition-fast), transform var(--transition-fast);
 }
 .sw-card:hover { transform: translateY(-2px); }
-.sw-live { border-top: 3px solid #10b981; background: rgba(16,185,129,0.03); }
-.sw-coming { border-top: 3px solid #f59e0b; background: rgba(245,158,11,0.02); }
+.sw-live { border-top: 3px solid #10b981; background: rgba(16,185,129,0.07); }
+.sw-coming { border-top: 3px solid #f59e0b; background: rgba(245,158,11,0.05); }
 .sw-live:hover { border-color: #10b981; }
 .sw-coming:hover { border-color: #f59e0b; }
 
