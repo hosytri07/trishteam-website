@@ -37,9 +37,9 @@
     <meta name="description" content="Hệ sinh thái công cụ: ôn thi lái xe, chứng chỉ XD, tra cầu VN, ghi chú cá nhân.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&subset=vietnamese&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=49">
+    <link rel="stylesheet" href="style.css?v=50">
     <!-- Thêm CSS cho tính năng mới -->
-    <link rel="stylesheet" href="features-addon.css?v=49">
+    <link rel="stylesheet" href="features-addon.css?v=50">
 </head>
 <body data-theme="dark">
     <!-- PWA Install Banner -->
@@ -255,616 +255,518 @@
     ═══════════════════════════════════════════════════════ -->
     <div class="dashboard-wrap" id="dashboard-wrap">
 
-      <!-- ── ROW 1: Widgets (Clock + Weather + Stats) ── -->
-      <div class="dash-row dash-row-widgets">
+<style>
+/* ═══ DASHBOARD REDESIGN - Self-contained styles ═══ */
+:root {
+  --d-bg: #0f0e0c;
+  --d-card: #1e1b17;
+  --d-card2: #252219;
+  --d-border: rgba(255,255,255,0.08);
+  --d-border2: rgba(102,126,234,0.3);
+  --d-accent: #667eea;
+  --d-accent2: #764ba2;
+  --d-text: #f0ede8;
+  --d-sub: #8a8278;
+  --d-green: #10b981;
+  --d-amber: #f59e0b;
+  --d-r: 14px;
+}
 
-        <!-- Clock Widget (FEZ Digital Clock) -->
-        <div class="dash-widget widget-clock" id="widget-clock">
-          <div class="widget-label">Đồng hồ</div>
-          <div class="clock-display">
-            <span class="clock-time" id="clock-time">00:00:00</span>
-            <span class="clock-date" id="clock-date">--/--/----</span>
-            <span class="clock-lunar" id="clock-lunar"></span>
+/* Layout grid */
+.d-grid { display: grid; gap: 1rem; }
+.d-row-3 { grid-template-columns: 1fr 1.1fr 1.4fr; }
+.d-row-2 { grid-template-columns: 1.3fr 1fr; }
+.d-row-1 { grid-template-columns: 1fr; }
+
+/* Card base */
+.d-card {
+  background: var(--d-card);
+  border: 1px solid var(--d-border);
+  border-radius: var(--d-r);
+  padding: 1.1rem 1.3rem;
+  position: relative;
+  overflow: hidden;
+}
+.d-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--d-accent), var(--d-accent2));
+  opacity: 0.5;
+}
+
+/* Widget labels */
+.d-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--d-sub);
+  margin-bottom: 0.6rem;
+}
+
+/* Section header */
+.d-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--d-text);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.d-section-link {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--d-accent);
+  text-decoration: none;
+}
+
+/* Quick access grid */
+.d-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.d-quick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 0.3rem;
+  background: rgba(102,126,234,0.07);
+  border: 1px solid rgba(102,126,234,0.2);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--d-text);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  min-height: 72px;
+  justify-content: center;
+}
+.d-quick-item:hover {
+  background: rgba(102,126,234,0.15);
+  border-color: rgba(102,126,234,0.45);
+  transform: translateY(-2px);
+}
+.d-quick-icon { font-size: 1.3rem; line-height: 1; }
+.d-quick-name { font-size: 0.73rem; font-weight: 700; color: var(--d-text); }
+.d-quick-sub  { font-size: 0.62rem; color: var(--d-sub); }
+
+/* Tools grid */
+.d-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+.d-tool-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 0.3rem;
+  background: rgba(102,126,234,0.06);
+  border: 1px solid rgba(102,126,234,0.18);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.d-tool-item:hover {
+  background: rgba(102,126,234,0.13);
+  border-color: rgba(102,126,234,0.4);
+  transform: translateY(-1px);
+}
+.d-tool-icon { font-size: 1.15rem; line-height: 1; }
+.d-tool-name  { font-size: 0.68rem; font-weight: 600; color: #c0b8b0; }
+
+/* Software cards */
+.d-sw-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.d-sw-card {
+  border-radius: 12px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.d-sw-card:hover { transform: translateY(-3px); }
+.d-sw-live    { background: rgba(16,185,129,0.08); border: 1.5px solid rgba(16,185,129,0.25); }
+.d-sw-coming  { background: rgba(245,158,11,0.07); border: 1.5px solid rgba(245,158,11,0.2); }
+.d-sw-webapp  { background: rgba(102,126,234,0.08); border: 1.5px solid rgba(102,126,234,0.2); }
+.d-sw-header  { display: flex; align-items: center; gap: 0.6rem; }
+.d-sw-icon    { font-size: 1.5rem; }
+.d-sw-name    { font-size: 0.9rem; font-weight: 800; color: var(--d-text); }
+.d-sw-tag-live    { font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; background: rgba(16,185,129,0.15); color: #10b981; font-weight: 700; }
+.d-sw-tag-coming  { font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; background: rgba(245,158,11,0.15); color: #f59e0b; font-weight: 700; }
+.d-sw-tag-web     { font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; background: rgba(102,126,234,0.15); color: #667eea; font-weight: 700; }
+.d-sw-desc    { font-size: 0.75rem; color: var(--d-sub); line-height: 1.5; }
+.d-sw-feats   { display: flex; flex-wrap: wrap; gap: 4px; }
+.d-sw-feat    { font-size: 0.65rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2px 7px; color: #a09080; }
+.d-sw-footer  { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.d-sw-tech    { font-size: 0.65rem; color: var(--d-sub); }
+.d-sw-btn     { font-size: 0.68rem; color: var(--d-accent); font-weight: 600; text-decoration: none; }
+
+/* Clock */
+.d-clock-time { font-size: 2.2rem; font-weight: 800; color: var(--d-accent); letter-spacing: -0.02em; line-height: 1; }
+.d-clock-date { font-size: 0.78rem; color: var(--d-sub); margin-top: 4px; }
+.d-clock-lunar { font-size: 0.68rem; color: rgba(138,130,120,0.7); margin-top: 2px; }
+.clock-colon { display: inline; }
+.clock-colon-off { opacity: 0.15; }
+
+/* Weather */
+.d-weather-main { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin: 0.3rem 0; }
+.d-weather-icon { font-size: 2rem; animation: weatherFloat 3s ease-in-out infinite; }
+@keyframes weatherFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+.d-weather-temp { font-size: 1.8rem; font-weight: 800; color: var(--d-text); }
+.d-weather-desc { font-size: 0.78rem; color: var(--d-sub); text-align: center; }
+.d-weather-sub  { display: flex; gap: 0.8rem; justify-content: center; font-size: 0.73rem; color: var(--d-sub); margin-top: 4px; }
+
+/* Ecosystem */
+.d-eco-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; }
+.d-eco-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.d-eco-live .d-eco-dot  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.d-eco-come .d-eco-dot  { background: #f59e0b; }
+.d-eco-name { font-size: 0.82rem; color: var(--d-text); flex: 1; }
+.d-eco-badge-live  { font-size: 0.62rem; padding: 1px 7px; border-radius: 20px; background: rgba(16,185,129,0.15); color: #10b981; }
+.d-eco-badge-come  { font-size: 0.62rem; padding: 1px 7px; border-radius: 20px; background: rgba(245,158,11,0.12); color: #f59e0b; }
+
+/* Activity */
+.d-activity-cta { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; padding: 1rem 0.5rem; text-align: center; }
+.d-activity-cta-text { font-size: 0.8rem; color: var(--d-sub); line-height: 1.5; }
+.d-activity-cta-btn {
+  padding: 0.5rem 1.4rem;
+  background: linear-gradient(135deg, var(--d-accent), var(--d-accent2));
+  border: none; border-radius: 40px; color: #fff;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  text-decoration: none; display: inline-block;
+}
+.d-activity-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.d-activity-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--d-accent); margin-top: 5px; flex-shrink: 0; }
+.d-activity-text { font-size: 0.78rem; color: var(--d-text); }
+.d-activity-time { font-size: 0.68rem; color: var(--d-sub); }
+
+/* Feed card */
+.d-feed-empty { font-size: 0.8rem; color: var(--d-sub); padding: 0.5rem 0; }
+
+/* Idea box */
+.d-idea-box {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 0.9rem 1.1rem;
+  background: rgba(102,126,234,0.06);
+  border: 1px dashed rgba(102,126,234,0.25);
+  border-radius: 12px; margin-top: 1rem;
+}
+.d-idea-title { font-size: 0.85rem; font-weight: 700; color: var(--d-text); margin-bottom: 3px; }
+.d-idea-desc  { font-size: 0.75rem; color: var(--d-sub); }
+.d-idea-btn {
+  padding: 0.5rem 1.2rem; white-space: nowrap;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none; border-radius: 40px; color: #fff;
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  text-decoration: none; display: inline-block;
+}
+
+@media (max-width: 1100px) {
+  .d-row-3 { grid-template-columns: 1fr 1fr; }
+  .d-row-2 { grid-template-columns: 1fr; }
+  .d-sw-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .d-row-3 { grid-template-columns: 1fr; }
+  .d-quick-grid { grid-template-columns: repeat(2, 1fr); }
+  .d-tools-grid { grid-template-columns: repeat(2, 1fr); }
+  .d-sw-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<!-- ── ROW 1: Widgets ── -->
+<div class="d-grid d-row-3" style="margin-bottom:1rem">
+
+  <!-- Clock -->
+  <div class="d-card">
+    <div class="d-label">Đồng hồ</div>
+    <span class="d-clock-time" id="clock-time">00:00:00</span>
+    <div class="d-clock-date" id="clock-date">--/--/----</div>
+    <div class="d-clock-lunar" id="clock-lunar"></div>
+  </div>
+
+  <!-- Weather -->
+  <div class="d-card" style="border-top-color:rgba(6,182,212,0.5)">
+    <div class="d-label">Thời tiết · Đà Nẵng</div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="d-weather-main">
+        <span class="d-weather-icon" id="weather-icon">🌤</span>
+        <span class="d-weather-temp" id="weather-temp">--°C</span>
+      </div>
+      <div class="d-weather-desc" id="weather-desc">Đang tải...</div>
+      <div class="d-weather-sub">
+        <span id="weather-humidity">💧 --%</span>
+        <span id="weather-wind">🌬 -- km/h</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ecosystem -->
+  <div class="d-card">
+    <div class="d-label">Hệ sinh thái TrishNexus</div>
+    <div class="d-eco-item d-eco-live">
+      <span class="d-eco-dot"></span>
+      <span class="d-eco-name">TrishLib</span>
+      <span class="d-eco-badge-live">Live</span>
+    </div>
+    <div class="d-eco-item d-eco-come">
+      <span class="d-eco-dot"></span>
+      <span class="d-eco-name">TrishDesign</span>
+      <span class="d-eco-badge-come">Sắp ra</span>
+    </div>
+    <div class="d-eco-item d-eco-come">
+      <span class="d-eco-dot"></span>
+      <span class="d-eco-name">TrishNotes</span>
+      <span class="d-eco-badge-come">Sắp ra</span>
+    </div>
+    <div class="d-eco-item d-eco-come">
+      <span class="d-eco-dot"></span>
+      <span class="d-eco-name">TrishMap</span>
+      <span class="d-eco-badge-come">Sắp ra</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── ROW 2: Quick Access + Activity ── -->
+<div class="d-grid d-row-2" style="margin-bottom:1rem">
+
+  <!-- Quick Access -->
+  <div class="d-card">
+    <div class="d-section-title">Truy cập nhanh</div>
+    <div class="d-quick-grid">
+      <a href="driving-test.html" class="d-quick-item">
+        <span class="d-quick-icon">🚗</span>
+        <span class="d-quick-name">Ôn thi lái xe</span>
+        <span class="d-quick-sub">A1/B1/B2/C</span>
+      </a>
+      <a href="certificates.html" class="d-quick-item">
+        <span class="d-quick-icon">🏗️</span>
+        <span class="d-quick-name">Chứng chỉ XD</span>
+        <span class="d-quick-sub">345 câu hỏi</span>
+      </a>
+      <a href="notes.html" class="d-quick-item quick-item-needs-login" data-require-login="true">
+        <span class="d-quick-icon">📝</span>
+        <span class="d-quick-name">TrishNotes</span>
+        <span class="d-quick-sub">Ghi chú cá nhân</span>
+      </a>
+      <a href="traffic-signs.html" class="d-quick-item">
+        <span class="d-quick-icon">🚦</span>
+        <span class="d-quick-name">Biển báo</span>
+        <span class="d-quick-sub">QC41:2024</span>
+      </a>
+      <a href="bridges.html" class="d-quick-item">
+        <span class="d-quick-icon">🌉</span>
+        <span class="d-quick-name">Cầu VN</span>
+        <span class="d-quick-sub">7.897 cầu</span>
+      </a>
+      <a href="posts.html" class="d-quick-item">
+        <span class="d-quick-icon">📰</span>
+        <span class="d-quick-name">Bảng tin</span>
+        <span class="d-quick-sub">Tin tức & chia sẻ</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Activity -->
+  <div class="d-card">
+    <div class="d-section-title">
+      Hoạt động gần đây
+      <a href="user-settings.html" class="d-section-link" id="activity-link" style="display:none">Xem tất cả →</a>
+    </div>
+    <div id="activity-guest">
+      <div class="d-activity-cta">
+        <div style="font-size:2rem">👋</div>
+        <div class="d-activity-cta-text">Đăng nhập để theo dõi tiến độ ôn thi, ghi chú và hoạt động cá nhân.</div>
+        <a href="login.html" class="d-activity-cta-btn">Đăng nhập ngay</a>
+      </div>
+    </div>
+    <div id="activity-user" style="display:none">
+      <div class="activity-list" id="activity-list">
+        <div style="font-size:0.8rem;color:#8a8278;padding:0.5rem 0">Chưa có hoạt động nào</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── ROW 3: Bảng tin ── -->
+<div class="d-grid d-row-1" style="margin-bottom:1rem">
+  <div class="d-card">
+    <div class="d-section-title">
+      📋 Bảng tin mới nhất
+      <a href="posts.html" class="d-section-link">Xem tất cả →</a>
+    </div>
+    <div id="dash-feed-list">
+      <div class="d-feed-empty">Chưa có bài viết nào.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ROW 4: Công cụ nhanh ── -->
+<div class="d-grid d-row-1" style="margin-bottom:1rem">
+  <div class="d-card">
+    <div class="d-section-title">🛠 Công cụ nhanh</div>
+    <div class="d-tools-grid">
+      <div class="d-tool-item" data-tool="qr-generator" onclick="openTool('qr-generator')">
+        <span class="d-tool-icon">📱</span>
+        <span class="d-tool-name">QR Code</span>
+      </div>
+      <div class="d-tool-item" data-tool="password-gen" onclick="openTool('password-gen')">
+        <span class="d-tool-icon">🔑</span>
+        <span class="d-tool-name">Mật khẩu</span>
+      </div>
+      <div class="d-tool-item" data-tool="base64" onclick="openTool('base64')">
+        <span class="d-tool-icon">💻</span>
+        <span class="d-tool-name">Base64</span>
+      </div>
+      <div class="d-tool-item" data-tool="color-picker" onclick="openTool('color-picker')">
+        <span class="d-tool-icon">🎨</span>
+        <span class="d-tool-name">Màu sắc</span>
+      </div>
+      <div class="d-tool-item" data-tool="unit-converter" onclick="openTool('unit-converter')">
+        <span class="d-tool-icon">📐</span>
+        <span class="d-tool-name">Đổi đơn vị</span>
+      </div>
+      <div class="d-tool-item" data-tool="loan-calculator" onclick="openTool('loan-calculator')">
+        <span class="d-tool-icon">🏦</span>
+        <span class="d-tool-name">Vay vốn</span>
+      </div>
+      <div class="d-tool-item" data-tool="json-formatter" onclick="openTool('json-formatter')">
+        <span class="d-tool-icon">📋</span>
+        <span class="d-tool-name">JSON</span>
+      </div>
+      <div class="d-tool-item" data-tool="markdown-editor" onclick="openTool('markdown-editor')">
+        <span class="d-tool-icon">✍️</span>
+        <span class="d-tool-name">Markdown</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ROW 5: Phần mềm ── -->
+<div class="d-grid d-row-1" style="margin-bottom:1rem">
+  <div class="d-card">
+    <div class="d-section-title">
+      🖥 Phần mềm
+      <span style="margin-left:0.4rem;font-size:0.68rem;color:#8a8278;font-weight:500">TrishNexus Ecosystem</span>
+    </div>
+    <div class="d-sw-grid">
+
+      <!-- TrishLib -->
+      <div class="d-sw-card d-sw-live" onclick="showSoftwareModal('trishlib')">
+        <div class="d-sw-header">
+          <span class="d-sw-icon">📁</span>
+          <div>
+            <div class="d-sw-name">TrishLib</div>
+            <span class="d-sw-tag-live">✓ Đã ra mắt v1.0</span>
           </div>
         </div>
-
-        <!-- Weather Widget -->
-        <div class="dash-widget widget-weather" id="widget-weather">
-          <div class="widget-label">Thời tiết · Đà Nẵng</div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.3rem;text-align:center">
-            <div class="weather-main">
-              <span class="weather-icon" id="weather-icon">🌤</span>
-              <span class="weather-temp" id="weather-temp">--°C</span>
-            </div>
-            <div class="weather-desc" id="weather-desc" style="font-size:0.83rem;color:var(--text-secondary)">Đang tải...</div>
-            <div class="weather-sub" style="display:flex;gap:0.8rem;justify-content:center;font-size:0.78rem;color:var(--text-tertiary)">
-              <span id="weather-humidity">💧 --%</span>
-              <span id="weather-wind">🌬 -- km/h</span>
-            </div>
-          </div>
+        <div class="d-sw-desc">Quản lý thư viện tài liệu kỹ thuật, video hướng dẫn và GitHub repos.</div>
+        <div class="d-sw-feats">
+          <span class="d-sw-feat">📂 File local</span>
+          <span class="d-sw-feat">🎬 Video</span>
+          <span class="d-sw-feat">🐙 GitHub</span>
+          <span class="d-sw-feat">📱 QR</span>
         </div>
-
-        <!-- Ecosystem Widget -->
-        <div class="dash-widget widget-ecosystem" id="widget-ecosystem">
-          <div class="widget-label">Hệ sinh thái TrishNexus</div>
-          <div class="ecosystem-grid">
-            <div class="eco-item eco-live">
-              <span class="eco-dot"></span>
-              <span class="eco-name">TrishLib</span>
-              <span class="eco-badge live">Live</span>
-            </div>
-            <div class="eco-item eco-coming">
-              <span class="eco-dot"></span>
-              <span class="eco-name">TrishDesign</span>
-              <span class="eco-badge coming">Sắp ra</span>
-            </div>
-            <div class="eco-item eco-coming">
-              <span class="eco-dot"></span>
-              <span class="eco-name">TrishNotes</span>
-              <span class="eco-badge coming">Sắp ra</span>
-            </div>
-            <div class="eco-item eco-coming">
-              <span class="eco-dot"></span>
-              <span class="eco-name">TrishMap</span>
-              <span class="eco-badge coming">Sắp ra</span>
-            </div>
-          </div>
+        <div class="d-sw-footer">
+          <span class="d-sw-tech">PyQt6 · Windows</span>
+          <span class="d-sw-btn">Chi tiết →</span>
         </div>
-
       </div>
 
-      <!-- ── ROW 2: Quick Access + Recent Activity ── -->
-      <div class="dash-row dash-row-main">
-
-        <!-- Quick Access Bento Grid -->
-        <div class="dash-card card-quick" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">Truy cập nhanh</span>
-          </div>
-          <div class="quick-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem">
-            <a href="driving-test.html" class="quick-item" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">🚗</span>
-              <span class="quick-name">Ôn thi lái xe</span>
-              <span class="quick-sub">A1 / B1 / B2 / C</span>
-            </a>
-            <a href="certificates.html" class="quick-item" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">🏗️</span>
-              <span class="quick-name">Chứng chỉ XD</span>
-              <span class="quick-sub">345 câu hỏi</span>
-            </a>
-            <a href="notes.html" class="quick-item quick-item-needs-login" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">📝</span>
-              <span class="quick-name">TrishNotes</span>
-              <span class="quick-sub">Ghi chú cá nhân</span>
-            </a>
-            <a href="traffic-signs.html" class="quick-item" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">🚦</span>
-              <span class="quick-name">Biển báo</span>
-              <span class="quick-sub">QC41:2024</span>
-            </a>
-            <a href="bridges.html" class="quick-item" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">🌉</span>
-              <span class="quick-name">Cầu VN</span>
-              <span class="quick-sub">7.897 cầu</span>
-            </a>
-            <a href="posts.html" class="quick-item" style="background:rgba(102,126,234,0.12);border:1.5px solid rgba(102,126,234,0.4);border-radius:10px;padding:0.75rem 0.5rem;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-height:80px;text-decoration:none;color:var(--text-primary)">
-              <span class="quick-icon">📰</span>
-              <span class="quick-name">Bảng tin</span>
-              <span class="quick-sub">Tin tức & chia sẻ</span>
-            </a>
+      <!-- TrishDesign -->
+      <div class="d-sw-card d-sw-coming" onclick="showSoftwareModal('trishdesign')">
+        <div class="d-sw-header">
+          <span class="d-sw-icon">📐</span>
+          <div>
+            <div class="d-sw-name">TrishDesign</div>
+            <span class="d-sw-tag-coming">⏳ Sắp ra mắt</span>
           </div>
         </div>
-
-        <!-- Recent Activity (thay đổi theo login state) -->
-        <div class="dash-card card-activity" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">Hoạt động gần đây</span>
-            <a href="user-settings.html" class="card-link-sm" id="activity-link" style="display:none">Xem tất cả →</a>
-          </div>
-          <!-- Guest view -->
-          <div id="activity-guest">
-            <div class="activity-cta">
-              <div class="activity-cta-icon">👋</div>
-              <div class="activity-cta-text">Đăng nhập để theo dõi tiến độ ôn thi, ghi chú và hoạt động cá nhân.</div>
-              <a href="login.html" class="activity-cta-btn">Đăng nhập ngay</a>
-            </div>
-          </div>
-          <!-- Logged-in view -->
-          <div id="activity-user" style="display:none">
-            <div class="activity-list" id="activity-list">
-              <div class="activity-empty">Chưa có hoạt động nào</div>
-            </div>
-          </div>
+        <div class="d-sw-desc">Toolkit tự động hóa: tính toán kết cấu, xuất báo cáo, AI tra cứu TCVN.</div>
+        <div class="d-sw-feats">
+          <span class="d-sw-feat">🏗 Dự toán</span>
+          <span class="d-sw-feat">📄 Word/Excel</span>
+          <span class="d-sw-feat">🤖 AI RAG</span>
+          <span class="d-sw-feat">📐 AutoCAD</span>
         </div>
-
-      </div>
-
-      <!-- ── ROW 3: Posts Feed Preview ── -->
-      <div class="dash-row dash-row-feed">
-        <div class="dash-card card-feed" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">📰 Bảng tin mới nhất</span>
-            <a href="posts.html" class="card-link-sm">Xem tất cả →</a>
-          </div>
-          <div class="feed-grid" id="home-feed-grid">
-            <div class="feed-loading">Đang tải bài viết...</div>
-          </div>
+        <div class="d-sw-footer">
+          <span class="d-sw-tech">PyQt6 · Python 3.11</span>
+          <span class="d-sw-btn">Tháng 7/2026</span>
         </div>
       </div>
 
-      <!-- ── ROW 4: Tools Grid (giữ lại nhưng compact hơn) ── -->
-      <div class="dash-row dash-row-tools">
-        <div class="dash-card card-tools" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">🛠 Công cụ nhanh</span>
+      <!-- TrishMap -->
+      <div class="d-sw-card d-sw-webapp" onclick="showSoftwareModal('trishmap')">
+        <div class="d-sw-header">
+          <span class="d-sw-icon">🌉</span>
+          <div>
+            <div class="d-sw-name">TrishMap (VBMS)</div>
+            <span class="d-sw-tag-web">🗺 Web App</span>
           </div>
-          <div class="tools-compact-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem">
-            <div class="tool-compact" data-tool="qr-generator" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">📱</span>
-              <span class="tc-name">QR Code</span>
-            </div>
-            <div class="tool-compact" data-tool="password-gen" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">🔑</span>
-              <span class="tc-name">Mật khẩu</span>
-            </div>
-            <div class="tool-compact" data-tool="base64" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">💻</span>
-              <span class="tc-name">Base64</span>
-            </div>
-            <div class="tool-compact" data-tool="color-picker" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">🎨</span>
-              <span class="tc-name">Màu sắc</span>
-            </div>
-            <div class="tool-compact" data-tool="unit-converter" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">📐</span>
-              <span class="tc-name">Đổi đơn vị</span>
-            </div>
-            <div class="tool-compact" data-tool="loan-calculator" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">🏦</span>
-              <span class="tc-name">Vay vốn</span>
-            </div>
-            <div class="tool-compact" data-tool="json-formatter" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">📋</span>
-              <span class="tc-name">JSON</span>
-            </div>
-            <div class="tool-compact" data-tool="markdown-editor" style="background:rgba(102,126,234,0.1);border:1.5px solid rgba(102,126,234,0.35);border-radius:10px;padding:0.75rem 0.4rem;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center">
-              <span class="tc-icon">✍️</span>
-              <span class="tc-name">Markdown</span>
-            </div>
-          </div>
+        </div>
+        <div class="d-sw-desc">Tra cứu 7.897 cầu Việt Nam. Lọc theo tỉnh, quốc lộ, loại kết cấu.</div>
+        <div class="d-sw-feats">
+          <span class="d-sw-feat">🔍 Tìm kiếm</span>
+          <span class="d-sw-feat">📊 7.897 cầu</span>
+          <span class="d-sw-feat">📥 CSV</span>
+        </div>
+        <div class="d-sw-footer">
+          <span class="d-sw-tech">Web App · Vercel</span>
+          <a href="bridges.html" class="d-sw-btn">Xem thử →</a>
         </div>
       </div>
 
-      <!-- ── ROW 5: Software Portfolio ── -->
-      <div class="dash-row dash-row-software">
-        <div class="dash-card card-software" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">🖥 Phần mềm</span>
-            <span class="card-link-sm" style="color:var(--text-tertiary);cursor:default">TrishNexus Ecosystem</span>
+      <!-- TrishFont -->
+      <div class="d-sw-card d-sw-live" onclick="showSoftwareModal('trishfont')">
+        <div class="d-sw-header">
+          <span class="d-sw-icon">✨</span>
+          <div>
+            <div class="d-sw-name">TrishFont</div>
+            <span class="d-sw-tag-live">✓ Đã ra mắt v1.0</span>
           </div>
-          <div class="software-grid">
-
-            <!-- TrishLib -->
-            <div class="sw-card sw-live" style="background:#1e2c24;border:2px solid #10b981;border-top:2px solid #10b981;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.65rem;box-shadow:0 2px 12px rgba(0,0,0,0.4)">
-              <div class="sw-header">
-                <div class="sw-icon">📁</div>
-                <div class="sw-meta">
-                  <div class="sw-name">TrishLib</div>
-                  <span class="sw-tag tag-live">✓ Đã ra mắt v1.0</span>
-                </div>
-              </div>
-              <p class="sw-desc">Quản lý thư viện tài liệu kỹ thuật, video hướng dẫn và GitHub repos. Dành cho kỹ sư cầu đường.</p>
-              <div class="sw-features">
-                <span>📂 Quản lý file local</span>
-                <span>🎬 Video kỹ thuật</span>
-                <span>🐙 GitHub Repos</span>
-                <span>📱 QR Code</span>
-              </div>
-              <div class="sw-footer">
-                <span class="sw-tech">PyQt6 · Windows</span>
-                <span class="sw-btn">Xem chi tiết →</span>
-              </div>
-            </div>
-
-            <!-- TrishDesign -->
-            <div class="sw-card sw-coming" style="background:#2a2414;border:2px solid #f59e0b;border-top:2px solid #f59e0b;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.65rem;box-shadow:0 2px 12px rgba(0,0,0,0.4)">
-              <div class="sw-header">
-                <div class="sw-icon">📐</div>
-                <div class="sw-meta">
-                  <div class="sw-name">TrishDesign</div>
-                  <span class="sw-tag tag-coming">⏳ Sắp ra mắt</span>
-                </div>
-              </div>
-              <p class="sw-desc">Toolkit tự động hóa cho kỹ sư thiết kế: tính toán kết cấu, xuất báo cáo, tích hợp AutoCAD và AI tra cứu tiêu chuẩn.</p>
-              <div class="sw-features">
-                <span>🏗 Tính khối lượng</span>
-                <span>📄 Export Word/Excel</span>
-                <span>🤖 AI RAG TCVN</span>
-                <span>📐 AutoCAD</span>
-              </div>
-              <div class="sw-footer">
-                <span class="sw-tech">PyQt6 · Python 3.11</span>
-                <span class="sw-btn">Xem chi tiết →</span>
-              </div>
-            </div>
-
-            <!-- TrishMap -->
-            <div class="sw-card sw-coming" style="background:#2a2414;border:2px solid #f59e0b;border-top:2px solid #f59e0b;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.65rem;box-shadow:0 2px 12px rgba(0,0,0,0.4)">
-              <div class="sw-header">
-                <div class="sw-icon">🌉</div>
-                <div class="sw-meta">
-                  <div class="sw-name">TrishMap (VBMS)</div>
-                  <span class="sw-tag tag-coming">⏳ Sắp ra mắt</span>
-                </div>
-              </div>
-              <p class="sw-desc">Hệ thống tra cứu cầu Việt Nam. Tìm kiếm, lọc theo tỉnh, loại cầu, năm xây dựng. Dữ liệu 7.897 cầu quốc lộ.</p>
-              <div class="sw-features">
-                <span>🔍 Tìm kiếm nhanh</span>
-                <span>🗺 Bản đồ</span>
-                <span>📊 7.897 cầu</span>
-                <span>📥 Xuất CSV</span>
-              </div>
-              <div class="sw-footer">
-                <span class="sw-tech">Web App · Vercel</span>
-                <span class="sw-btn">Xem chi tiết →</span>
-              </div>
-            </div>
-
-            <!-- TrishFont -->
-            <div class="sw-card sw-coming" style="background:#2a2414;border:2px solid #f59e0b;border-top:2px solid #f59e0b;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.65rem;box-shadow:0 2px 12px rgba(0,0,0,0.4)">
-              <div class="sw-header">
-                <div class="sw-icon">✨</div>
-                <div class="sw-meta">
-                  <div class="sw-name">TrishFont</div>
-                  <span class="sw-tag tag-live">✓ Đã ra mắt v1.0</span>
-                </div>
-              </div>
-              <p class="sw-desc">Trình cài đặt font chữ kỹ thuật: Unicode, VNI, TCVN3 cho Windows và font SHX cho AutoCAD. Hỗ trợ cài hàng loạt.</p>
-              <div class="sw-features">
-                <span>🔤 Font Unicode/VNI</span>
-                <span>🔠 TCVN3/VietwareX</span>
-                <span>📐 AutoCAD SHX</span>
-                <span>⚡ Cài hàng loạt</span>
-              </div>
-              <div class="sw-footer">
-                <span class="sw-tech">PyQt6 · Windows</span>
-                <span class="sw-btn">Xem chi tiết →</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Đóng góp ý tưởng -->
-          <div class="sw-idea-box">
-            <div class="sw-idea-left">
-              <div class="sw-idea-title">💡 Đóng góp ý tưởng tính năng mới</div>
-              <div class="sw-idea-desc">Bạn có ý tưởng về tính năng hữu ích cho kỹ sư cầu đường? Hãy chia sẻ để tôi xem xét phát triển trong các phiên bản tiếp theo.</div>
-            </div>
-            <a href="#contact" class="sw-idea-btn" onclick="document.getElementById('contact-message').focus();document.getElementById('contact-message').placeholder='Ý tưởng tính năng: ...'">Gửi ý tưởng →</a>
-          </div>
-
+        </div>
+        <div class="d-sw-desc">Cài font kỹ thuật Unicode/VNI/TCVN3 và SHX AutoCAD hàng loạt.</div>
+        <div class="d-sw-feats">
+          <span class="d-sw-feat">🔤 Unicode</span>
+          <span class="d-sw-feat">📐 SHX AutoCAD</span>
+          <span class="d-sw-feat">⚡ Hàng loạt</span>
+        </div>
+        <div class="d-sw-footer">
+          <span class="d-sw-tech">PyQt6 · Windows</span>
+          <span class="d-sw-btn">Chi tiết →</span>
         </div>
       </div>
 
-      <!-- ── ROW 6: Contact ── -->
-        <div class="dash-card card-contact" style="background:#48423a;border:1.5px solid #6a6058;border-top:2px solid #667eea;border-radius:14px;padding:1.2rem 1.4rem;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-          <div class="card-header">
-            <span class="card-title">📬 Liên hệ & Hỗ trợ</span>
-          </div>
-          <div class="contact-grid-compact">
-            <div class="contact-info-compact">
-              <p class="contact-intro">Tôi là <strong>Hồ Sỹ Trí</strong>, kỹ sư thiết kế hạ tầng giao thông. Đam mê phát triển công cụ tự động hóa cho kỹ sư.</p>
-              <div class="contact-links">
-                <a href="mailto:trishteam.official@gmail.com" class="contact-link-item">
-                  <i class="fas fa-envelope"></i> trishteam.official@gmail.com
-                </a>
-                <a href="https://github.com/hosytri07" target="_blank" class="contact-link-item">
-                  <i class="fab fa-github"></i> @hosytri07
-                </a>
-                <a href="https://zalo.me/0969580657" target="_blank" class="contact-link-item">
-                  <i class="fas fa-comments"></i> Zalo: 0969 580 657
-                </a>
-              </div>
-            </div>
-            <form class="contact-form-compact" id="contact-form">
-              <div class="form-group">
-                <input type="text" id="contact-name" required placeholder=" ">
-                <label>Họ và tên</label>
-              </div>
-              <div class="form-group">
-                <input type="email" id="contact-email" required placeholder=" ">
-                <label>Email</label>
-              </div>
-              <div class="form-group">
-                <textarea id="contact-message" required placeholder=" " rows="3"></textarea>
-                <label>Nội dung</label>
-              </div>
-              <div class="form-row-submit">
-                <label class="attach-label">
-                  <i class="fas fa-paperclip"></i>
-                  <span id="attach-name">Đính kèm file</span>
-                  <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
-                </label>
-                <button type="submit" class="fez-submit-btn" id="contact-submit-btn">
-                  <span class="btn-inner"><i class="fas fa-paper-plane"></i> Gửi tin nhắn</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /dashboard-wrap -->
-
-    <!-- Tool Modal (giữ nguyên từ bản cũ) -->
-    <div class="modal" id="tool-modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-body" id="modal-body"></div>
-        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <span class="brand-icon">✨</span>
-                    <span class="brand-text">Trish<strong>TEAM</strong></span>
-                </div>
-                <p class="footer-text">
-                    © 2026 Hồ Sỹ Trí. Phi thương mại • Miễn phí 100%
-                </p>
-                <div class="footer-social">
-                    <a href="https://github.com/hosytri07" target="_blank" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://zalo.me/0969580657" target="_blank" title="Zalo">
-                        <i class="fas fa-comments"></i>
-                    </a>
-                    <a href="https://m.me/hosytri07" target="_blank" title="Messenger">
-                        <i class="fab fa-facebook-messenger"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Floating Action Buttons -->
-    <div class="fab-container">
-        <button class="fab" id="scroll-top" title="Về đầu trang">
-            <i class="fas fa-arrow-up"></i>
-        </button>
+    <!-- Đóng góp ý tưởng -->
+    <div class="d-idea-box">
+      <div>
+        <div class="d-idea-title">💡 Đóng góp ý tưởng tính năng mới</div>
+        <div class="d-idea-desc">Bạn có ý tưởng về tính năng hữu ích cho kỹ sư cầu đường? Hãy chia sẻ!</div>
+      </div>
+      <a href="#contact" class="d-idea-btn" onclick="if(typeof openFeedback==='function')openFeedback()">Gửi ý tưởng →</a>
     </div>
 
-    <!-- Tool Modal -->
-    <div class="modal" id="tool-modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-body" id="modal-body">
-                <!-- Tool content will be loaded here -->
-            </div>
-        </div>
-    </div>
+  </div>
+</div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.5/lunar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="main.js?v=44"></script>
-    <!-- Thêm JavaScript cho tính năng mới -->    <script src="api.js"></script>
-    <script src="api_new.js"></script>
-    <script src="features-addon.js"></script>
-    <script src="dashboard_widgets.js?v=44"></script>
-
-    <script>
-    // ── VERSION LOG ──
-    console.log('%c TrishTeam v44 (21/04/2026) ', 'background:#667eea;color:white;font-weight:bold;padding:4px 8px;border-radius:4px');
-    console.log('CSS: style.css?v=49 | SW: trishteam-static-v6');
-
-    // ── FIREBASE CONFIG ── (điền sau khi có apiKey)
-    const firebaseConfig = {
-        apiKey: "AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",
-        authDomain: "trishteam-e3ae4.firebaseapp.com",
-        databaseURL: "https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "trishteam-e3ae4",
-        storageBucket: "trishteam-e3ae4.firebasestorage.app",
-        messagingSenderId: "930627527626",
-        appId: "1:930627527626:web:9018c3afbcb6ee819ae533"
-    };
-
-    try {
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db   = firebase.database();
-
-        // Đảm bảo auth state tồn tại sau redirect
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
-
-        auth.onAuthStateChanged(user => {
-            const loginBtn   = document.getElementById('nav-login-btn');
-            const userMenu   = document.getElementById('nav-user-menu');
-            const userNameEl = document.getElementById('nav-user-name');
-            const sidebar    = document.getElementById('webapp-sidebar');
-
-            if (user) {
-                // Đã đăng nhập — show sidebar + user menu
-                if (loginBtn)   { loginBtn.classList.add('hidden'); }
-                if (userMenu)   { userMenu.classList.add('visible'); }
-                if (userNameEl) { userNameEl.textContent = user.displayName || user.email.split('@')[0]; }
-                // Avatar: hiện chữ cái đầu thay vì icon
-                const avatarEl = document.getElementById('nav-avatar');
-                if (avatarEl) {
-                    const letter = (user.displayName || user.email || 'U')[0].toUpperCase();
-                    avatarEl.innerHTML = `<span style="font-weight:800;font-size:.88rem">${letter}</span>`;
-                }
-                // Show bell
-                const bellWrap = document.getElementById('nav-bell-wrap');
-                if (bellWrap) bellWrap.style.display = 'flex';
-                if (sidebar)    {
-                    setTimeout(() => sidebar.classList.add('show'), 80);
-                }
-                // Lấy role từ DB
-                db.ref('users/' + user.uid + '/role').once('value', snap => {
-                    const role = snap.val() || 'trial';
-                    document.body.setAttribute('data-role', role);
-                    if (role === 'admin') {
-                        document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
-                    }
-                });
-                // Subscribe notifications
-                subscribeNotifications(user.uid);
-                // updateDashActivity - retry nếu DOM chưa sẵn sàng
-                const _doUpdateActivity = (u) => {
-                    if (document.getElementById('activity-guest')) {
-        if (typeof updateDashActivity === 'function') updateDashActivity(u);
-                    } else {
-                        setTimeout(() => { if (typeof updateDashActivity === 'function') updateDashActivity(u); }, 300);
-                    }
-                };
-                window._firebaseUser = user; // expose cho dashboard_widgets re-check
-                _doUpdateActivity(user);
-            } else {
-                // Chưa đăng nhập
-                if (loginBtn)  loginBtn.classList.remove('hidden');
-                if (userMenu)  userMenu.classList.remove('visible');
-                if (sidebar)   sidebar.classList.remove('show');
-                document.body.removeAttribute('data-role');
-                const bw = document.getElementById('nav-bell-wrap');
-                if (bw) bw.style.display = 'none';
-                if (window._notifListener) { window._notifListener.off(); }
-                if (document.getElementById('activity-guest')) {
-                    if (typeof updateDashActivity === 'function') updateDashActivity(null);
-                } else {
-                    setTimeout(() => { if (typeof updateDashActivity === 'function') updateDashActivity(null); }, 300);
-                }
-            }
-        });
-
-        // Đăng xuất
-        window.doLogout = () => {
-            auth.signOut().then(() => {
-                showToast('Đã đăng xuất!');
-            });
-        };
-    } catch(e) {
-        console.warn('Firebase chưa cấu hình:', e.message);
-    }
-    
-// ──────────────────────────────────────────────
-// NOTIFICATION BELL SYSTEM
-// ──────────────────────────────────────────────
-let _currentUid = null;
-
-function subscribeNotifications(uid) {
-    _currentUid = uid;
-    // Off old listener nếu có
-    if (window._notifListener) window._notifListener.off();
-    const ref = db.ref('notifications').orderByChild('timestamp');
-    window._notifListener = ref;
-    ref.on('value', snap => {
-        const items = [];
-        snap.forEach(c => items.unshift({ id: c.key, ...c.val() }));
-        renderNotifications(items, uid);
-    });
-}
-
-function renderNotifications(items, uid) {
-    // Filter: chỉ hiện thông báo cho role tương ứng hoặc 'all'
-    const role = document.body.getAttribute('data-role') || 'trial';
-    const visible = items.filter(n => {
-        const t = n.targetRole || 'all';
-        return t === 'all' || t === role;
-    });
-
-    // Count unread
-    const unread = visible.filter(n => !n.readBy || !n.readBy[uid]).length;
-    const badge = document.getElementById('bell-badge');
-    if (badge) {
-        badge.textContent = unread > 9 ? '9+' : unread;
-        badge.style.display = unread > 0 ? 'flex' : 'none';
-    }
-
-    // Render list
-    const list = document.getElementById('notif-list');
-    if (!list) return;
-    if (!visible.length) {
-        list.innerHTML = '<div class="notif-empty">Chưa có thông báo nào</div>';
-        return;
-    }
-
-    const TYPE_ICON = { info: 'ℹ️', success: '✅', warning: '⚠️' };
-    list.innerHTML = visible.map(n => {
-        const isRead = n.readBy && n.readBy[uid];
-        const ts = n.timestamp ? timeAgoNotif(n.timestamp) : '';
-        return `<div class="notif-item ${isRead ? 'read' : 'unread'}" onclick="markRead('${n.id}')">
-            <div class="notif-icon">${TYPE_ICON[n.type] || 'ℹ️'}</div>
-            <div class="notif-body">
-                <div class="notif-title">${n.title || ''}</div>
-                <div class="notif-text">${n.body || ''}</div>
-                <div class="notif-time">${ts}</div>
-            </div>
-            ${!isRead ? '<div class="notif-dot"></div>' : ''}
-        </div>`;
-    }).join('');
-}
-
-function markRead(id) {
-    if (!_currentUid) return;
-    db.ref(`notifications/${id}/readBy/${_currentUid}`).set(true);
-}
-
-function markAllRead() {
-    if (!_currentUid) return;
-    const list = document.getElementById('notif-list');
-    if (!list) return;
-    list.querySelectorAll('.notif-item.unread').forEach(el => {
-        // Extract ID from onclick
-        const m = el.getAttribute('onclick').match(/'([^']+)'/);
-        if (m) db.ref(`notifications/${m[1]}/readBy/${_currentUid}`).set(true);
-    });
-}
-
-function toggleNotifDrawer() {
-    const drawer = document.getElementById('notif-drawer');
-    if (!drawer) return;
-    const isOpen = drawer.classList.contains('open');
-    drawer.classList.toggle('open', !isOpen);
-    // Close when clicking outside
-    if (!isOpen) {
-        setTimeout(() => {
-            document.addEventListener('click', closeDrawerOnOutside, { once: true });
-        }, 50);
-    }
-}
-
-function closeDrawerOnOutside(e) {
-    const wrap = document.getElementById('nav-bell-wrap');
-    if (wrap && !wrap.contains(e.target)) {
-        const drawer = document.getElementById('notif-drawer');
-        if (drawer) drawer.classList.remove('open');
-    }
-}
-
-function timeAgoNotif(ts) {
-    const s = Math.floor((Date.now()-ts)/1000);
-    if (s < 60)   return 'vừa xong';
-    if (s < 3600) return Math.floor(s/60) + ' phút trước';
-    if (s < 86400) return Math.floor(s/3600) + ' giờ trước';
-    return Math.floor(s/86400) + ' ngày trước';
-}
-
-</script>
+</div>
 
 <!-- ═══ SOFTWARE MODAL ═══ -->
 <div id="sw-modal-overlay" onclick="closeSoftwareModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center"></div>
