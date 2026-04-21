@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <script>
+    // FORCE: xóa SW cũ + tất cả cache, sau đó register SW mới (v7)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => {
+          // Nếu SW cũ (không phải v7), unregister hoàn toàn
+          if (!reg.active || !reg.active.scriptURL.endsWith('/sw.js')) return;
+          reg.update();
+        });
+      });
+      if (window.caches) {
+        caches.keys().then(keys => {
+          keys.forEach(k => {
+            if (k !== 'trishteam-v7-cdn') {
+              console.log('[App] Delete old cache:', k);
+              caches.delete(k);
+            }
+          });
+        });
+      }
+    }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trish TEAM | Đa năng Workspace</title>
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TrishTeam">
+    <!-- SEO -->
+    <meta name="description" content="Hệ sinh thái công cụ: ôn thi lái xe, chứng chỉ XD, tra cầu VN, ghi chú cá nhân.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&subset=vietnamese&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=52">
+    <!-- Thêm CSS cho tính năng mới -->
+    <link rel="stylesheet" href="features-addon.css?v=52">
+</head>
+<body data-theme="dark">
+    <!-- PWA Install Banner -->
+    <div id="pwa-banner" style="display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:9999;background:var(--bg-card);border:1.5px solid var(--accent-1);border-radius:var(--radius-lg);padding:.75rem 1.1rem;display:none;align-items:center;gap:.75rem;box-shadow:0 8px 32px rgba(0,0,0,.3);max-width:380px;width:calc(100% - 2rem)">
+        <span style="font-size:1.3rem">📱</span>
+        <div style="flex:1">
+            <div style="font-size:.82rem;font-weight:700;color:var(--text-primary)">Thêm TrishTeam vào màn hình</div>
+            <div style="font-size:.72rem;color:var(--text-tertiary)">Dùng offline, không cần mạng</div>
+        </div>
+        <button id="pwa-install-btn" style="padding:.45rem .9rem;background:var(--accent-gradient);border:none;border-radius:30px;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">Cài đặt</button>
+        <button onclick="document.getElementById('pwa-banner').style.display='none'" style="background:none;border:none;color:var(--text-tertiary);cursor:pointer;font-size:1rem;padding:2px">✕</button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Thông báo</span>
+    </div>
+
+    <!-- Cache Clear Banner (hiện 1 lần nếu có SW cũ) -->
+    <div id="cache-banner" style="display:none;position:fixed;bottom:80px;right:20px;z-index:9999;
+        background:linear-gradient(135deg,#667eea,#764ba2);color:white;
+        padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;
+        box-shadow:0 8px 32px rgba(102,126,234,0.4);cursor:pointer;
+        animation:slideInRight .3s ease">
+        🔄 Có bản cập nhật mới — Click để tải lại
+    </div>
+    <style>
+    @keyframes slideInRight { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
+    </style>
+    <script>
+    // Show cache-clear banner nếu SW cũ đang hoạt động
+    (async () => {
+        if (!('serviceWorker' in navigator)) return;
+        try {
+            const keys = await window.caches.keys();
+            const hasOld = keys.some(k => k.includes('trishteam') && !k.includes('v5'));
+            if (hasOld) {
+                const b = document.getElementById('cache-banner');
+                if (b) {
+                    b.style.display = 'block';
+                    b.onclick = async () => {
+                        await Promise.all(keys.map(k => caches.delete(k)));
+                        const regs = await navigator.serviceWorker.getRegistrations();
+                        await Promise.all(regs.map(r => r.unregister()));
+                        location.reload(true);
+                    };
+                }
+            }
+        } catch(e) {}
+    })();
+    </script>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <span class="brand-icon">✨</span>
+                <span class="brand-text">Trish<strong>TEAM</strong></span>
+            </a>
+            
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link active">Dashboard</a>
+                <a href="driving-test.html" class="nav-link">Ôn thi lái xe</a>
+                <a href="certificates.html" class="nav-link">Chứng chỉ XD</a>
+                <a href="traffic-signs.html" class="nav-link">Biển báo</a>
+                <a href="bridges.html" class="nav-link">Cầu VN</a>
+                <a href="posts.html" class="nav-link">Bảng tin</a>
+                <a href="#contact" class="nav-link">Liên hệ</a>
+            </div>
+
+            <!-- Global Search -->
+            <div class="nav-search-wrap" id="nav-search-wrap">
+                <div class="nav-search-box">
+                    <i class="fas fa-search nav-search-icon"></i>
+                    <input type="text" id="global-search-input" class="nav-search-input"
+                        placeholder="Tìm kiếm..." autocomplete="off"
+                        oninput="globalSearchDebounce()" onfocus="openSearch()" />
+                    <button class="nav-search-clear" id="search-clear" onclick="clearSearch()" style="display:none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="search-dropdown" id="search-dropdown" style="display:none">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <!-- Chưa login -->
+                <a href="login.html" class="btn-login-nav" id="nav-login-btn">
+                    <i class="fas fa-user"></i>
+                    <span>Đăng nhập</span>
+                </a>
+                <!-- Đã login - ẩn mặc định -->
+                <!-- Bell notification (hiện khi đã login) -->
+                <div class="nav-bell-wrap" id="nav-bell-wrap" style="display:none;position:relative">
+                    <button class="nav-bell-btn" id="nav-bell-btn" onclick="toggleNotifDrawer()" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="bell-badge" id="bell-badge" style="display:none">0</span>
+                    </button>
+                    <!-- Notification Drawer -->
+                    <div class="notif-drawer" id="notif-drawer">
+                        <div class="notif-drawer-header">
+                            <span class="notif-drawer-title">🔔 Thông báo</span>
+                            <button class="notif-mark-all" onclick="markAllRead()">Đọc tất cả</button>
+                        </div>
+                        <div class="notif-list" id="notif-list">
+                            <div class="notif-empty">Chưa có thông báo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-user-menu" id="nav-user-menu" style="display:none">
+                    <div class="nav-avatar" id="nav-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <span class="nav-user-name" id="nav-user-name">User</span>
+                    <a href="user-settings.html" class="btn-settings" title="Cài đặt tài khoản">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <button class="btn-logout" onclick="doLogout()" title="Đăng xuất">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <!-- FEZ Theme Toggle -->
+                <label class="fez-theme-switch" id="fez-theme-label" title="Đổi theme sáng/tối">
+                    <input type="checkbox" id="theme-toggle" class="fez-theme-input">
+                    <div class="fez-theme-track">
+                        <div class="fez-stars"></div>
+                        <div class="fez-shooting-star"></div>
+                        <div class="fez-clouds">
+                            <div class="fez-cloud fez-cloud--1"></div>
+                            <div class="fez-cloud fez-cloud--2"></div>
+                        </div>
+                        <div class="fez-orb">
+                            <div class="fez-crater fez-crater--1"></div>
+                            <div class="fez-crater fez-crater--2"></div>
+                        </div>
+                    </div>
+                </label>
+                <button class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- WebApp Sidebar (chỉ hiện sau khi đăng nhập) -->
+    <aside class="webapp-sidebar" id="webapp-sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-sparkles sidebar-logo"></i>
+            <span class="sidebar-title">TrishTeam</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Chính</span>
+                <a href="index.html" class="sidebar-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="posts.html" class="sidebar-item">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Bảng tin</span>
+                </a>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Học tập</span>
+                <a href="driving-test.html" class="sidebar-item">
+                    <i class="fas fa-car"></i>
+                    <span>Ôn thi lái xe</span>
+                </a>
+                <a href="certificates.html" class="sidebar-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>Chứng chỉ XD</span>
+                </a>
+                <a href="notes.html" class="sidebar-item">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>TrishNotes</span>
+                </a>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-label">Tra cứu</span>
+                <a href="traffic-signs.html" class="sidebar-item">
+                    <i class="fas fa-road"></i>
+                    <span>Biển báo</span>
+                </a>
+                <a href="bridges.html" class="sidebar-item">
+                    <i class="fas fa-water"></i>
+                    <span>Cầu VN (VBMS)</span>
+                </a>
+            </div>
+            <div class="sidebar-group admin-only" style="display:none">
+                <span class="sidebar-group-label">Quản trị</span>
+                <a href="admin.html" class="sidebar-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin Panel</span>
+                </a>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Thu gọn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+    </aside>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         DASHBOARD MAIN AREA
+         Hiện với mọi người — nội dung thay đổi theo auth state
+    ═══════════════════════════════════════════════════════ -->
+    <div class="dashboard-wrap" id="dashboard-wrap">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   BENTO-STYLE DASHBOARD — TrishTeam
+   Inspired by typeui.sh/bento • Brand: TrishTeam colors
+   Self-contained, no external CSS dependencies
+═══════════════════════════════════════════════════════════ */
+:root {
+  --b-bg:         #0a0908;
+  --b-surface:    #14120f;
+  --b-card:       #1c1a15;
+  --b-card-hi:    #23201a;
+  --b-border:     rgba(255,255,255,0.06);
+  --b-border-hi:  rgba(102,126,234,0.25);
+  --b-accent:     #667eea;
+  --b-accent2:    #764ba2;
+  --b-success:    #10b981;
+  --b-warning:    #f59e0b;
+  --b-text:       #ede9e3;
+  --b-text-sub:   #8a827a;
+  --b-text-muted: #5c554f;
+  /* Bento spacing scale: 4/8/12/16/24/32 */
+  --b-s1: 4px;  --b-s2: 8px;  --b-s3: 12px;
+  --b-s4: 16px; --b-s5: 24px; --b-s6: 32px;
+  /* Typography scale: 12/14/16/20/24/32 */
+  --b-t-xs: 12px; --b-t-sm: 14px; --b-t-md: 16px;
+  --b-t-lg: 20px; --b-t-xl: 24px; --b-t-2xl: 32px;
+  --b-radius: 16px;
+}
+
+/* ── BENTO GRID SYSTEM ──────────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--b-s3);
+  margin-bottom: var(--b-s3);
+}
+
+/* Block size utilities */
+.b-col-3  { grid-column: span 3; }
+.b-col-4  { grid-column: span 4; }
+.b-col-5  { grid-column: span 5; }
+.b-col-6  { grid-column: span 6; }
+.b-col-7  { grid-column: span 7; }
+.b-col-8  { grid-column: span 8; }
+.b-col-12 { grid-column: span 12; }
+.b-row-2  { grid-row: span 2; }
+
+/* ── BLOCK (Bento card) ─────────────────────────────────── */
+.b-block {
+  background: var(--b-card);
+  border: 1px solid var(--b-border);
+  border-radius: var(--b-radius);
+  padding: var(--b-s5);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.b-block:hover {
+  border-color: var(--b-border-hi);
+}
+.b-block.has-accent::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--b-accent), var(--b-accent2));
+}
+
+/* ── BLOCK HEADER ───────────────────────────────────────── */
+.b-block-label {
+  font-size: var(--b-t-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--b-text-sub);
+  margin-bottom: var(--b-s3);
+}
+.b-block-title {
+  font-size: var(--b-t-md);
+  font-weight: 700;
+  color: var(--b-text);
+  display: flex;
+  align-items: center;
+  gap: var(--b-s2);
+  margin-bottom: var(--b-s4);
+}
+.b-block-link {
+  margin-left: auto;
+  font-size: var(--b-t-xs);
+  color: var(--b-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.b-block-link:hover { opacity: 0.75; }
+
+/* ── CLOCK BLOCK ────────────────────────────────────────── */
+.b-clock-time {
+  font-family: 'JetBrains Mono', 'Be Vietnam Pro', monospace;
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--b-accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: var(--b-s2);
+}
+.b-clock-date {
+  font-size: var(--b-t-sm);
+  color: var(--b-text-sub);
+  margin-top: var(--b-s2);
+}
+.b-clock-lunar {
+  font-size: var(--b-t-xs);
+  color: var(--b-text-muted);
+  margin-top: 4px;
+}
+.clock-colon     { display: inline; }
+.clock-colon-off { opacity: 0.2; }
+
+/* ── WEATHER BLOCK ──────────────────────────────────────── */
+.b-weather-main {
+  display: flex;
+  align-items: center;
+  gap: var(--b-s3);
+  margin: var(--b-s3) 0;
+}
+.b-weather-icon {
+  font-size: 40px;
+  line-height: 1;
+  animation: bfloat 3s ease-in-out infinite;
+}
+@keyframes bfloat {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-4px); }
+}
+.b-weather-temp {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--b-text);
+  line-height: 1;
+}
+.b-weather-desc {
+  font-size: var(--b-t-sm);
+  color: var(--b-text-sub);
+}
+.b-weather-sub {
+  display: flex;
+  gap: var(--b-s4);
+  font-size: var(--b-t-xs);
+  color: var(--b-text-muted);
+  margin-top: var(--b-s3);
+}
+
+/* ── ECOSYSTEM BLOCK ────────────────────────────────────── */
+.b-eco-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--b-s2);
+}
+.b-eco-item {
+  display: flex;
+  align-items: center;
+  gap: var(--b-s3);
+  padding: var(--b-s2) 0;
+}
+.b-eco-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.b-eco-dot.live { background: var(--b-success); box-shadow: 0 0 8px var(--b-success); }
+.b-eco-dot.come { background: var(--b-warning); }
+.b-eco-name {
+  font-size: var(--b-t-sm);
+  color: var(--b-text);
+  flex: 1;
+  font-weight: 500;
+}
+.b-eco-badge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.b-eco-badge.live { background: rgba(16,185,129,0.14); color: var(--b-success); }
+.b-eco-badge.come { background: rgba(245,158,11,0.12); color: var(--b-warning); }
+
+/* ── QUICK ACCESS (Bento items) ─────────────────────────── */
+.b-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--b-s3);
+}
+.b-quick-item {
+  background: var(--b-card-hi);
+  border: 1px solid var(--b-border);
+  border-radius: 12px;
+  padding: var(--b-s4) var(--b-s3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--b-s1);
+  text-decoration: none;
+  color: var(--b-text);
+  transition: all 0.2s;
+  cursor: pointer;
+  min-height: 88px;
+  justify-content: center;
+  text-align: center;
+}
+.b-quick-item:hover {
+  border-color: var(--b-accent);
+  background: rgba(102,126,234,0.08);
+  transform: translateY(-2px);
+}
+.b-quick-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: var(--b-s1);
+}
+.b-quick-name {
+  font-size: var(--b-t-sm);
+  font-weight: 700;
+  color: var(--b-text);
+}
+.b-quick-sub {
+  font-size: 11px;
+  color: var(--b-text-muted);
+}
+
+/* ── ACTIVITY ───────────────────────────────────────────── */
+.b-activity-empty {
+  text-align: center;
+  padding: var(--b-s5) var(--b-s3);
+  color: var(--b-text-sub);
+}
+.b-activity-empty-icon { font-size: 40px; margin-bottom: var(--b-s3); }
+.b-activity-empty-text { font-size: var(--b-t-sm); line-height: 1.5; margin-bottom: var(--b-s4); }
+.b-activity-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, var(--b-accent), var(--b-accent2));
+  border: none; border-radius: 40px;
+  color: #fff;
+  font-size: var(--b-t-sm);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.b-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--b-s3);
+  padding: var(--b-s3) 0;
+  border-bottom: 1px solid var(--b-border);
+}
+.b-activity-item:last-child { border-bottom: none; }
+.b-activity-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--b-accent); margin-top: 8px; flex-shrink: 0;
+}
+.b-activity-text { font-size: var(--b-t-sm); color: var(--b-text); }
+.b-activity-time { font-size: 11px; color: var(--b-text-muted); margin-top: 2px; }
+
+/* ── TOOLS ──────────────────────────────────────────────── */
+.b-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--b-s3);
+}
+.b-tool-item {
+  background: var(--b-card-hi);
+  border: 1px solid var(--b-border);
+  border-radius: 12px;
+  padding: var(--b-s4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--b-s2);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.b-tool-item:hover {
+  border-color: var(--b-accent);
+  background: rgba(102,126,234,0.06);
+}
+.b-tool-icon { font-size: 24px; }
+.b-tool-name { font-size: var(--b-t-xs); font-weight: 600; color: var(--b-text-sub); }
+
+/* ── SOFTWARE CARDS (Bento with different accents) ──────── */
+.b-sw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--b-s3);
+}
+.b-sw-card {
+  background: var(--b-card-hi);
+  border: 1px solid var(--b-border);
+  border-radius: 14px;
+  padding: var(--b-s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--b-s3);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.b-sw-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.b-sw-card.live::before   { background: var(--b-success); }
+.b-sw-card.coming::before { background: var(--b-warning); }
+.b-sw-card.webapp::before { background: var(--b-accent); }
+.b-sw-card:hover { transform: translateY(-3px); border-color: var(--b-border-hi); }
+.b-sw-header { display: flex; align-items: flex-start; gap: var(--b-s3); }
+.b-sw-icon { font-size: 28px; flex-shrink: 0; }
+.b-sw-name { font-size: var(--b-t-md); font-weight: 800; color: var(--b-text); }
+.b-sw-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+.b-sw-tag.live   { background: rgba(16,185,129,0.14); color: var(--b-success); }
+.b-sw-tag.coming { background: rgba(245,158,11,0.12); color: var(--b-warning); }
+.b-sw-tag.web    { background: rgba(102,126,234,0.14); color: var(--b-accent); }
+.b-sw-desc { font-size: var(--b-t-xs); color: var(--b-text-sub); line-height: 1.55; }
+.b-sw-feats { display: flex; flex-wrap: wrap; gap: 4px; }
+.b-sw-feat {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--b-border);
+  border-radius: 20px;
+  color: var(--b-text-sub);
+}
+.b-sw-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: var(--b-s2); }
+.b-sw-tech { font-size: 10px; color: var(--b-text-muted); }
+.b-sw-btn  { font-size: 11px; color: var(--b-accent); font-weight: 600; text-decoration: none; }
+
+/* ── FEED (Bảng tin) ────────────────────────────────────── */
+.b-feed-empty { font-size: var(--b-t-sm); color: var(--b-text-sub); padding: var(--b-s3) 0; }
+
+/* ── IDEA BOX ───────────────────────────────────────────── */
+.b-idea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--b-s4);
+  padding: var(--b-s4) var(--b-s5);
+  background: rgba(102,126,234,0.05);
+  border: 1px dashed var(--b-border-hi);
+  border-radius: 12px;
+  margin-top: var(--b-s4);
+}
+.b-idea-title { font-size: var(--b-t-sm); font-weight: 700; color: var(--b-text); margin-bottom: var(--b-s1); }
+.b-idea-desc  { font-size: var(--b-t-xs); color: var(--b-text-sub); }
+.b-idea-btn {
+  padding: 10px 20px; white-space: nowrap;
+  background: linear-gradient(135deg, var(--b-accent), var(--b-accent2));
+  border: none; border-radius: 40px; color: #fff;
+  font-size: var(--b-t-xs); font-weight: 600; cursor: pointer;
+  text-decoration: none; flex-shrink: 0;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .b-col-4, .b-col-3 { grid-column: span 6; }
+  .b-col-5, .b-col-7, .b-col-8 { grid-column: span 12; }
+  .b-sw-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+  .b-col-6, .b-col-4, .b-col-3 { grid-column: span 12; }
+  .b-quick-grid, .b-tools-grid { grid-template-columns: repeat(2, 1fr); }
+  .b-sw-grid { grid-template-columns: 1fr; }
+  .b-clock-time { font-size: 36px; }
+  .b-weather-temp { font-size: 28px; }
+}
+</style>
+
+<!-- ═══ BENTO ROW 1: Widgets (4+4+4) ═══ -->
+<div class="bento-grid">
+
+  <!-- Clock (4 cols) -->
+  <div class="b-block has-accent b-col-4">
+    <div class="b-block-label">⏰ Đồng hồ</div>
+    <div class="b-clock-time" id="clock-time">00:00:00</div>
+    <div class="b-clock-date" id="clock-date">--/--/----</div>
+    <div class="b-clock-lunar" id="clock-lunar"></div>
+  </div>
+
+  <!-- Weather (4 cols) -->
+  <div class="b-block b-col-4" style="border-top: 2px solid rgba(6,182,212,0.5)">
+    <div class="b-block-label">🌤 Thời tiết · Đà Nẵng</div>
+    <div class="b-weather-main">
+      <span class="b-weather-icon" id="weather-icon">🌤</span>
+      <span class="b-weather-temp" id="weather-temp">--°C</span>
+    </div>
+    <div class="b-weather-desc" id="weather-desc">Đang tải...</div>
+    <div class="b-weather-sub">
+      <span id="weather-humidity">💧 --%</span>
+      <span id="weather-wind">🌬 -- km/h</span>
+    </div>
+  </div>
+
+  <!-- Ecosystem (4 cols) -->
+  <div class="b-block b-col-4" style="border-top: 2px solid rgba(16,185,129,0.4)">
+    <div class="b-block-label">✨ Hệ sinh thái TrishNexus</div>
+    <div class="b-eco-list">
+      <div class="b-eco-item"><span class="b-eco-dot live"></span><span class="b-eco-name">TrishLib</span><span class="b-eco-badge live">Live</span></div>
+      <div class="b-eco-item"><span class="b-eco-dot come"></span><span class="b-eco-name">TrishDesign</span><span class="b-eco-badge come">Sắp ra</span></div>
+      <div class="b-eco-item"><span class="b-eco-dot come"></span><span class="b-eco-name">TrishNotes</span><span class="b-eco-badge come">Sắp ra</span></div>
+      <div class="b-eco-item"><span class="b-eco-dot come"></span><span class="b-eco-name">TrishMap</span><span class="b-eco-badge come">Sắp ra</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ BENTO ROW 2: Quick Access (7) + Activity (5) ═══ -->
+<div class="bento-grid">
+
+  <div class="b-block has-accent b-col-7">
+    <div class="b-block-title">🎯 Truy cập nhanh</div>
+    <div class="b-quick-grid">
+      <a href="driving-test.html" class="b-quick-item">
+        <span class="b-quick-icon">🚗</span>
+        <span class="b-quick-name">Ôn thi lái xe</span>
+        <span class="b-quick-sub">A1 / B1 / B2 / C</span>
+      </a>
+      <a href="certificates.html" class="b-quick-item">
+        <span class="b-quick-icon">🏗️</span>
+        <span class="b-quick-name">Chứng chỉ XD</span>
+        <span class="b-quick-sub">345 câu hỏi</span>
+      </a>
+      <a href="notes.html" class="b-quick-item quick-item-needs-login" data-require-login="true">
+        <span class="b-quick-icon">📝</span>
+        <span class="b-quick-name">TrishNotes</span>
+        <span class="b-quick-sub">Ghi chú cá nhân</span>
+      </a>
+      <a href="traffic-signs.html" class="b-quick-item">
+        <span class="b-quick-icon">🚦</span>
+        <span class="b-quick-name">Biển báo</span>
+        <span class="b-quick-sub">QC41:2024</span>
+      </a>
+      <a href="bridges.html" class="b-quick-item">
+        <span class="b-quick-icon">🌉</span>
+        <span class="b-quick-name">Cầu VN</span>
+        <span class="b-quick-sub">7.897 cầu</span>
+      </a>
+      <a href="posts.html" class="b-quick-item">
+        <span class="b-quick-icon">📰</span>
+        <span class="b-quick-name">Bảng tin</span>
+        <span class="b-quick-sub">Tin tức · Chia sẻ</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="b-block b-col-5" style="border-top: 2px solid rgba(245,158,11,0.4)">
+    <div class="b-block-title">📊 Hoạt động gần đây
+      <a href="user-settings.html" class="b-block-link" id="activity-link" style="display:none">Xem tất cả →</a>
+    </div>
+    <div id="activity-guest">
+      <div class="b-activity-empty">
+        <div class="b-activity-empty-icon">👋</div>
+        <div class="b-activity-empty-text">Đăng nhập để theo dõi tiến độ ôn thi, ghi chú và hoạt động cá nhân.</div>
+        <a href="login.html" class="b-activity-btn">Đăng nhập ngay →</a>
+      </div>
+    </div>
+    <div id="activity-user" style="display:none">
+      <div class="activity-list" id="activity-list">
+        <div class="b-feed-empty">Chưa có hoạt động nào</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ BENTO ROW 3: Bảng tin (full width) ═══ -->
+<div class="bento-grid">
+  <div class="b-block has-accent b-col-12">
+    <div class="b-block-title">📋 Bảng tin mới nhất
+      <a href="posts.html" class="b-block-link">Xem tất cả →</a>
+    </div>
+    <div id="dash-feed-list">
+      <div class="b-feed-empty">Chưa có bài viết nào.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BENTO ROW 4: Công cụ nhanh (8) + thứ gì đó (4)... full 12 ═══ -->
+<div class="bento-grid">
+  <div class="b-block has-accent b-col-12">
+    <div class="b-block-title">🛠 Công cụ nhanh</div>
+    <div class="b-tools-grid">
+      <div class="b-tool-item" data-tool="qr-generator" onclick="typeof openTool==='function'&&openTool('qr-generator')">
+        <span class="b-tool-icon">📱</span><span class="b-tool-name">QR Code</span>
+      </div>
+      <div class="b-tool-item" data-tool="password-gen" onclick="typeof openTool==='function'&&openTool('password-gen')">
+        <span class="b-tool-icon">🔑</span><span class="b-tool-name">Mật khẩu</span>
+      </div>
+      <div class="b-tool-item" data-tool="base64" onclick="typeof openTool==='function'&&openTool('base64')">
+        <span class="b-tool-icon">💻</span><span class="b-tool-name">Base64</span>
+      </div>
+      <div class="b-tool-item" data-tool="color-picker" onclick="typeof openTool==='function'&&openTool('color-picker')">
+        <span class="b-tool-icon">🎨</span><span class="b-tool-name">Màu sắc</span>
+      </div>
+      <div class="b-tool-item" data-tool="unit-converter" onclick="typeof openTool==='function'&&openTool('unit-converter')">
+        <span class="b-tool-icon">📐</span><span class="b-tool-name">Đổi đơn vị</span>
+      </div>
+      <div class="b-tool-item" data-tool="loan-calculator" onclick="typeof openTool==='function'&&openTool('loan-calculator')">
+        <span class="b-tool-icon">🏦</span><span class="b-tool-name">Vay vốn</span>
+      </div>
+      <div class="b-tool-item" data-tool="json-formatter" onclick="typeof openTool==='function'&&openTool('json-formatter')">
+        <span class="b-tool-icon">📋</span><span class="b-tool-name">JSON</span>
+      </div>
+      <div class="b-tool-item" data-tool="markdown-editor" onclick="typeof openTool==='function'&&openTool('markdown-editor')">
+        <span class="b-tool-icon">✍️</span><span class="b-tool-name">Markdown</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BENTO ROW 5: Phần mềm (4 cards × 3 cols) ═══ -->
+<div class="bento-grid">
+  <div class="b-block has-accent b-col-12">
+    <div class="b-block-title">🖥 Phần mềm
+      <span style="margin-left:8px;font-size:12px;color:var(--b-text-muted);font-weight:500">TrishNexus Ecosystem</span>
+    </div>
+    <div class="b-sw-grid">
+
+      <div class="b-sw-card live" onclick="showSoftwareModal('trishlib')">
+        <div class="b-sw-header">
+          <span class="b-sw-icon">📁</span>
+          <div style="flex:1">
+            <div class="b-sw-name">TrishLib</div>
+            <span class="b-sw-tag live">✓ v1.0</span>
+          </div>
+        </div>
+        <div class="b-sw-desc">Quản lý thư viện tài liệu kỹ thuật, video hướng dẫn, GitHub repos.</div>
+        <div class="b-sw-feats">
+          <span class="b-sw-feat">File local</span>
+          <span class="b-sw-feat">Video</span>
+          <span class="b-sw-feat">GitHub</span>
+        </div>
+        <div class="b-sw-footer">
+          <span class="b-sw-tech">PyQt6 · Windows</span>
+          <span class="b-sw-btn">Chi tiết →</span>
+        </div>
+      </div>
+
+      <div class="b-sw-card coming" onclick="showSoftwareModal('trishdesign')">
+        <div class="b-sw-header">
+          <span class="b-sw-icon">📐</span>
+          <div style="flex:1">
+            <div class="b-sw-name">TrishDesign</div>
+            <span class="b-sw-tag coming">⏳ Sắp ra</span>
+          </div>
+        </div>
+        <div class="b-sw-desc">Toolkit tự động hóa: tính toán kết cấu, xuất báo cáo, AI RAG TCVN.</div>
+        <div class="b-sw-feats">
+          <span class="b-sw-feat">Dự toán</span>
+          <span class="b-sw-feat">Word/Excel</span>
+          <span class="b-sw-feat">AutoCAD</span>
+        </div>
+        <div class="b-sw-footer">
+          <span class="b-sw-tech">PyQt6 · Python</span>
+          <span class="b-sw-btn">Tháng 7/2026</span>
+        </div>
+      </div>
+
+      <div class="b-sw-card webapp" onclick="showSoftwareModal('trishmap')">
+        <div class="b-sw-header">
+          <span class="b-sw-icon">🌉</span>
+          <div style="flex:1">
+            <div class="b-sw-name">TrishMap</div>
+            <span class="b-sw-tag web">🗺 Web App</span>
+          </div>
+        </div>
+        <div class="b-sw-desc">Tra cứu 7.897 cầu Việt Nam. Lọc theo tỉnh, quốc lộ, loại kết cấu.</div>
+        <div class="b-sw-feats">
+          <span class="b-sw-feat">7.897 cầu</span>
+          <span class="b-sw-feat">Lọc</span>
+          <span class="b-sw-feat">CSV</span>
+        </div>
+        <div class="b-sw-footer">
+          <span class="b-sw-tech">Vercel</span>
+          <a href="bridges.html" class="b-sw-btn">Xem thử →</a>
+        </div>
+      </div>
+
+      <div class="b-sw-card live" onclick="showSoftwareModal('trishfont')">
+        <div class="b-sw-header">
+          <span class="b-sw-icon">✨</span>
+          <div style="flex:1">
+            <div class="b-sw-name">TrishFont</div>
+            <span class="b-sw-tag live">✓ v1.0</span>
+          </div>
+        </div>
+        <div class="b-sw-desc">Cài font Unicode/VNI/TCVN3 và SHX AutoCAD hàng loạt.</div>
+        <div class="b-sw-feats">
+          <span class="b-sw-feat">Unicode</span>
+          <span class="b-sw-feat">AutoCAD</span>
+          <span class="b-sw-feat">Batch</span>
+        </div>
+        <div class="b-sw-footer">
+          <span class="b-sw-tech">PyQt6 · Windows</span>
+          <span class="b-sw-btn">Chi tiết →</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="b-idea">
+      <div>
+        <div class="b-idea-title">💡 Đóng góp ý tưởng tính năng mới</div>
+        <div class="b-idea-desc">Chia sẻ ý tưởng về tính năng hữu ích cho kỹ sư cầu đường.</div>
+      </div>
+      <a href="#contact" class="b-idea-btn" onclick="if(typeof openFeedback==='function')openFeedback();return false">Gửi ý tưởng →</a>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ SOFTWARE MODAL ═══ -->
+<div id="sw-modal-overlay" onclick="closeSoftwareModal()" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center"></div>
+<div id="sw-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:min(560px,94vw);max-height:90vh;overflow-y:auto;background:var(--bg-card);border:1.5px solid var(--border-color);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+  <div style="padding:1.5rem">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem">
+      <div style="display:flex;align-items:center;gap:0.8rem">
+        <div id="sw-modal-icon" style="font-size:2.5rem;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:var(--bg-secondary);border-radius:14px"></div>
+        <div>
+          <div id="sw-modal-name" style="font-size:1.3rem;font-weight:800;color:var(--text-primary)"></div>
+          <span id="sw-modal-tag" style="font-size:0.75rem;font-weight:600;padding:2px 8px;border-radius:20px"></span>
+        </div>
+      </div>
+      <button onclick="closeSoftwareModal()" style="background:none;border:none;cursor:pointer;color:var(--text-tertiary);font-size:1.4rem;padding:4px;line-height:1">×</button>
+    </div>
+    <p id="sw-modal-desc" style="color:var(--text-secondary);font-size:0.92rem;line-height:1.6;margin-bottom:1.2rem"></p>
+    <div id="sw-modal-features" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem"></div>
+    <div id="sw-modal-changelog" style="margin-bottom:1.2rem"></div>
+    <div style="display:flex;gap:0.8rem;flex-wrap:wrap" id="sw-modal-actions"></div>
+  </div>
+</div>
+
+<script>
+const SW_DATA = {
+  trishlib: {
+    icon:'📁', name:'TrishLib', version:'v1.0.0',
+    tag:'✓ Đã ra mắt', tagClass:'tag-live',
+    desc:'Quản lý toàn bộ thư viện tài liệu kỹ thuật: file PDF, DWG, Excel, video hướng dẫn và GitHub repos. Giao diện dark mode, tìm kiếm nhanh, tạo QR code chia sẻ.',
+    features:['📂 Quản lý file local','🎬 Video kỹ thuật','🐙 GitHub Repos','📱 QR Code','🔍 Tìm kiếm nhanh','📊 Thống kê thư viện'],
+    tech:'PyQt6 · Python 3.11 · Windows',
+    changelog:[
+      {ver:'v1.0.0', date:'04/2026', notes:['Ra mắt phiên bản đầu tiên','Quản lý thư viện file local','Tab Video kỹ thuật YouTube','Tab GitHub Repos','Tab Phần mềm kỹ thuật']},
+    ],
+    actions:[
+      {label:'⬇ Tải xuống v1.0', href:'https://github.com/hosytri07', primary:true},
+      {label:'Xem GitHub →', href:'https://github.com/hosytri07', primary:false},
+    ]
+  },
+  trishdesign: {
+    icon:'📐', name:'TrishDesign', version:'v0.9 Beta',
+    tag:'⏳ Sắp ra mắt', tagClass:'tag-coming',
+    desc:'Toolkit tự động hóa cho kỹ sư thiết kế hạ tầng giao thông: tính toán khối lượng, xuất báo cáo Word/Excel, tích hợp AutoCAD và AI tra cứu tiêu chuẩn TCVN/AASHTO.',
+    features:['🏗 Tính khối lượng','📄 Export Word/Excel','🤖 AI RAG TCVN','📐 AutoCAD Plugin','📁 Thư viện hồ sơ','⚙️ Tiện ích văn phòng'],
+    tech:'PyQt6 · Python 3.11 · Windows',
+    changelog:[
+      {ver:'v0.9 Beta', date:'04/2026', notes:['Dashboard + 4 module cốt lõi','EstimatePage: dự toán xây dựng','LibraryPage: thư viện hồ sơ kỹ thuật','OfficePage: Drive link, Renamer, Folder, QR']},
+      {ver:'v1.0', date:'Tháng 7/2026', notes:['ChatbotPage AI RAG TCVN','MapPage tra cứu dự án','AutoCAD Plugin Phase 4']},
+    ],
+    actions:[
+      {label:'Dự kiến: Tháng 7/2026', href:'#', primary:false, disabled:true},
+    ]
+  },
+  trishmap: {
+    icon:'🌉', name:'TrishMap (VBMS)', version:'Live',
+    tag:'🗺 Web App', tagClass:'tag-live',
+    desc:'Hệ thống tra cứu cầu Việt Nam trực tuyến. Dữ liệu 7.897 cầu từ Cục QLĐB Cao tốc, 4 Khu QLĐB và 49 Sở GTVT. Tìm kiếm, lọc theo tỉnh, quốc lộ, loại kết cấu.',
+    features:['🔍 Tìm kiếm toàn văn','🗺 Lọc theo tỉnh/QL','📊 7.897 cầu quốc lộ','📥 Xuất CSV','🏗 167 quốc lộ','⚡ Tải nhanh (3 phần)'],
+    tech:'HTML · JavaScript · Vercel',
+    changelog:[
+      {ver:'v1.0', date:'04/2026', notes:['Ra mắt 7.897 cầu từ Database VBMS 2026','Tìm kiếm + lọc 4 tiêu chí','Export CSV','Load 3 phần song song']},
+    ],
+    actions:[
+      {label:'🌐 Xem ngay', href:'bridges.html', primary:true},
+    ]
+  },
+  trishfont: {
+    icon:'✨', name:'TrishFont', version:'v1.0.0',
+    tag:'✓ Đã ra mắt', tagClass:'tag-live',
+    desc:'Trình cài đặt font chữ kỹ thuật cho kỹ sư: hỗ trợ Unicode, VNI, TCVN3, VietwareX và font SHX cho AutoCAD. Cài hàng loạt, kiểm tra quyền admin tự động.',
+    features:['🔤 Unicode/VNI/TCVN3','📐 AutoCAD SHX','⚡ Cài hàng loạt','🛡 Kiểm tra Admin','📋 Log chi tiết','🔄 Broadcast font change'],
+    tech:'PyQt6 · Python 3.11 · Windows',
+    changelog:[
+      {ver:'v1.0.0', date:'04/2026', notes:['Ra mắt phiên bản đầu tiên','Cài font Windows TTF/OTF/TTC','Copy SHX vào AutoCAD Fonts','Worker thread không block UI','Kiểm tra + xin quyền Admin']},
+    ],
+    actions:[
+      {label:'⬇ Tải xuống v1.0', href:'https://github.com/hosytri07', primary:true},
+    ]
+  }
+};
+
+function showSoftwareModal(id) {
+  const d = SW_DATA[id]; if (!d) return;
+  document.getElementById('sw-modal-icon').textContent = d.icon;
+  document.getElementById('sw-modal-name').textContent = d.name + ' ' + d.version;
+  const tagEl = document.getElementById('sw-modal-tag');
+  tagEl.textContent = d.tag;
+  tagEl.className = 'sw-tag ' + (d.tagClass || '');
+  tagEl.style.background = d.tagClass === 'tag-live' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)';
+  tagEl.style.color = d.tagClass === 'tag-live' ? '#10b981' : '#f59e0b';
+  document.getElementById('sw-modal-desc').textContent = d.desc;
+  document.getElementById('sw-modal-features').innerHTML = d.features.map(f =>
+    `<span style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:20px;padding:3px 10px;font-size:0.78rem;color:var(--text-secondary)">${f}</span>`
+  ).join('');
+  // Changelog
+  const clEl = document.getElementById('sw-modal-changelog');
+  clEl.innerHTML = '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-tertiary);margin-bottom:0.6rem">📋 Changelog</div>' +
+    d.changelog.map(v => `<div style="margin-bottom:0.7rem;padding:0.7rem;background:var(--bg-secondary);border-radius:10px;border:1px solid var(--border-color)">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem">
+        <span style="font-weight:700;font-size:0.85rem;color:var(--text-primary)">${v.ver}</span>
+        <span style="font-size:0.73rem;color:var(--text-tertiary)">${v.date}</span>
+      </div>
+      <ul style="list-style:none;padding:0;margin:0">${v.notes.map(n=>`<li style="font-size:0.8rem;color:var(--text-secondary);padding:1px 0">• ${n}</li>`).join('')}</ul>
+    </div>`).join('');
+  // Actions
+  document.getElementById('sw-modal-actions').innerHTML = d.actions.map(a =>
+    a.disabled ? `<span style="padding:0.55rem 1.2rem;border-radius:40px;font-size:0.85rem;background:var(--bg-secondary);color:var(--text-tertiary);border:1px solid var(--border-color)">${a.label}</span>`
+    : `<a href="${a.href}" ${a.href==='#'?'':'target="_blank"'} style="padding:0.55rem 1.4rem;border-radius:40px;font-size:0.85rem;font-weight:600;text-decoration:none;${a.primary?'background:linear-gradient(135deg,#667eea,#764ba2);color:#fff':'background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border-color)'}">${a.label}</a>`
+  ).join('');
+  // Show
+  const overlay = document.getElementById('sw-modal-overlay');
+  const modal = document.getElementById('sw-modal');
+  overlay.style.display = 'flex';
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeSoftwareModal() {
+  document.getElementById('sw-modal-overlay').style.display = 'none';
+  document.getElementById('sw-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSoftwareModal(); });
+</script>
+
+</body>
+</html>

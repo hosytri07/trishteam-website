@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tra cứu Biển báo — QC 41:2024/BGTVT</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg:#0f0e0c;--bg2:#1a1814;--bg3:#242018;--card:#1e1c18;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#f5f2ed;--muted:#a09890;--hint:#6b6560;
+  --accent:#667eea;--grad:linear-gradient(135deg,#667eea,#764ba2);
+  --red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--green:#10b981;
+  --r:12px;--r2:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;height:58px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar-brand{font-weight:800;font-size:1rem;color:var(--text);display:flex;align-items:center;gap:.4rem}
+.topbar-brand span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.back-btn{display:flex;align-items:center;gap:.4rem;padding:.4rem .85rem;border:1px solid var(--border);border-radius:30px;background:transparent;color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;transition:all .18s}
+.back-btn:hover{color:var(--text)}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1.2rem}
+
+/* Hero */
+.page-hero{text-align:center;padding:1.5rem 0 1.8rem}
+.page-hero h1{font-size:1.9rem;font-weight:900;margin-bottom:.4rem}
+.page-hero h1 span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hero p{color:var(--muted);font-size:.9rem}
+.legal-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .9rem;background:rgba(102,126,234,.1);border:1px solid rgba(102,126,234,.2);border-radius:20px;font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:1rem}
+
+/* Search + Filters */
+.search-wrap{display:flex;gap:.6rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.search-box{flex:1;min-width:240px;padding:.75rem 1rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:.9rem;transition:border-color .18s}
+.search-box:focus{outline:none;border-color:var(--accent)}
+.filter-group{display:flex;gap:.4rem;flex-wrap:wrap}
+.filter-btn{padding:.5rem 1rem;border:1.5px solid var(--border);background:var(--card);border-radius:30px;color:var(--muted);font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap}
+.filter-btn:hover,.filter-btn.active{border-color:transparent;color:#fff}
+.filter-btn[data-cat="all"].active{background:linear-gradient(135deg,#667eea,#764ba2)}
+.filter-btn[data-cat="cam"].active{background:var(--red)}
+.filter-btn[data-cat="nguy-hiem"].active{background:var(--yellow);color:#000}
+.filter-btn[data-cat="hieu-lenh"].active{background:var(--blue)}
+.filter-btn[data-cat="chi-dan"].active{background:var(--green)}
+.filter-btn[data-cat="phu"].active{background:#8b5cf6}
+.filter-btn[data-cat="vach-son"].active{background:#f97316}
+
+/* Grid */
+.signs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+
+/* Sign Card */
+.sign-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.sign-card:hover{border-color:rgba(102,126,234,.4);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.sign-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(102,126,234,.04) 100%);pointer-events:none}
+.sign-visual{width:76px;height:76px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:2.2rem;position:relative;flex-shrink:0;overflow:hidden}
+.sign-visual img{width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.sign-visual.cam{background:rgba(239,68,68,.1);border:2.5px solid var(--red)}
+.sign-visual.nguy-hiem{background:rgba(245,158,11,.1);border:2.5px solid var(--yellow);border-radius:0;clip-path:polygon(50% 0%,100% 100%,0% 100%)}
+.sign-visual.hieu-lenh{background:rgba(59,130,246,.1);border:2.5px solid var(--blue)}
+.sign-visual.chi-dan{background:rgba(16,185,129,.1);border:2.5px solid var(--green);border-radius:6px}
+.sign-visual.phu{background:rgba(139,92,246,.1);border:2.5px solid #8b5cf6;border-radius:4px}
+.sign-visual.vach-son{background:rgba(249,115,22,.1);border:2.5px solid #f97316;border-radius:4px}
+.sign-code{font-size:.7rem;font-weight:700;color:var(--hint);text-align:center;margin-bottom:.3rem;font-family:monospace;letter-spacing:.05em}
+.sign-name{font-size:.88rem;font-weight:700;text-align:center;margin-bottom:.4rem;line-height:1.35}
+.sign-cat-tag{display:block;text-align:center;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin:0 auto}
+.tag-cam{background:rgba(239,68,68,.15);color:var(--red)}
+.tag-nguy-hiem{background:rgba(245,158,11,.15);color:var(--yellow)}
+.tag-hieu-lenh{background:rgba(59,130,246,.15);color:var(--blue)}
+.tag-chi-dan{background:rgba(16,185,129,.15);color:var(--green)}
+.tag-phu{background:rgba(139,92,246,.15);color:#8b5cf6}
+.tag-vach-son{background:rgba(249,115,22,.15);color:#f97316}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;display:none}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r2);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{font-size:1.1rem;font-weight:800}
+.modal-close{width:32px;height:32px;border:none;background:var(--bg3);color:var(--muted);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .18s}
+.modal-close:hover{background:var(--red);color:#fff}
+.modal-body{padding:1.4rem}
+.modal-visual{width:120px;height:120px;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:3.5rem}
+.modal-code{text-align:center;font-family:monospace;font-size:.8rem;color:var(--hint);font-weight:700;margin-bottom:.3rem}
+.modal-name{text-align:center;font-size:1.15rem;font-weight:800;margin-bottom:1rem}
+.detail-row{display:grid;grid-template-columns:120px 1fr;gap:.6rem;padding:.7rem 0;border-bottom:1px solid var(--border);font-size:.87rem}
+.detail-row:last-child{border-bottom:none}
+.detail-label{font-weight:700;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;align-self:start;padding-top:1px}
+.detail-val{color:var(--text);line-height:1.65}
+.detail-val.use-case{color:var(--muted);font-size:.83rem;line-height:1.6}
+.modal-cat-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:.75rem}
+
+/* Empty / count */
+.result-info{font-size:.82rem;color:var(--hint);margin-bottom:.9rem}
+
+.no-results{text-align:center;padding:3rem;color:var(--hint)}
+.no-results i{font-size:2.5rem;display:block;margin-bottom.75rem;color:var(--bg3)}
+
+@media(max-width:600px){.signs-grid{grid-template-columns:1fr 1fr}}
+
+/* ── GLOBAL ANIMATED BG ── */
+body::before {
+    content:'';position:fixed;inset:0;z-index:-2;
+    background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(102,126,234,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 70%, rgba(118,75,162,0.09) 0%, transparent 60%);
+    animation: gbgMove 25s ease-in-out infinite;
+    pointer-events:none;
+}
+body::after {
+    content:'';position:fixed;inset:0;z-index:-1;
+    background-image:
+        linear-gradient(rgba(102,126,234,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,0.04) 1px, transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+}
+@keyframes gbgMove {
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(18px,-12px) scale(1.02)}
+    66%{transform:translate(-12px,18px) scale(0.98)}
+}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
+  <div class="topbar-brand">🚦 Tra cứu <span>Biển báo</span></div>
+  <div style="width:90px"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <h2 id="m-name">Chi tiết biển báo</h2>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-visual" id="m-visual"></div>
+      <div class="modal-code" id="m-code"></div>
+      <div class="modal-name" id="m-name2"></div>
+      <span class="modal-cat-badge" id="m-catbadge"></span>
+      <div id="m-details"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="page-hero">
+    <div class="legal-badge"><i class="fas fa-gavel"></i> QC 41:2024/BGTVT — Bộ GTVT Việt Nam</div>
+    <div class="legal-badge" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--yellow)">
+      <i class="fas fa-shield-alt"></i> Dữ liệu do Admin kiểm soát — đang cập nhật đầy đủ
+    </div>
+    <h1>Tra cứu <span>Biển báo & Vạch sơn</span></h1>
+    <p>Toàn bộ biển báo giao thông đường bộ theo Quy chuẩn kỹ thuật quốc gia QC 41:2024/BGTVT</p>
+    <p style="font-size:.78rem;color:var(--hint);margin-top:.4rem">
+      <i class="fas fa-info-circle"></i> Dữ liệu hiển thị là bản mẫu — Admin đang nhập liệu đầy đủ từ file PDF QC41 chính thức
+    </p>
+  </div>
+
+  <div class="search-wrap">
+    <input class="search-box" type="text" id="search-inp" placeholder="🔍 Tìm theo tên, mã số, công dụng..." oninput="filterSigns()">
+  </div>
+  <div class="filter-group" style="margin-bottom:1.2rem">
+    <button class="filter-btn active" data-cat="all" onclick="filterCat(this)">Tất cả</button>
+    <button class="filter-btn" data-cat="cam" onclick="filterCat(this)">🔴 Biển cấm</button>
+    <button class="filter-btn" data-cat="nguy-hiem" onclick="filterCat(this)">⚠️ Biển nguy hiểm</button>
+    <button class="filter-btn" data-cat="hieu-lenh" onclick="filterCat(this)">🔵 Biển hiệu lệnh</button>
+    <button class="filter-btn" data-cat="chi-dan" onclick="filterCat(this)">🟢 Biển chỉ dẫn</button>
+    <button class="filter-btn" data-cat="phu" onclick="filterCat(this)">🟣 Biển phụ</button>
+    <button class="filter-btn" data-cat="vach-son" onclick="filterCat(this)">🟠 Vạch sơn</button>
+  </div>
+
+  <div class="result-info" id="result-info">Đang tải dữ liệu...</div>
+  <div class="signs-grid" id="signs-grid"></div>
+</div>
+
+<script>
+// ── FIREBASE ──
+const FB = {
+  apiKey:"AIzaSyDPyh1aJXNQUZ9ueyq3pR_jsnTw1C_t0Kc",
+  authDomain:"trishteam-e3ae4.firebaseapp.com",
+  databaseURL:"https://trishteam-e3ae4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"trishteam-e3ae4",
+  storageBucket:"trishteam-e3ae4.firebasestorage.app",
+  messagingSenderId:"930627527626",
+  appId:"1:930627527626:web:9018c3afbcb6ee819ae533"
+};
+if (!firebase.apps.length) firebase.initializeApp(FB);
+const db_ts = firebase.database();
+
+// Load từ Firebase, fallback về data local
+db_ts.ref('traffic_signs').once('value').then(snap => {
+  if (snap.exists()) {
+    const fbData = [];
+    snap.forEach(c => fbData.push(c.val()));
+    if (fbData.length > 0) {
+      window.SIGNS_DATA = fbData;
+      render();
+      return;
+    }
+  }
+  // Fallback: dùng data local
+  window.SIGNS_DATA = SIGNS;
+  render();
+}).catch(() => {
+  window.SIGNS_DATA = SIGNS;
+  render();
+});
+
+// ── DỮ LIỆU BIỂN BÁO QC 41:2024 (Bản mẫu — fallback) ──
+const SIGNS = [{"id":"P.101","name":"Đường cấm","cat":"cam","desc":"Đường cấm.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.102","name":"Cấm đi ngược chiều","cat":"cam","desc":"Cấm đi ngược chiều.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.103a","name":"Cấm xe ô tô","cat":"cam","desc":"Cấm xe ô tô.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.104","name":"Cấm xe máy","cat":"cam","desc":"Cấm xe máy.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.105","name":"Cấm xe ô tô và xe máy","cat":"cam","desc":"Cấm xe ô tô và xe máy.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.106c","name":"Cấm các xe chở hàng nguy hiểm","cat":"cam","desc":"Cấm các xe chở hàng nguy hiểm.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.107","name":"Cấm xe ô tô khách và xe ô tô tải","cat":"cam","desc":"Cấm xe ô tô khách và xe ô tô tải.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.107a","name":"Cấm xe ô tô khác h","cat":"cam","desc":"Cấm xe ô tô khác h.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.107b","name":"Cấm xe ô tô taxi","cat":"cam","desc":"Cấm xe ô tô taxi.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.108","name":"Cấm xe kéo rơ-moóc","cat":"cam","desc":"Cấm xe kéo rơ-moóc.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"Để báo đường cấm các lo ại xe cơ gi ới kéo theo rơ-moóc kể cả xe máy, máy kéo, ô tô khách kéo theo rơ-moóc đi lại, trừ loại ô tô sơ-mi rơ-moóc và các xe được ưu tiên (có kéo theo rơ-moóc) the o quy định, đặ t biển số P.108 \"Cấm xe ô tô, máy kéo kéo rơ-moóc\".","usecase":"","icon":"🚫"},{"id":"P.108a","name":"Cấm xe sơ-mi rơ-moóc","cat":"cam","desc":"Cấm xe sơ-mi rơ-moóc.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.109","name":"Cấm máy kéo","cat":"cam","desc":"Cấm máy kéo.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.110a","name":"Cấm xeđ ạp","cat":"cam","desc":"Cấm xeđ ạp.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.110b","name":"Cấm xeđ ạp thồ","cat":"cam","desc":"Cấm xeđ ạp thồ.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.111a","name":"Cấm xe gắn máy","cat":"cam","desc":"Cấm xe gắn máy.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.111d","name":"Cấm xeb a bánh loại không có động cơ (xích lô)","cat":"cam","desc":"Cấm xeb a bánh loại không có động cơ (xích lô).","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.112","name":"Cấm người đi bộ","cat":"cam","desc":"Cấm người đi bộ.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.113","name":"Cấm xe người kéo, đẩy","cat":"cam","desc":"Cấm xe người kéo, đẩy.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.114","name":"Cấm xe vật nuôi kéo","cat":"cam","desc":"Cấm xe vật nuôi kéo.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.115","name":"Hạn chế trọng tải toàn bộ xe","cat":"cam","desc":"Hạn chế trọng tải toàn bộ xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.116","name":"Hạn chế tải trọng trên trục xe","cat":"cam","desc":"Hạn chế tải trọng trên trục xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.117","name":"Hạn chế chiều cao","cat":"cam","desc":"Hạn chế chiều cao.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.118","name":"Hạn chế chiều ngang xe","cat":"cam","desc":"Hạn chế chiều ngang xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.119","name":"Hạn chế chiều dài xe","cat":"cam","desc":"Hạn chế chiều dài xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.120","name":"Hạnc hế chiều dài xe cơ giới kéo theo rơ-moóc hoặc sơ-mi rơ","cat":"cam","desc":"Hạnc hế chiều dài xe cơ giới kéo theo rơ-moóc hoặc sơ-mi rơ.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.121","name":"Cự ly tối thiểu giữa hai xe","cat":"cam","desc":"Cự ly tối thiểu giữa hai xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.125","name":"Cấm vượt","cat":"cam","desc":"Cấm vượt.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.126","name":"Cấm xe ô tô tải vượt","cat":"cam","desc":"Cấm xe ô tô tải vượt.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.127","name":"Tốc độ tối đa cho phép","cat":"cam","desc":"Tốc độ tối đa cho phép.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.127a","name":"Tốc độ tối đa cho phép về ban đêm","cat":"cam","desc":"Tốc độ tối đa cho phép về ban đêm.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.127b","name":"Biển ghép tốc độ tối đa cho phép trên từng làn đường","cat":"cam","desc":"Biển ghép tốc độ tối đa cho phép trên từng làn đường.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.127c","name":"Biển ghép tốc độ tối đa cho phép theo phương tiện, trên từng làn","cat":"cam","desc":"Biển ghép tốc độ tối đa cho phép theo phương tiện, trên từng làn.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.128","name":"Cấm sử dụng còi","cat":"cam","desc":"Cấm sử dụng còi.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.129","name":"Ki ểm tra","cat":"cam","desc":"Ki ểm tra.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.130","name":"Cấm dừng xe và đỗ xe","cat":"cam","desc":"Cấm dừng xe và đỗ xe.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.132","name":"Nhườngđ ường cho xe cơ giới đi ngược chiều qua đường hẹp","cat":"cam","desc":"Nhườngđ ường cho xe cơ giới đi ngược chiều qua đường hẹp.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.136","name":"Cấm đi thẳng","cat":"cam","desc":"Cấm đi thẳng.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.137","name":"Cấm rẽ trái, rẽ phải","cat":"cam","desc":"Cấm rẽ trái, rẽ phải.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.138","name":"Cấm đi thẳng, rẽ trá i","cat":"cam","desc":"Cấm đi thẳng, rẽ trá i.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.139","name":"Cấm đi thẳng, rẽ phải","cat":"cam","desc":"Cấm đi thẳng, rẽ phải.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"P.140","name":"Cấm xe công nông và các lo ại xe tương tự","cat":"cam","desc":"Cấm xe công nông và các lo ại xe tương tự.","shape":"Hình tròn, nền trắng, viền đỏ","usage":"","usecase":"","icon":"🚫"},{"id":"W.212","name":"C ầu hẹp","cat":"nguy-hiem","desc":"C ầu hẹp.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"Để báo trước sắp đến cầu hẹp l à l oại cầu có chiều rộ ng phần xe chạy nhỏ hơn hoặc bằ ng 4,50 m, đặt biể n số W.212 \"C ầu hẹp\". Khi qua các cầu này lái xe phải đi chậm, quan sát, nhường nhau và dừng l ại chờ ở ha i đầu cầu.","usecase":"","icon":"⚠️"},{"id":"W.213","name":"C ầu tạm","cat":"nguy-hiem","desc":"C ầu tạm.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"a) Để báo trước sắp đến cầu tạm là loại cầu được làm để sử dụn g tạm thời cho xe cộ qua lại, đặt biển số W.213 \"Cầu tạm\". b) Nếu trọng tải của cầu thấp và khổ cầu hẹp thì đặt th êm các bi ển số P.115 \"H ạn ch ế trọng tải toàn bộ xe\" và biển số P.118 \"Hạn chế chiều ngang xe\" hoặc các biển báo cần thiết khác. Khi gặp báo hiệu cầu tạm, người sử dụng phương tiện th am gia gia o thông cần thận trọng, khi nước ngập nhất thiết không được qu a cầu.","usecase":"","icon":"⚠️"},{"id":"W.214","name":"C ầu quay - cầu cấ t","cat":"nguy-hiem","desc":"C ầu quay - cầu cấ t.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"Để báo phía trước gặp cầu quay, cầu cất là l oại c ầu trong từng thời gian có cắ t giao thông đường bộ bằng cách quay hoặc nâng nhịp thông thuyền để cho t àu thuyền qua","usecase":"","icon":"⚠️"},{"id":"W.215a","name":"Kè, vực sâu phía trước","cat":"nguy-hiem","desc":"Kè, vực sâu phía trước.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.216a","name":"Đường ngầm","cat":"nguy-hiem","desc":"Đường ngầm.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.216b","name":"Đường ngầm có nguy cơ lũ quét","cat":"nguy-hiem","desc":"Đường ngầm có nguy cơ lũ quét.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.217","name":"Bến phà","cat":"nguy-hiem","desc":"Bến phà.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.218","name":"C ửa chui","cat":"nguy-hiem","desc":"C ửa chui.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"Để báo trước sắp đến đường có cổng chắ n ngang, kiểu cổn g nh ư cổng thành, cầu vượt đ ường bộ dạng cầu vòm, v.v... mà có ảnh hưởng đến giao thôn g, đặt biển số W.218 \"C ửa chui\".","usecase":"","icon":"⚠️"},{"id":"W.219","name":"D ốc xuống nguy hiểm","cat":"nguy-hiem","desc":"D ốc xuống nguy hiểm.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"a) Để báo trước sắp tới đoạn đường xuống dốc ngu y hiểm, đặt biển số W.219 \"Dốc xu ống nguy hiểm\". phân.","usecase":"","icon":"⚠️"},{"id":"W.220","name":"D ốc lên nguy hi ểm","cat":"nguy-hiem","desc":"D ốc lên nguy hi ểm.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.221a","name":"Đường lồil õm","cat":"nguy-hiem","desc":"Đường lồil õm.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.221b","name":"Đường có gồ giảm tốc","cat":"nguy-hiem","desc":"Đường có gồ giảm tốc.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.222a","name":"Đường trơn","cat":"nguy-hiem","desc":"Đường trơn.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.222b","name":"Lề đường nguy hiể m","cat":"nguy-hiem","desc":"Lề đường nguy hiể m.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.224","name":"Đư ờng người đi bộ cắt ngang","cat":"nguy-hiem","desc":"Đư ờng người đi bộ cắt ngang.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.225","name":"Trẻ em","cat":"nguy-hiem","desc":"Trẻ em.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.226","name":"Đư ờng người đi xeđ ạp cắt ngang","cat":"nguy-hiem","desc":"Đư ờng người đi xeđ ạp cắt ngang.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.227","name":"Công trường","cat":"nguy-hiem","desc":"Công trường.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.228c","name":"Sỏi đáb ắn lên","cat":"nguy-hiem","desc":"Sỏi đáb ắn lên.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.228d","name":"Nền đường yế u","cat":"nguy-hiem","desc":"Nền đường yế u.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.229","name":"D ải máy bay lên xu ống","cat":"nguy-hiem","desc":"D ải máy bay lên xu ống.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.230","name":"Gia súc","cat":"nguy-hiem","desc":"Gia súc.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.231","name":"Thú rừng vượt qua đường","cat":"nguy-hiem","desc":"Thú rừng vượt qua đường.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.232","name":"Gió ngang","cat":"nguy-hiem","desc":"Gió ngang.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.233","name":"Nguy hiểm khác","cat":"nguy-hiem","desc":"Nguy hiểm khác.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.234","name":"Giao nhau với đường hai chiều","cat":"nguy-hiem","desc":"Giao nhau với đường hai chiều.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.235","name":"Đư ờng đôi","cat":"nguy-hiem","desc":"Đư ờng đôi.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.236","name":"Kết thúc đường đôi","cat":"nguy-hiem","desc":"Kết thúc đường đôi.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.239b","name":"Chiều cao tĩnh không thực tế","cat":"nguy-hiem","desc":"Chiều cao tĩnh không thực tế.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"R.403k","name":"Đườngd ành cho xe chở hàng, xe chở ng ười bốn bánh gắn động","cat":"hieu-lenh","desc":"Đườngd ành cho xe chở hàng, xe chở ng ười bốn bánh gắn động.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"I.401","name":"Bắt đầu đường ưu tiên","cat":"chi-dan","desc":"Bắt đầu đường ưu tiên.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.402","name":"Hết đoạnđ ường ưu tiên","cat":"chi-dan","desc":"Hết đoạnđ ường ưu tiên.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.406","name":"Được ưu tiên qua đường hẹp","cat":"chi-dan","desc":"Được ưu tiên qua đường hẹp.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.408","name":"Nơi đỗ xe","cat":"chi-dan","desc":"Nơi đỗ xe.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.408a","name":"Nơi đỗ xe một phần trên hè phố","cat":"chi-dan","desc":"Nơi đỗ xe một phần trên hè phố.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.409","name":"Chỗ quay xe","cat":"chi-dan","desc":"Chỗ quay xe.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.410","name":"Khu vực quay xe","cat":"chi-dan","desc":"Khu vực quay xe.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.413a","name":"Đường phía trước có làn đường dành choô tô khách","cat":"chi-dan","desc":"Đường phía trước có làn đường dành choô tô khách.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"và biển số I.413 (b,c) \"Rẽ ra đường có làn đường dành cho ô tô khách \" a) Đ ể chỉ dẫn cho người tham gia giao thông biết đường phía trước có làn đường dành riêng cho ô tô khách theo chiều ngược lại, đặ t biển số I.413a \"Đường phía t rước có làn đường dành cho ô tô khách\". Biển được đặt ở nơi đường giao nh au đầu đường mộ t chiều mà hướng ng ược chiề u có ô tô khá ch được ph ép chạ y. b) Để chỉ dẫn cho người tham gia giao thông biết ở nơi đường giao n hau rẽ phải hoặc rẽ trái là rẽ ra đường c ó l","usecase":"","icon":"🟢"},{"id":"I.415","name":"Mũi tên chỉ hướng đi","cat":"chi-dan","desc":"Mũi tên chỉ hướng đi.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.416","name":"Đường tránh","cat":"chi-dan","desc":"Đường tránh.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.418","name":"Lối điở nhữ ng vị trí cấm rẽ","cat":"chi-dan","desc":"Lối điở nhữ ng vị trí cấm rẽ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.419a","name":"Chỉ dẫnđ ịa giới","cat":"chi-dan","desc":"Chỉ dẫnđ ịa giới.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.419b","name":"Chỉ dẫnđ ịa giới trên tuyến đường đối ngoại","cat":"chi-dan","desc":"Chỉ dẫnđ ịa giới trên tuyến đường đối ngoại.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.422a","name":"Di tíchl ịch sử","cat":"chi-dan","desc":"Di tíchl ịch sử.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.422b","name":"Di tích lịch sử trên tuyến đường đối ngoại","cat":"chi-dan","desc":"Di tích lịch sử trên tuyến đường đối ngoại.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.423c","name":"Điểm bắt đầu đường đi bộ","cat":"chi-dan","desc":"Điểm bắt đầu đường đi bộ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.425","name":"Bệnh viện","cat":"chi-dan","desc":"Bệnh viện.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.426","name":"Trạm cấp cứu","cat":"chi-dan","desc":"Trạm cấp cứu.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.427a","name":"Trạm sửa chữa","cat":"chi-dan","desc":"Trạm sửa chữa.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.427b","name":"Cô ng trình kiểm soátt ải trọng xe","cat":"chi-dan","desc":"Cô ng trình kiểm soátt ải trọng xe.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.428","name":"Cửa hàng xăng dầu","cat":"chi-dan","desc":"Cửa hàng xăng dầu.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.429","name":"Nơi rửa xe","cat":"chi-dan","desc":"Nơi rửa xe.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.430","name":"Điện thoại","cat":"chi-dan","desc":"Điện thoại.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.431","name":"Trạm dừng nghỉ","cat":"chi-dan","desc":"Trạm dừng nghỉ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.432","name":"Khách sạn","cat":"chi-dan","desc":"Khách sạn.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.433a","name":"Nơi nghỉ mát","cat":"chi-dan","desc":"Nơi nghỉ mát.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"Để chỉ dẫn n ơi ngh ỉ mát, đ ặt biển số I.433a \"Nơi ngh ỉ mát\".","usecase":"","icon":"🟢"},{"id":"I.433e","name":"Báo hiệu nhà trọ","cat":"chi-dan","desc":"Báo hiệu nhà trọ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.434a","name":"Bến xe buýt","cat":"chi-dan","desc":"Bến xe buýt.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.434b","name":"Bến xe tải","cat":"chi-dan","desc":"Bến xe tải.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.435","name":"Bến xeđ iện","cat":"chi-dan","desc":"Bến xeđ iện.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.436","name":"Trạm cảnh sát giao th ông","cat":"chi-dan","desc":"Trạm cảnh sát giao th ông.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.439","name":"Tên cầu","cat":"chi-dan","desc":"Tên cầu.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.440","name":"Đoạn đường thi công","cat":"chi-dan","desc":"Đoạn đường thi công.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.442","name":"Chợ","cat":"chi-dan","desc":"Chợ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.443","name":"Xe kéo rơ-moóc","cat":"chi-dan","desc":"Xe kéo rơ-moóc.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.446","name":"Nơi đỗ xe dành cho người khuyết tật","cat":"chi-dan","desc":"Nơi đỗ xe dành cho người khuyết tật.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.448","name":"Làn đường cứu nạn hay làn dừng xe khẩn cấp","cat":"chi-dan","desc":"Làn đường cứu nạn hay làn dừng xe khẩn cấp.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.449","name":"Biển tên đường","cat":"chi-dan","desc":"Biển tên đường.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.407a và I.413a","name":"đặt sau nơi đường bộ giao nhau","cat":"chi-dan","desc":"đặt sau nơi đường bộ giao nhau.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.418","name":"Lối điở nhữ ng vị trí cấm rẽ","cat":"chi-dan","desc":"Lối điở nhữ ng vị trí cấm rẽ.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"S.501","name":"Phạm vi tác dụng của biển","cat":"phu","desc":"Phạm vi tác dụng của biển.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"nguy hiểm hoặc cấm hoặc hiệu lệnh hoặc hạn chế bên dưới một số biển báo chính ) Chiều dài đo ạn nguy hiể m hoặc cấm hoặc hạn chế ghi theo đơn vị mét (m) và lấy chẵn đến hàng ch ục mét.","usecase":"","icon":"🟣"},{"id":"S.502","name":"Khoảng cách đến đốit ượng báo hiệu","cat":"phu","desc":"Khoảng cách đến đốit ượng báo hiệu.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.503","name":"(a,b,c,d,e,f): Hướng tác dụng của bi ển","cat":"phu","desc":"(a,b,c,d,e,f): Hướng tác dụng của bi ển.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.504","name":"Làn đường","cat":"phu","desc":"Làn đường.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.505a","name":"Loại xe","cat":"phu","desc":"Loại xe.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.505b","name":"Loại xe hạn chế qua cầu","cat":"phu","desc":"Loại xe hạn chế qua cầu.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.505c","name":"Tải trọng trục hạn chế qua cầu","cat":"phu","desc":"Tải trọng trục hạn chế qua cầu.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.507","name":"Hướng rẽ","cat":"phu","desc":"Hướng rẽ.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.510a","name":"Chúý đường trơn có băng tuyết","cat":"phu","desc":"Chúý đường trơn có băng tuyết.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.510b","name":"Chúý đ ường sắt","cat":"phu","desc":"Chúý đ ường sắt.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.G,7","name":"Địa đi ểm cắm trại","cat":"phu","desc":"Địa đi ểm cắm trại.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.G,8","name":"Địa đi ểm nhà trọ","cat":"phu","desc":"Địa đi ểm nhà trọ.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.G,9b","name":"Chỉ dẫn tới điểm đỗ xed ành cho lái xe muốn sử dụng phương","cat":"phu","desc":"Chỉ dẫn tới điểm đỗ xed ành cho lái xe muốn sử dụng phương.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"S.H,6","name":"Ngoại lệ","cat":"phu","desc":"Ngoại lệ.","shape":"Hình chữ nhật/vuông, nền trắng","usage":"","usecase":"","icon":"🟣"},{"id":"W.201a","name":"ch ỗ ngoặt nguy hi ểm vòng bên trái","cat":"nguy-hiem","desc":"ch ỗ ngoặt nguy hi ểm vòng bên trái.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.201b","name":"ch ỗ ngoặt nguy hi ểm vòng bên phải","cat":"nguy-hiem","desc":"ch ỗ ngoặt nguy hi ểm vòng bên phải.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.201c","name":"chỗ ngoặt nguy hiểm có nguy cơ lật xe bên phải khi đường cong","cat":"nguy-hiem","desc":"chỗ ngoặt nguy hiểm có nguy cơ lật xe bên phải khi đường cong.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.202a","name":"đặt trong trường hợp có từ 2 chỗ ngoặt, ở gần nhau trong đó có ít","cat":"nguy-hiem","desc":"đặt trong trường hợp có từ 2 chỗ ngoặt, ở gần nhau trong đó có ít.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.202b","name":"đặt trong trường hợ p nh ư bi ển số W.202a nh ưng hướng vòng","cat":"nguy-hiem","desc":"đặt trong trường hợ p nh ư bi ển số W.202a nh ưng hướng vòng.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.203b","name":"hoặc biển số W.203c đặt trong trường hợp đ ường bị thu hẹp về","cat":"nguy-hiem","desc":"hoặc biển số W.203c đặt trong trường hợp đ ường bị thu hẹp về.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"W.221b","name":"Đường có gồ giảm tốc","cat":"nguy-hiem","desc":"Đường có gồ giảm tốc.","shape":"Hình tam giác đều, nền vàng, viền đỏ","usage":"","usecase":"","icon":"⚠️"},{"id":"R.301a","name":"các xe chỉ được đi thẳng","cat":"hieu-lenh","desc":"các xe chỉ được đi thẳng.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301b","name":"các xe chỉ được rẽ phải","cat":"hieu-lenh","desc":"các xe chỉ được rẽ phải.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301c","name":"các xe chỉ được rẽ trái","cat":"hieu-lenh","desc":"các xe chỉ được rẽ trái.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301d","name":"các xe chỉ được rẽ phải","cat":"hieu-lenh","desc":"các xe chỉ được rẽ phải.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301e","name":"các xe chỉ được rẽ trái","cat":"hieu-lenh","desc":"các xe chỉ được rẽ trái.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301f","name":"các xe chỉ được đi thẳng và rẽ phải","cat":"hieu-lenh","desc":"các xe chỉ được đi thẳng và rẽ phải.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301g","name":"các xe chỉ được đi thẳng và rẽ trá i","cat":"hieu-lenh","desc":"các xe chỉ được đi thẳng và rẽ trá i.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.301h","name":"các xe chỉ được rẽ trái và rẽ phải","cat":"hieu-lenh","desc":"các xe chỉ được rẽ trái và rẽ phải.","shape":"Hình tròn, nền xanh lam","usage":"","usecase":"","icon":"🔵"},{"id":"R.412a","name":"\"L àn đư ờng dành cho xe ô tô khách\": làn đườn g dà nh riêng cho ô","cat":"hieu-lenh","desc":"\"L àn đư ờng dành cho xe ô tô khách\": làn đườn g dà nh riêng cho ô.","shape":"Hình tròn, nền xanh lam","usage":"tô khách (kể cả ô tô buýt). Trong trường hợp cần phân làn các loại xe kh ách theo số chỗ ngồi thì ghi số chỗ ng ồi cho phép của xe khách lên thân xe trong hình vẽ của biển (Ví dụ: “< 16c”. Khi báo hiệu làn đường dành riêng cho xe buý t n hanh, bổ sung thêm cụm từ “BRT” trên biển số R.412a. - Biển số R. 412b \"L àn đường dành cho xe ô tô con\". - Biển số R. 412c \"Làn đường dành cho xe ô tô tải\". Trong trường h ợp cần phân làn các loại xe tải the o khối lượng chuy ên chở cho phép thì gh i trị số kh ","usecase":"","icon":"🔵"},{"id":"I.405","name":"(a,b) để chỉ lối rẽ vào đường cụt. Tùy theo l ối rẽ vào đường cụt mà","cat":"chi-dan","desc":"(a,b) để chỉ lối rẽ vào đường cụt. Tùy theo l ối rẽ vào đường cụt mà.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"},{"id":"I.405c","name":"để chỉ dẫn phía trước là đường cụt. Biển này đặt trước đ ường cụt","cat":"chi-dan","desc":"để chỉ dẫn phía trước là đường cụt. Biển này đặt trước đ ường cụt.","shape":"Hình chữ nhật/vuông, nền xanh lá","usage":"","usecase":"","icon":"🟢"}];
+
+let currentCat = 'all';
+let searchVal  = '';
+
+function render() {
+  let filtered = (window.SIGNS_DATA||SIGNS).filter(s => {
+    if (currentCat !== 'all' && s.cat !== currentCat) return false;
+    const q = searchVal.toLowerCase();
+    if (q && !s.name.toLowerCase().includes(q) && !s.id.toLowerCase().includes(q) && !s.desc.toLowerCase().includes(q) && !(s.usecase||'').toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('result-info').textContent = `Hiển thị ${filtered.length} / ${(window.SIGNS_DATA||SIGNS).length} mục`;
+  const grid = document.getElementById('signs-grid');
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><i class="fas fa-search"></i><br><br>Không tìm thấy kết quả cho "<strong>${searchVal}</strong>"</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(s => {
+    const visual = s.imgUrl
+      ? `<img src="${s.imgUrl}" alt="${s.name}" loading="lazy" onerror="this.parentNode.innerHTML='${s.icon}'">`
+      : s.icon;
+    return `<div class="sign-card" onclick="showModal('${s.id}')">
+      <div class="sign-visual ${s.cat}">${visual}</div>
+      <div class="sign-code">${s.id}</div>
+      <div class="sign-name">${s.name}</div>
+      <span class="sign-cat-tag tag-${s.cat}">${catLabel(s.cat)}</span>
+    </div>`;
+  }).join('');
+}
+
+function catLabel(c) {
+  return {cam:'Biển cấm','nguy-hiem':'Nguy hiểm','hieu-lenh':'Hiệu lệnh','chi-dan':'Chỉ dẫn',phu:'Biển phụ','vach-son':'Vạch sơn'}[c]||c;
+}
+function catColor(c) {
+  return {cam:'var(--red)','nguy-hiem':'var(--yellow)','hieu-lenh':'var(--blue)','chi-dan':'var(--green)',phu:'#8b5cf6','vach-son':'#f97316'}[c]||'var(--accent)';
+}
+
+function filterCat(el) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentCat = el.dataset.cat;
+  render();
+}
+function filterSigns() {
+  searchVal = document.getElementById('search-inp').value;
+  render();
+}
+
+function showModal(id) {
+  const s = SIGNS.find(x=>x.id===id);
+  if (!s) return;
+  document.getElementById('m-visual').innerHTML = `<div class="modal-visual ${s.cat}" style="font-size:3.5rem">${s.icon}</div>`;
+  document.getElementById('m-visual').className = '';
+  document.getElementById('m-code').textContent = s.id;
+  document.getElementById('m-name').textContent = s.name;
+  document.getElementById('m-name2').textContent = s.name;
+  const badge = document.getElementById('m-catbadge');
+  badge.textContent = catLabel(s.cat);
+  badge.className = 'modal-cat-badge tag-'+s.cat;
+  document.getElementById('m-details').innerHTML = `
+    <div class="detail-row"><div class="detail-label">Công dụng</div><div class="detail-val">${s.desc}</div></div>
+    <div class="detail-row"><div class="detail-label">Hình dạng</div><div class="detail-val">${s.shape||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Đặt ở đâu</div><div class="detail-val">${s.usage||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Trường hợp</div><div class="detail-val use-case">${s.usecase||'—'}</div></div>
+  `;
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(e) {
+  if (!e || e.target===document.getElementById('modal-bg')) {
+    document.getElementById('modal-bg').classList.remove('open');
+  }
+}
+
+render();
+</script>
+</body>
+</html>
