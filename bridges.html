@@ -301,10 +301,15 @@ async function loadBridgesData() {
     for (const baseFn of [BD_BASE_VERCEL, BD_BASE_CDN]) {
         try {
             const urls = Array.from({length: BD_FILES}, (_,i) => baseFn(i+1));
-            const parts = await Promise.all(urls.map(u => fetchJSON(u)));
+            // allSettled: không fail khi 1 file lỗi
+            const results = await Promise.allSettled(urls.map(u => fetchJSON(u)));
             let allData = [];
-            for (const p of parts) allData = allData.concat(p.d || p.data || []);
-            if (allData.length === 0) continue;
+            for (const r of results) {
+                if (r.status === 'fulfilled') {
+                    allData = allData.concat(r.value.d || r.value.data || []);
+                }
+            }
+            if (allData.length < 100) continue; // Không đủ data
 
             BRIDGES = allData.map((b, i) => ({
                 id: i + 1,
@@ -327,12 +332,13 @@ async function loadBridgesData() {
             doSearch();
             return; // thành công
         } catch(e) {
-            console.warn('Bridge load failed:', e.message);
+            console.warn('Bridge load failed for base', baseFn(1), ':', e.message);
             continue;
         }
     }
-    // Tất cả thất bại
+    // Tất cả thất bại - hiện lỗi chi tiết
+    console.error('All bridge sources failed');
     if (loadEl) loadEl.innerHTML =
-        '<span style="color:#ef4444">⚠️ Không tải được dữ liệu. Vui lòng tải lại trang.</span>';
+        '<span style="color:#ef4444">⚠️ Không tải được dữ liệu. Kiểm tra Console (F12) để biết chi tiết.</span>';
 }
 >
