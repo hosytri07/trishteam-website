@@ -362,18 +362,31 @@ body::after {
       </div>
       <!-- Bulk import -->
       <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem;margin-bottom:1rem">
-        <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.6rem;color:var(--muted)">NHẬP HÀNG LOẠT (JSON)</h4>
+        <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.6rem;color:var(--muted)">NHẬP HÀNG LOẠT (JSON / FILE)</h4>
         <div style="font-size:.78rem;color:var(--hint);margin-bottom:.55rem">
-          Dán mảng JSON: <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">[{"id":"P.101","cat":"cam","name":"Đường cấm",...}]</code>
+          Dán mảng JSON hoặc upload file .json / .txt:
+          <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">[{"id":"P.101","cat":"cam","name":"Đường cấm",...}]</code>
+        </div>
+        <!-- File upload row -->
+        <div style="display:flex;gap:.5rem;margin-bottom:.55rem;align-items:center">
+          <label style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;background:var(--bg3);border:1.5px dashed var(--border2);border-radius:30px;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);transition:all .15s" id="sign-file-label">
+            <i class="fas fa-file-upload"></i>
+            <span id="sign-file-name">Chọn file JSON...</span>
+            <input type="file" id="sign-json-file" accept=".json,.txt" style="display:none" onchange="loadSignFile(this)">
+          </label>
+          <span style="font-size:.72rem;color:var(--hint)">hoặc dán trực tiếp bên dưới</span>
         </div>
         <textarea id="signs-bulk-json" rows="4" placeholder='[{"id":"P.101","cat":"cam","name":"Đường cấm","desc":"...","shape":"...","usage":"..."}]'
           style="width:100%;padding:.6rem .8rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:monospace;font-size:.78rem;resize:vertical"></textarea>
-        <div style="display:flex;gap:.5rem;margin-top:.55rem;align-items:center">
+        <div style="display:flex;gap:.5rem;margin-top:.55rem;align-items:center;flex-wrap:wrap">
           <button class="btn-action" style="font-size:.82rem;padding:.55rem 1rem" onclick="bulkImportSigns()">
-            <i class="fas fa-file-import"></i> Import
+            <i class="fas fa-file-import"></i> Import vào Firebase
           </button>
           <button class="btn-sm" onclick="loadQC41Sample()" style="font-size:.78rem">
-            <i class="fas fa-download"></i> Load 143 biển QC41
+            <i class="fas fa-list"></i> Load mẫu 6 biển QC41
+          </button>
+          <button class="btn-sm" onclick="clearSignsBulk()" style="font-size:.78rem">
+            <i class="fas fa-trash"></i> Xóa
           </button>
           <span style="font-size:.72rem;color:var(--hint)" id="bulk-sign-status"></span>
         </div>
@@ -927,8 +940,28 @@ async function deleteSign(key, id) {
 
 
 // ── BULK IMPORT SIGNS ──
-async function bulkImportSigns() {
-  const raw = document.getElementById('signs-bulk-json').value.trim();
+function loadSignFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('sign-file-name').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('signs-bulk-json').value = e.target.result;
+    document.getElementById('bulk-sign-status').textContent = '📂 Đã tải ' + file.name;
+    document.getElementById('bulk-sign-status').style.color = 'var(--accent)';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function clearSignsBulk() {
+  document.getElementById('signs-bulk-json').value = '';
+  document.getElementById('sign-file-name').textContent = 'Chọn file JSON...';
+  document.getElementById('bulk-sign-status').textContent = '';
+  const fi = document.getElementById('sign-json-file');
+  if (fi) fi.value = '';
+}
+
+async function bulkImportSigns() {  const raw = document.getElementById('signs-bulk-json').value.trim();
   if (!raw) { toast('Dán JSON vào trước!','err'); return; }
   let signs;
   try { signs = JSON.parse(raw); } catch(e) { toast('JSON không hợp lệ!','err'); return; }

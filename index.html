@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trish TEAM | Đa năng Workspace</title>
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TrishTeam">
+    <!-- SEO -->
+    <meta name="description" content="Hệ sinh thái công cụ: ôn thi lái xe, chứng chỉ XD, tra cầu VN, ghi chú cá nhân.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&subset=vietnamese&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -11,6 +19,17 @@
     <link rel="stylesheet" href="features-addon.css">
 </head>
 <body data-theme="dark">
+    <!-- PWA Install Banner -->
+    <div id="pwa-banner" style="display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:9999;background:var(--bg-card);border:1.5px solid var(--accent-1);border-radius:var(--radius-lg);padding:.75rem 1.1rem;display:none;align-items:center;gap:.75rem;box-shadow:0 8px 32px rgba(0,0,0,.3);max-width:380px;width:calc(100% - 2rem)">
+        <span style="font-size:1.3rem">📱</span>
+        <div style="flex:1">
+            <div style="font-size:.82rem;font-weight:700;color:var(--text-primary)">Thêm TrishTeam vào màn hình</div>
+            <div style="font-size:.72rem;color:var(--text-tertiary)">Dùng offline, không cần mạng</div>
+        </div>
+        <button id="pwa-install-btn" style="padding:.45rem .9rem;background:var(--accent-gradient);border:none;border-radius:30px;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">Cài đặt</button>
+        <button onclick="document.getElementById('pwa-banner').style.display='none'" style="background:none;border:none;color:var(--text-tertiary);cursor:pointer;font-size:1rem;padding:2px">✕</button>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <i class="fas fa-check-circle"></i>
@@ -33,6 +52,22 @@
                 <a href="bridges.html" class="nav-link">Cầu VN</a>
                 <a href="posts.html" class="nav-link">Bảng tin</a>
                 <a href="#contact" class="nav-link">Liên hệ</a>
+            </div>
+
+            <!-- Global Search -->
+            <div class="nav-search-wrap" id="nav-search-wrap">
+                <div class="nav-search-box">
+                    <i class="fas fa-search nav-search-icon"></i>
+                    <input type="text" id="global-search-input" class="nav-search-input"
+                        placeholder="Tìm kiếm..." autocomplete="off"
+                        oninput="globalSearchDebounce()" onfocus="openSearch()" />
+                    <button class="nav-search-clear" id="search-clear" onclick="clearSearch()" style="display:none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="search-dropdown" id="search-dropdown" style="display:none">
+                    <div class="search-results" id="search-results"></div>
+                </div>
             </div>
 
             <div class="nav-actions">
@@ -72,9 +107,22 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" title="Đổi theme">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <!-- FEZ Theme Toggle -->
+                <label class="fez-theme-switch" id="fez-theme-label" title="Đổi theme sáng/tối">
+                    <input type="checkbox" id="theme-toggle" class="fez-theme-input">
+                    <div class="fez-theme-track">
+                        <div class="fez-stars"></div>
+                        <div class="fez-shooting-star"></div>
+                        <div class="fez-clouds">
+                            <div class="fez-cloud fez-cloud--1"></div>
+                            <div class="fez-cloud fez-cloud--2"></div>
+                        </div>
+                        <div class="fez-orb">
+                            <div class="fez-crater fez-crater--1"></div>
+                            <div class="fez-crater fez-crater--2"></div>
+                        </div>
+                    </div>
+                </label>
                 <button class="menu-toggle" id="menu-toggle">
                     <span></span>
                     <span></span>
@@ -455,8 +503,8 @@
                   <span id="attach-name">Đính kèm file</span>
                   <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
                 </label>
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-paper-plane"></i> Gửi tin nhắn
+                <button type="submit" class="fez-submit-btn" id="contact-submit-btn">
+                  <span class="btn-inner"><i class="fas fa-paper-plane"></i> Gửi tin nhắn</span>
                 </button>
               </div>
             </form>

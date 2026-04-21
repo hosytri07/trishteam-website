@@ -3205,3 +3205,347 @@ body[data-theme="light"] { background: #faf9f7; }
 }
 .form-row-submit .attach-label { flex: 1; min-width: 120px; }
 .form-row-submit .btn { flex-shrink: 0; white-space: nowrap; }
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL SEARCH — Navbar dropdown
+   Phiên 28 — 20/04/2026
+═══════════════════════════════════════════════════════ */
+
+.nav-search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 340px;
+    min-width: 160px;
+    margin: 0 0.75rem;
+}
+.nav-search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid var(--border-color);
+    border-radius: 40px;
+    padding: 0 0.85rem;
+    transition: all var(--transition-fast);
+    height: 38px;
+}
+.nav-search-box:focus-within {
+    border-color: var(--accent-1);
+    background: rgba(102,126,234,0.07);
+}
+.nav-search-icon {
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+.nav-search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    min-width: 0;
+}
+.nav-search-input::placeholder { color: var(--text-tertiary); }
+.nav-search-clear {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 2px;
+    font-size: 0.75rem;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+}
+.nav-search-clear:hover { color: var(--text-primary); }
+
+/* Dropdown */
+.search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0; right: 0;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 2000;
+    overflow: hidden;
+    max-height: 420px;
+    overflow-y: auto;
+}
+.search-results { padding: 6px; }
+.search-section-label {
+    font-size: 0.67rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    padding: 6px 8px 3px;
+}
+.search-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background 0.12s;
+}
+.search-item:hover { background: rgba(102,126,234,0.1); }
+.search-item-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: rgba(102,126,234,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+.search-item-text { flex: 1; min-width: 0; }
+.search-item-title {
+    font-size: 0.83rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-primary);
+}
+.search-item-sub {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    margin-top: 1px;
+}
+.search-item-type {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(102,126,234,0.1);
+    color: var(--accent-1);
+    flex-shrink: 0;
+}
+.search-empty {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.83rem;
+    color: var(--text-tertiary);
+}
+.search-hint {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+mark.sh {
+    background: rgba(102,126,234,0.2);
+    color: var(--accent-1);
+    border-radius: 2px;
+    padding: 0 1px;
+    font-style: normal;
+}
+
+@media (max-width: 768px) {
+    .nav-search-wrap { max-width: 140px; min-width: 100px; margin: 0 0.4rem; }
+    .nav-menu { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEZ THEME TOGGLE — Sun/Moon orb animation
+   Phiên 29 — Đổi font/màu về TrishTeam design
+═══════════════════════════════════════════════════════ */
+.fez-theme-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 76px; height: 34px;
+    cursor: pointer;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+.fez-theme-input { position: absolute; opacity: 0; width: 0; height: 0; }
+.fez-theme-track {
+    position: relative;
+    width: 76px; height: 34px;
+    border-radius: 999px;
+    background: #4ba5f8;
+    transition: background 0.5s ease;
+    overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,0.15);
+}
+.fez-theme-input:checked ~ .fez-theme-track { background: #12121f; border-color: rgba(102,126,234,0.3); }
+
+/* Orb (sun/moon) */
+.fez-orb {
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 8px rgba(251,191,36,0.6);
+    transition: left 0.45s cubic-bezier(0.34,1.56,0.64,1), background 0.4s, box-shadow 0.4s;
+    z-index: 3;
+}
+.fez-theme-input:checked ~ .fez-theme-track .fez-orb {
+    left: calc(76px - 28px);
+    background: #e2e8f0;
+    box-shadow: 0 0 6px rgba(226,232,240,0.3);
+}
+.fez-crater {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.12);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.fez-crater--1 { width: 7px; height: 7px; top: 5px; left: 4px; }
+.fez-crater--2 { width: 5px; height: 5px; top: 13px; left: 14px; }
+.fez-theme-input:checked ~ .fez-theme-track .fez-crater { opacity: 1; }
+
+/* Stars */
+.fez-stars {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s 0.1s;
+}
+.fez-stars::before, .fez-stars::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+}
+.fez-stars::before { width: 3px; height: 3px; top: 6px; left: 12px; box-shadow: 16px 4px 0 1px white, 8px 14px 0 0.5px white; }
+.fez-stars::after  { width: 2px; height: 2px; top: 16px; left: 18px; box-shadow: 10px -8px 0 1px white; }
+.fez-theme-input:checked ~ .fez-theme-track .fez-stars { opacity: 1; }
+
+/* Shooting star */
+.fez-shooting-star {
+    position: absolute;
+    top: 8px; right: 28px;
+    width: 16px; height: 1.5px;
+    background: linear-gradient(90deg, transparent, white);
+    border-radius: 999px;
+    opacity: 0;
+    transform: rotate(-30deg);
+    transition: opacity 0.3s;
+}
+.fez-theme-input:checked ~ .fez-theme-track .fez-shooting-star { opacity: 0.6; }
+
+/* Clouds */
+.fez-clouds { position: absolute; inset: 0; transition: opacity 0.3s; z-index: 2; }
+.fez-cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.85);
+    border-radius: 999px;
+}
+.fez-cloud--1 { width: 22px; height: 9px; top: 8px; right: 6px; }
+.fez-cloud--2 { width: 14px; height: 6px; top: 18px; right: 14px; opacity: 0.7; }
+.fez-theme-input:checked ~ .fez-theme-track .fez-clouds { opacity: 0; }
+
+/* ═══════════════════════════════════════════════════════
+   FEZ SUBMIT BUTTON — Progress fill animation
+   Dùng cho nút Gửi tin nhắn contact form
+═══════════════════════════════════════════════════════ */
+.fez-submit-btn {
+    position: relative;
+    padding: 0.8rem 1.6rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 2px solid var(--accent-1);
+    border-radius: var(--radius-md);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    outline: none;
+    width: 100%;
+}
+.fez-submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 0%; height: 100%;
+    background: var(--accent-gradient);
+    transition: width 2.5s ease-in-out;
+    z-index: 1;
+}
+.fez-submit-btn .btn-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.fez-submit-btn.loading::before { width: 100%; }
+.fez-submit-btn.loading { border-color: var(--accent-2); transform: scale(0.99); }
+.fez-submit-btn.success { border-color: #10b981; box-shadow: 0 0 16px rgba(16,185,129,0.3); }
+.fez-submit-btn.success::before { width: 100%; background: linear-gradient(135deg, #10b981, #059669); }
+
+/* ═══════════════════════════════════════════════════════
+   FEZ LOADERS — Neon spinner thay thế spinner cũ
+   Dùng cho: bridges.html, feed loading, data fetch
+═══════════════════════════════════════════════════════ */
+@keyframes fez-spin { to { transform: rotate(360deg); } }
+@keyframes fez-pulse-dots {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+.fez-spinner {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--accent-1);
+    border-bottom-color: var(--accent-1);
+    animation: fez-spin 0.9s linear infinite;
+    flex-shrink: 0;
+}
+.fez-spinner-sm {
+    width: 18px; height: 18px;
+    border-width: 2px;
+}
+
+.fez-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.fez-dots span {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-1);
+    animation: fez-pulse-dots 1.4s infinite ease-in-out both;
+}
+.fez-dots span:nth-child(1) { animation-delay: 0s; }
+.fez-dots span:nth-child(2) { animation-delay: 0.2s; }
+.fez-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Loading overlay cho bridges/data fetch */
+.fez-load-bar {
+    height: 2px;
+    width: 100%;
+    background: rgba(102,126,234,0.15);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+.fez-load-bar::after {
+    content: '';
+    position: absolute;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 999px;
+    animation: fez-load-slide 1.2s ease-in-out infinite;
+}
+@keyframes fez-load-slide {
+    0% { left: -40%; }
+    100% { left: 100%; }
+}

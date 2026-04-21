@@ -76,6 +76,8 @@ function loadDashFeed() {
     const grid = document.getElementById('home-feed-grid');
     if (!grid) return;
     if (typeof firebase === 'undefined' || !firebase.apps.length) return;
+    // FEZ dots loading
+    grid.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:.5rem;color:var(--text-tertiary);font-size:.82rem"><div class="fez-dots"><span></span><span></span><span></span></div> Đang tải bài viết...</div>';
     const db = firebase.database();
     db.ref('posts').orderByChild('timestamp').limitToLast(4).once('value', snap => {
         const posts = [];
@@ -166,4 +168,241 @@ document.addEventListener('DOMContentLoaded', () => {
     initDashTools();
     // Delay feed một chút chờ Firebase init
     setTimeout(loadDashFeed, 1200);
+});
+
+// ═══════════════════════════════════════════════════════
+// GLOBAL SEARCH — Tìm trong: posts, biển báo, cầu VN, câu hỏi thi
+// ═══════════════════════════════════════════════════════
+
+let _searchTimer = null;
+let _searchOpen  = false;
+let _postsCache  = null;
+let _signsCache  = null;
+
+function globalSearchDebounce() {
+    clearTimeout(_searchTimer);
+    const q = document.getElementById('global-search-input')?.value?.trim();
+    const clearBtn = document.getElementById('search-clear');
+    if (clearBtn) clearBtn.style.display = q ? '' : 'none';
+    if (!q) { closeSearch(); return; }
+    _searchTimer = setTimeout(() => runGlobalSearch(q), 280);
+}
+
+function openSearch() {
+    const q = document.getElementById('global-search-input')?.value?.trim();
+    if (q) runGlobalSearch(q);
+    document.addEventListener('click', searchOutsideHandler, { once: false });
+    _searchOpen = true;
+}
+
+function closeSearch() {
+    const dd = document.getElementById('search-dropdown');
+    if (dd) dd.style.display = 'none';
+    _searchOpen = false;
+    document.removeEventListener('click', searchOutsideHandler);
+}
+
+function clearSearch() {
+    const inp = document.getElementById('global-search-input');
+    if (inp) { inp.value = ''; inp.focus(); }
+    const clearBtn = document.getElementById('search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    closeSearch();
+}
+
+function searchOutsideHandler(e) {
+    const wrap = document.getElementById('nav-search-wrap');
+    if (wrap && !wrap.contains(e.target)) closeSearch();
+    else document.addEventListener('click', searchOutsideHandler, { once: false });
+}
+
+async function runGlobalSearch(q) {
+    const dd = document.getElementById('search-dropdown');
+    const res = document.getElementById('search-results');
+    if (!dd || !res) return;
+    dd.style.display = '';
+    res.innerHTML = '<div class="search-empty">Đang tìm...</div>';
+
+    const kw = q.toLowerCase();
+    const results = [];
+
+    // 1. Tìm trong Posts (Firebase)
+    try {
+        if (!_postsCache && typeof firebase !== 'undefined' && firebase.apps.length) {
+            const snap = await firebase.database().ref('posts').orderByChild('published').equalTo(true).limitToLast(200).once('value');
+            _postsCache = [];
+            snap.forEach(c => _postsCache.push({ id: c.key, ...c.val() }));
+        }
+        if (_postsCache) {
+            _postsCache.filter(p =>
+                (p.title || '').toLowerCase().includes(kw) ||
+                (p.excerpt || '').toLowerCase().includes(kw)
+            ).slice(0, 3).forEach(p => results.push({
+                type: 'post', icon: '📰', label: 'Bài viết',
+                title: p.title || 'Không tên',
+                sub: p.category || 'Bài viết',
+                href: `posts.html#${p.id}`
+            }));
+        }
+    } catch(e) {}
+
+    // 2. Tìm trong Biển báo (Firebase)
+    try {
+        if (!_signsCache && typeof firebase !== 'undefined' && firebase.apps.length) {
+            const snap = await firebase.database().ref('traffic_signs').limitToFirst(300).once('value');
+            _signsCache = [];
+            snap.forEach(c => _signsCache.push({ id: c.key, ...c.val() }));
+        }
+        if (_signsCache) {
+            _signsCache.filter(s =>
+                (s.name || '').toLowerCase().includes(kw) ||
+                (s.desc || '').toLowerCase().includes(kw) ||
+                (s.id || '').toLowerCase().includes(kw)
+            ).slice(0, 3).forEach(s => results.push({
+                type: 'sign', icon: '🚦', label: 'Biển báo',
+                title: s.name || s.id || 'Biển báo',
+                sub: s.id || '',
+                href: `traffic-signs.html`
+            }));
+        }
+    } catch(e) {}
+
+    // 3. Tìm trong câu hỏi thi (nếu questions.js đã load)
+    try {
+        const allQ = window.ALL_QUESTIONS || [];
+        allQ.filter(q2 =>
+            (q2.text || q2.question || '').toLowerCase().includes(kw)
+        ).slice(0, 2).forEach(q2 => results.push({
+            type: 'quiz', icon: '🚗', label: 'Câu hỏi',
+            title: (q2.text || q2.question || '').slice(0, 60) + '…',
+            sub: 'Ôn thi lái xe',
+            href: 'driving-test.html'
+        }));
+    } catch(e) {}
+
+    // 4. Tìm nhanh trong các trang
+    const PAGES = [
+        { title: 'Ôn thi lái xe', sub: '838 câu A1/B1/B2/C', href: 'driving-test.html', icon: '🚗' },
+        { title: 'Chứng chỉ hành nghề XD', sub: '345 câu', href: 'certificates.html', icon: '🏗️' },
+        { title: 'Biển báo giao thông', sub: 'QC41:2024 — 143 biển', href: 'traffic-signs.html', icon: '🚦' },
+        { title: 'Cầu Việt Nam (VBMS)', sub: '7.897 cầu quốc lộ', href: 'bridges.html', icon: '🌉' },
+        { title: 'TrishNotes — Ghi chú', sub: 'Ghi chú cá nhân Firebase', href: 'notes.html', icon: '📝' },
+        { title: 'Bảng tin', sub: 'Tin tức & chia sẻ', href: 'posts.html', icon: '📰' },
+    ];
+    PAGES.filter(p => p.title.toLowerCase().includes(kw) || p.sub.toLowerCase().includes(kw))
+        .slice(0, 2).forEach(p => results.push({ type: 'page', icon: p.icon, label: 'Trang', ...p }));
+
+    // Render kết quả
+    if (!results.length) {
+        res.innerHTML = `<div class="search-empty">Không tìm thấy kết quả nào cho "<strong>${esc(q)}</strong>"</div>`;
+        return;
+    }
+
+    const grouped = {};
+    results.forEach(r => {
+        if (!grouped[r.label]) grouped[r.label] = [];
+        grouped[r.label].push(r);
+    });
+
+    let html = '';
+    for (const [label, items] of Object.entries(grouped)) {
+        html += `<div class="search-section-label">${label}</div>`;
+        items.forEach(item => {
+            const titleHL = highlight(item.title, q);
+            html += `<a href="${item.href}" class="search-item" onclick="closeSearch()">
+                <div class="search-item-icon">${item.icon}</div>
+                <div class="search-item-text">
+                    <div class="search-item-title">${titleHL}</div>
+                    <div class="search-item-sub">${esc(item.sub || '')}</div>
+                </div>
+                <span class="search-item-type">${esc(item.label)}</span>
+            </a>`;
+        });
+    }
+    html += `<div class="search-hint">Nhấn Enter để tìm kiếm nâng cao</div>`;
+    res.innerHTML = html;
+}
+
+function highlight(text, kw) {
+    if (!kw) return esc(text);
+    const re = new RegExp('(' + kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+    return esc(text).replace(re, '<mark class="sh">$1</mark>');
+}
+function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Enter → đến bridges nếu dài, driving-test nếu ngắn
+document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('global-search-input');
+    if (inp) {
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { clearSearch(); inp.blur(); }
+            if (e.key === 'Enter') {
+                const q = inp.value.trim();
+                if (q.length > 2) {
+                    closeSearch();
+                    window.location.href = 'bridges.html?q=' + encodeURIComponent(q);
+                }
+            }
+        });
+    }
+});
+
+// ═══════════════════════════════════════════════════════
+// PWA — Service Worker Registration
+// ═══════════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(reg => {
+                console.log('[PWA] Service Worker đã đăng ký:', reg.scope);
+                // Thông báo cập nhật nếu có SW mới
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Có bản cập nhật mới — hiện toast
+                            if (typeof showToast === 'function') {
+                                showToast('🔄 Có bản cập nhật mới! Tải lại trang để áp dụng.');
+                            }
+                        }
+                    });
+                });
+            })
+            .catch(err => console.warn('[PWA] SW đăng ký thất bại:', err));
+    });
+}
+
+// ── PWA Install Prompt ──
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    _deferredPrompt = e;
+    // Hiện banner sau 3 giây
+    setTimeout(() => {
+        const banner = document.getElementById('pwa-banner');
+        if (banner) banner.style.display = 'flex';
+    }, 3000);
+});
+
+const pwaInstallBtn = document.getElementById('pwa-install-btn');
+if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', async () => {
+        if (!_deferredPrompt) return;
+        _deferredPrompt.prompt();
+        const { outcome } = await _deferredPrompt.userChoice;
+        _deferredPrompt = null;
+        const banner = document.getElementById('pwa-banner');
+        if (banner) banner.style.display = 'none';
+        if (outcome === 'accepted' && typeof showToast === 'function') {
+            showToast('✓ TrishTeam đã được thêm vào màn hình!');
+        }
+    });
+}
+
+window.addEventListener('appinstalled', () => {
+    _deferredPrompt = null;
+    const banner = document.getElementById('pwa-banner');
+    if (banner) banner.style.display = 'none';
 });

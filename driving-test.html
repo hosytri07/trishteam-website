@@ -499,6 +499,14 @@ function finishQuiz() {
   });
   localStorage.setItem('driving_hist', JSON.stringify(hist.slice(0, 10)));
 
+  // Lưu điểm cao nhất theo hạng bằng lái
+  const gradeKey = {
+    'A1': 'trish_best_a1', 'A2': 'trish_best_a1',
+    'B1': 'trish_best_b1', 'B2': 'trish_best_b1', 'C': 'trish_best_b1'
+  }[state.grade] || 'trish_best_b1';
+  const prevBest = parseInt(localStorage.getItem(gradeKey) || '0');
+  if (pct > prevBest) localStorage.setItem(gradeKey, pct);
+
   showScreen('result');
 }
 

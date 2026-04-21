@@ -365,6 +365,9 @@ function finishQuiz(){
   const hist=JSON.parse(localStorage.getItem('cert_hist')||'[]');
   hist.unshift({field:state.field,correct,total,passed,pct,date:new Date().toLocaleDateString('vi-VN')});
   localStorage.setItem('cert_hist',JSON.stringify(hist.slice(0,10)));
+  // Lưu điểm cao nhất chứng chỉ XD
+  const prevBestXD = parseInt(localStorage.getItem('trish_best_xd') || '0');
+  if (pct > prevBestXD) localStorage.setItem('trish_best_xd', pct);
   showScreen('result');
 }
 

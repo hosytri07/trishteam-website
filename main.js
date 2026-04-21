@@ -48,8 +48,9 @@ const copyToClipboard = async (text) => {
 // ==================== THEME ====================
 const initTheme = () => {
     document.body.setAttribute('data-theme', state.theme);
-    const icon = document.querySelector('#theme-toggle i');
-    icon.className = state.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    // Sync FEZ toggle checkbox (dark = checked)
+    const cb = document.getElementById('theme-toggle');
+    if (cb) cb.checked = (state.theme === 'dark');
 };
 
 const toggleTheme = () => {
@@ -354,8 +355,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initToolsFilter();
     loadUtilities();
     
-    // Theme toggle
-    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    // Theme toggle (FEZ checkbox)
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('change', toggleTheme);
     
     // Tool cards click
     document.querySelectorAll('.tool-card').forEach(card => {
@@ -403,7 +405,9 @@ const handleContactForm = async (e) => {
     }
 
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+    btn.classList.add('loading');
+    const inner = btn.querySelector('.btn-inner');
+    if (inner) inner.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Đang gửi...';
 
     const BOT_TOKEN = TRISH_CONFIG.telegram.botToken;
     const CHAT_ID   = TRISH_CONFIG.telegram.chatId;
@@ -436,13 +440,28 @@ const handleContactForm = async (e) => {
         showToast('✓ Tin nhắn đã được gửi thành công!');
         e.target.reset();
         const nameEl = document.getElementById('attach-name');
-        if (nameEl) { nameEl.textContent = 'Đính kèm file (tối đa 20MB)'; nameEl.style.color = ''; }
+        if (nameEl) { nameEl.textContent = 'Đính kèm file'; nameEl.style.color = ''; }
+        // FEZ success state
+        btn.classList.remove('loading');
+        btn.classList.add('success');
+        const inner2 = btn.querySelector('.btn-inner');
+        if (inner2) inner2.innerHTML = '<i class="fas fa-check"></i> Đã gửi thành công!';
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.disabled = false;
+            if (inner2) inner2.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi tin nhắn';
+        }, 3000);
     } catch (err) {
         console.error('Telegram error:', err);
         showToast('✗ Lỗi gửi tin nhắn. Vui lòng thử lại!');
     } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi tin nhắn';
+        if (!btn.classList.contains('success')) {
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            const inner3 = btn.querySelector('.btn-inner');
+            if (inner3 && !btn.classList.contains('success'))
+                inner3.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi tin nhắn';
+        }
     }
 };
 
