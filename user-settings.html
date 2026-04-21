@@ -129,6 +129,25 @@ body::after {
     33%{transform:translate(18px,-12px) scale(1.02)}
     66%{transform:translate(-12px,18px) scale(0.98)}
 }
+/* ── Learning Dashboard ── */
+.learn-grid{padding:1rem 1.2rem;display:flex;flex-direction:column;gap:1.1rem}
+.learn-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem}
+@media(max-width:500px){.learn-stats{grid-template-columns:repeat(2,1fr)}}
+.ls-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;text-align:center}
+.ls-num{font-size:1.5rem;font-weight:800;color:var(--accent);font-family:'Be Vietnam Pro',sans-serif;line-height:1.2}
+.ls-lbl{font-size:.67rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.section-head-sm{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:.55rem}
+.la-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.la-btn{display:flex;align-items:center;gap:.55rem;padding:.6rem .85rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);text-decoration:none;color:var(--text);font-size:.8rem;font-weight:600;transition:all .15s}
+.la-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(102,126,234,.08)}
+.la-btn i{width:14px;color:var(--accent);font-size:.82rem}
+.recent-notes-list{display:flex;flex-direction:column;gap:4px}
+.rn-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .4rem;border-radius:var(--r);cursor:pointer;text-decoration:none;color:var(--text);transition:background .15s}
+.rn-item:hover{background:rgba(255,255,255,.04)}
+.rn-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.rn-text{font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.rn-time{font-size:.68rem;color:var(--hint);flex-shrink:0}
+.rn-empty{font-size:.82rem;color:var(--hint);padding:.4rem 0}
 </style>
 </head>
 <body>
@@ -241,6 +260,65 @@ body::after {
     </div>
   </div>
 
+  <!-- ── LEARNING DASHBOARD ── -->
+  <div class="settings-section" id="learning-section">
+    <div class="section-head"><i class="fas fa-chart-line"></i><h3>Tiến độ học tập</h3></div>
+    <div class="learn-grid">
+
+      <!-- Stats row -->
+      <div class="learn-stats">
+        <div class="ls-item">
+          <div class="ls-num" id="ls-notes">--</div>
+          <div class="ls-lbl">Ghi chú</div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-num" id="ls-score-b1">--</div>
+          <div class="ls-lbl">Điểm cao B1</div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-num" id="ls-score-a1">--</div>
+          <div class="ls-lbl">Điểm cao A1</div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-num" id="ls-score-xd">--</div>
+          <div class="ls-lbl">Điểm cao XD</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="learn-actions">
+        <div class="section-head-sm">Truy cập nhanh</div>
+        <div class="la-grid">
+          <a href="driving-test.html" class="la-btn">
+            <i class="fas fa-car"></i>
+            <span>Tiếp tục ôn thi lái xe</span>
+          </a>
+          <a href="certificates.html" class="la-btn">
+            <i class="fas fa-certificate"></i>
+            <span>Ôn thi chứng chỉ XD</span>
+          </a>
+          <a href="notes.html" class="la-btn">
+            <i class="fas fa-sticky-note"></i>
+            <span>Xem ghi chú</span>
+          </a>
+          <a href="bridges.html" class="la-btn">
+            <i class="fas fa-water"></i>
+            <span>Tra cứu cầu VN</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent notes -->
+      <div class="learn-recent">
+        <div class="section-head-sm">Ghi chú gần đây</div>
+        <div id="recent-notes-list" class="recent-notes-list">
+          <div class="rn-empty">Chưa có ghi chú nào</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Bảo mật -->
   <div class="settings-section">
     <div class="section-head"><i class="fas fa-shield-alt"></i><h3>Bảo mật</h3></div>
@@ -324,6 +402,7 @@ auth.onAuthStateChanged(async user => {
   document.getElementById('gate').style.display = 'none';
   document.getElementById('main-wrap').style.display = 'block';
   loadProfile(user);
+  loadLearningStats(user);
 });
 
 async function loadProfile(user) {
@@ -544,6 +623,44 @@ function showKeyCountdown(expireStr) {
     // handled by showKeyCountdown
         showKeyCountdown = map[expireStr] || expireStr;
   }
+}
+
+// ── LEARNING STATS ──
+async function loadLearningStats(user) {
+  if (!user) return;
+  const uid = user.uid;
+  try {
+    const snap = await db.ref('notes/' + uid).once('value');
+    const notes = Object.values(snap.val() || {});
+    const el = document.getElementById('ls-notes');
+    if (el) el.textContent = notes.length;
+    const sorted = notes.filter(n=>n&&n.title).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,5);
+    const listEl = document.getElementById('recent-notes-list');
+    if (listEl && sorted.length) {
+      listEl.innerHTML = sorted.map(n => {
+        const t = n.updatedAt ? timeAgoSettings(n.updatedAt) : '';
+        return `<a href="notes.html" class="rn-item"><div class="rn-dot"></div><div class="rn-text">${n.title}</div><div class="rn-time">${t}</div></a>`;
+      }).join('');
+    }
+  } catch(e) {}
+  try {
+    const bestB1 = localStorage.getItem('trish_best_b1');
+    const bestA1 = localStorage.getItem('trish_best_a1');
+    const bestXD = localStorage.getItem('trish_best_xd');
+    const elB1 = document.getElementById('ls-score-b1');
+    const elA1 = document.getElementById('ls-score-a1');
+    const elXD = document.getElementById('ls-score-xd');
+    if (elB1) elB1.textContent = bestB1 ? bestB1+'%' : '--';
+    if (elA1) elA1.textContent = bestA1 ? bestA1+'%' : '--';
+    if (elXD) elXD.textContent = bestXD ? bestXD+'%' : '--';
+  } catch(e) {}
+}
+function timeAgoSettings(ts) {
+  const s = Math.floor((Date.now()-ts)/1000);
+  if (s<60) return 'vừa xong';
+  if (s<3600) return Math.floor(s/60)+' phút';
+  if (s<86400) return Math.floor(s/3600)+' giờ';
+  return Math.floor(s/86400)+' ngày';
 }
 
 </script>

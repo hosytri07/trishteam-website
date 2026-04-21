@@ -22,11 +22,23 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .gate-box p{color:var(--muted);margin-bottom:1.5rem;font-size:.9rem}
 
 /* Layout */
-.admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px);display:none}
-.admin-sidebar{background:rgba(26,24,20,0.85);border-right:1px solid var(--border);padding:1rem 0;position:relative;z-index:1}
-.admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.2rem;cursor:pointer;transition:all .15s;color:var(--muted);font-size:.88rem;font-weight:500;border:none;background:none;width:100%;text-align:left;font-family:inherit}
-.admin-nav-item:hover,.admin-nav-item.active{background:rgba(102,126,234,.1);color:var(--accent)}
-.admin-nav-item i{width:18px;text-align:center;font-size:.9rem}
+.admin-layout{display:grid;grid-template-columns:72px 1fr;min-height:calc(100vh - 58px);display:none}
+.admin-sidebar{
+  width:72px;background:rgba(26,24,20,0.92);border-right:1px solid var(--border);
+  padding:.75rem 0;position:sticky;top:58px;height:calc(100vh - 58px);
+  overflow:hidden;transition:width .35s cubic-bezier(0.4,0,0.2,1);z-index:50;flex-shrink:0;
+}
+.admin-sidebar:hover{width:240px;box-shadow:4px 0 24px rgba(0,0,0,.4)}
+.admin-nav-item{
+  display:flex;align-items:center;gap:.7rem;padding:.65rem .9rem;
+  cursor:pointer;transition:all .15s;color:var(--muted);font-size:.85rem;font-weight:500;
+  border:none;background:none;width:100%;text-align:left;font-family:inherit;
+  white-space:nowrap;overflow:hidden;border-radius:8px;margin:0 4px;width:calc(100% - 8px);
+}
+.admin-nav-item:hover,.admin-nav-item.active{background:rgba(102,126,234,.12);color:var(--accent)}
+.admin-nav-item i{width:22px;text-align:center;font-size:.95rem;flex-shrink:0}
+.admin-nav-item span{opacity:0;transition:opacity .2s .05s;font-size:.83rem}
+.admin-sidebar:hover .admin-nav-item span{opacity:1}
 .nav-sep{height:1px;background:var(--border);margin:.5rem 0}
 .nav-label{font-size:.68rem;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;padding:.4rem 1.2rem}
 .admin-content{padding:1.5rem;overflow-y:auto;position:relative;z-index:1}
@@ -92,8 +104,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .toast.ok i{color:var(--green)}.toast.err i{color:var(--red)}.toast.info i{color:var(--accent)}
 
 @media(max-width:768px){
-  .admin-layout{grid-template-columns:1fr}
-  .admin-sidebar{display:none}
+  .admin-layout{grid-template-columns:56px 1fr}
+  .admin-sidebar{width:56px}
+  .admin-sidebar:hover{width:220px}
   .form-grid{grid-template-columns:1fr}
 }
 
@@ -163,18 +176,16 @@ body::after {
 <div class="admin-layout" id="admin-layout">
   <!-- Sidebar -->
   <div class="admin-sidebar">
-    <div class="nav-label">Tổng quan</div>
-    <button class="admin-nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+    <div class="nav-label" style="padding:.4rem .9rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);white-space:nowrap;overflow:hidden"></div>
+    <button class="admin-nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></button>
     <div class="nav-sep"></div>
-    <div class="nav-label">Quản lý</div>
-    <button class="admin-nav-item" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
-    <button class="admin-nav-item" onclick="switchTab('keys')"><i class="fas fa-key"></i> Quản lý Key</button>
-    <button class="admin-nav-item" onclick="switchTab('posts')"><i class="fas fa-newspaper"></i> Bài viết</button>
-    <button class="admin-nav-item" onclick="switchTab('notify')"><i class="fas fa-bell"></i> Thông báo</button>
+    <button class="admin-nav-item" onclick="switchTab('users')"><i class="fas fa-users"></i><span>Người dùng</span></button>
+    <button class="admin-nav-item" onclick="switchTab('keys')"><i class="fas fa-key"></i><span>Quản lý Key</span></button>
+    <button class="admin-nav-item" onclick="switchTab('posts')"><i class="fas fa-newspaper"></i><span>Bài viết</span></button>
+    <button class="admin-nav-item" onclick="switchTab('notify')"><i class="fas fa-bell"></i><span>Thông báo</span></button>
     <div class="nav-sep"></div>
-    <div class="nav-label">Nội dung</div>
-    <button class="admin-nav-item" onclick="switchTab('signs')"><i class="fas fa-road"></i> Biển báo</button>
-    <button class="admin-nav-item" onclick="switchTab('rss')"><i class="fas fa-rss"></i> RSS Inbox</button>
+    <button class="admin-nav-item" onclick="switchTab('signs')"><i class="fas fa-road"></i><span>Biển báo</span></button>
+    <button class="admin-nav-item" onclick="switchTab('rss')"><i class="fas fa-rss"></i><span>RSS Inbox</span></button>
   </div>
 
   <!-- Content -->

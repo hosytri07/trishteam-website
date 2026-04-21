@@ -176,25 +176,29 @@
           </div>
         </div>
 
-        <!-- Stats cards (guest: info; user: personal stats) -->
-        <div class="dash-widget widget-stats" id="widget-stats">
-          <div class="widget-label">Tổng quan</div>
-          <div class="stats-mini-grid">
-            <div class="stats-mini-item">
-              <div class="stats-mini-num">838</div>
-              <div class="stats-mini-lbl">Câu lái xe</div>
+        <!-- Ecosystem Widget -->
+        <div class="dash-widget widget-ecosystem" id="widget-ecosystem">
+          <div class="widget-label">Hệ sinh thái TrishNexus</div>
+          <div class="ecosystem-grid">
+            <div class="eco-item eco-live">
+              <span class="eco-dot"></span>
+              <span class="eco-name">TrishLib</span>
+              <span class="eco-badge live">Live</span>
             </div>
-            <div class="stats-mini-item">
-              <div class="stats-mini-num">345</div>
-              <div class="stats-mini-lbl">Câu chứng chỉ</div>
+            <div class="eco-item eco-coming">
+              <span class="eco-dot"></span>
+              <span class="eco-name">TrishDesign</span>
+              <span class="eco-badge coming">Sắp ra</span>
             </div>
-            <div class="stats-mini-item">
-              <div class="stats-mini-num">143</div>
-              <div class="stats-mini-lbl">Biển báo</div>
+            <div class="eco-item eco-coming">
+              <span class="eco-dot"></span>
+              <span class="eco-name">TrishNotes</span>
+              <span class="eco-badge coming">Sắp ra</span>
             </div>
-            <div class="stats-mini-item">
-              <div class="stats-mini-num">7.897</div>
-              <div class="stats-mini-lbl">Cầu VN</div>
+            <div class="eco-item eco-coming">
+              <span class="eco-dot"></span>
+              <span class="eco-name">TrishMap</span>
+              <span class="eco-badge coming">Sắp ra</span>
             </div>
           </div>
         </div>
@@ -323,8 +327,96 @@
         </div>
       </div>
 
-      <!-- Contact section giữ lại nhưng compact hơn -->
-      <div class="dash-row dash-row-contact">
+      <!-- ── ROW 5: Software Portfolio ── -->
+      <div class="dash-row dash-row-software">
+        <div class="dash-card card-software">
+          <div class="card-header">
+            <span class="card-title">🖥 Phần mềm</span>
+            <span class="card-link-sm" style="color:var(--text-tertiary);cursor:default">TrishNexus Ecosystem</span>
+          </div>
+          <div class="software-grid">
+
+            <!-- TrishLib - đã ra mắt -->
+            <div class="sw-card sw-live">
+              <div class="sw-header">
+                <div class="sw-icon">📁</div>
+                <div class="sw-meta">
+                  <div class="sw-name">TrishLib</div>
+                  <span class="sw-tag tag-live">✓ Đã ra mắt v1.0</span>
+                </div>
+              </div>
+              <p class="sw-desc">Quản lý thư viện tài liệu kỹ thuật, video hướng dẫn và GitHub repos. Dành cho kỹ sư cầu đường.</p>
+              <div class="sw-features">
+                <span>📂 Quản lý file local</span>
+                <span>🎬 Video kỹ thuật</span>
+                <span>🐙 GitHub Repos</span>
+                <span>📱 QR Code</span>
+              </div>
+              <div class="sw-footer">
+                <span class="sw-tech">PyQt6 · Windows</span>
+                <a href="https://github.com/hosytri07" target="_blank" class="sw-btn">Xem trên GitHub →</a>
+              </div>
+            </div>
+
+            <!-- TrishDesign - sắp ra mắt -->
+            <div class="sw-card sw-coming">
+              <div class="sw-header">
+                <div class="sw-icon">📐</div>
+                <div class="sw-meta">
+                  <div class="sw-name">TrishDesign</div>
+                  <span class="sw-tag tag-coming">⏳ Sắp ra mắt</span>
+                </div>
+              </div>
+              <p class="sw-desc">Toolkit tự động hóa cho kỹ sư thiết kế: tính toán kết cấu, xuất báo cáo, tích hợp AutoCAD và AI tra cứu tiêu chuẩn.</p>
+              <div class="sw-features">
+                <span>🏗 Tính khối lượng</span>
+                <span>📄 Export Word/Excel</span>
+                <span>🤖 AI RAG TCVN</span>
+                <span>📐 AutoCAD</span>
+              </div>
+              <div class="sw-footer">
+                <span class="sw-tech">PyQt6 · Python 3.11</span>
+                <span class="sw-eta">Dự kiến: Tháng 7/2026</span>
+              </div>
+            </div>
+
+            <!-- TrishMap - sắp ra mắt -->
+            <div class="sw-card sw-coming">
+              <div class="sw-header">
+                <div class="sw-icon">🌉</div>
+                <div class="sw-meta">
+                  <div class="sw-name">TrishMap (VBMS)</div>
+                  <span class="sw-tag tag-coming">⏳ Sắp ra mắt</span>
+                </div>
+              </div>
+              <p class="sw-desc">Hệ thống tra cứu cầu Việt Nam. Tìm kiếm, lọc theo tỉnh, loại cầu, năm xây dựng. Dữ liệu 7.897 cầu quốc lộ.</p>
+              <div class="sw-features">
+                <span>🔍 Tìm kiếm nhanh</span>
+                <span>🗺 Bản đồ</span>
+                <span>📊 7.897 cầu</span>
+                <span>📥 Xuất CSV</span>
+              </div>
+              <div class="sw-footer">
+                <span class="sw-tech">Web App · Vercel</span>
+                <a href="bridges.html" class="sw-btn">Xem thử →</a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Đóng góp ý tưởng -->
+          <div class="sw-idea-box">
+            <div class="sw-idea-left">
+              <div class="sw-idea-title">💡 Đóng góp ý tưởng tính năng mới</div>
+              <div class="sw-idea-desc">Bạn có ý tưởng về tính năng hữu ích cho kỹ sư cầu đường? Hãy chia sẻ để tôi xem xét phát triển trong các phiên bản tiếp theo.</div>
+            </div>
+            <a href="#contact" class="sw-idea-btn" onclick="document.getElementById('contact-message').focus();document.getElementById('contact-message').placeholder='Ý tưởng tính năng: ...'">Gửi ý tưởng →</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ROW 6: Contact ── -->
         <div class="dash-card card-contact">
           <div class="card-header">
             <span class="card-title">📬 Liên hệ & Hỗ trợ</span>
@@ -357,16 +449,16 @@
                 <textarea id="contact-message" required placeholder=" " rows="3"></textarea>
                 <label>Nội dung</label>
               </div>
-              <div class="form-group attach-group">
+              <div class="form-row-submit">
                 <label class="attach-label">
                   <i class="fas fa-paperclip"></i>
-                  <span id="attach-name">Đính kèm file (tối đa 20MB)</span>
+                  <span id="attach-name">Đính kèm file</span>
                   <input type="file" id="contact-file" accept="image/*,.pdf,.doc,.docx,.zip" style="display:none" onchange="updateFileName(this)">
                 </label>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i> Gửi tin nhắn
+                </button>
               </div>
-              <button type="submit" class="btn btn-primary btn-block">
-                <i class="fas fa-paper-plane"></i> Gửi tin nhắn
-              </button>
             </form>
           </div>
         </div>
@@ -508,6 +600,7 @@
                 const bw = document.getElementById('nav-bell-wrap');
                 if (bw) bw.style.display = 'none';
                 if (window._notifListener) { window._notifListener.off(); }
+                if (typeof updateDashActivity === 'function') updateDashActivity(null);
             }
         });
 
