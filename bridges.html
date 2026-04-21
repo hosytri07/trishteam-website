@@ -277,17 +277,39 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 <script>
-// ── VBMS DATA — fetch từ Google Drive ──
-const DRIVE_URL = 'https://drive.google.com/uc?export=download&id=1GSG9FrSKBLqUlDcZMqHn3xR2SlaFA0-Q';
+// ── VBMS DATA — Multi-source fetch với fallback ──
+// Ưu tiên: jsDelivr CDN → raw GitHub → Drive (với confirm)
+const BRIDGES_SOURCES = [
+  // 1. jsDelivr CDN (CORS OK, nhanh nhất) — dùng sau khi upload file lên GitHub
+  'https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bridges_all.json',
+  // 2. raw.githubusercontent.com (CORS OK)
+  'https://raw.githubusercontent.com/hosytri07/trishteam-website/main/bridges_all.json',
+  // 3. Google Drive với confirm=t (fallback cuối)
+  'https://drive.google.com/uc?export=download&confirm=t&id=1GSG9FrSKBLqUlDcZMqHn3xR2SlaFA0-Q'
+];
 let BRIDGES = [];
+
+async function fetchWithFallback(sources) {
+  for (const url of sources) {
+    try {
+      const res = await fetch(url, { cache: 'force-cache' });
+      if (!res.ok) continue;
+      const text = await res.text();
+      // Kiểm tra không phải HTML (Drive virus page)
+      if (text.trim().startsWith('<')) continue;
+      return JSON.parse(text);
+    } catch(e) {
+      continue;
+    }
+  }
+  throw new Error('Tất cả nguồn dữ liệu đều thất bại');
+}
 
 async function loadBridgesData() {
   const loadEl = document.getElementById('load-status');
   if (loadEl) loadEl.style.display = 'flex';
   try {
-    const res = await fetch(DRIVE_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
+    const json = await fetchWithFallback(BRIDGES_SOURCES);
     BRIDGES = (json.data || []).map((b, i) => ({
       id: i + 1,
       t:  b.ten_cau || '',
