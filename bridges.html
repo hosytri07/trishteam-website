@@ -277,219 +277,62 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 <script>
-// ── VBMS DATA — Load 3 phần song song (mỗi phần ~1.1MB) ──
-// bridges_all.json 3.5MB → chia 3 part nhỏ → load nhanh hơn, ít lỗi hơn
-const BRIDGE_PARTS = [
-  // 3 file nhỏ ~1.1MB/phần, Vercel serve tốt hơn 1 file 3.5MB
-  ['/bridges_part1.json', '/bridges_part2.json', '/bridges_part3.json'],
-  // Fallback: jsDelivr CDN
-  [
-    'https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bridges_part1.json',
-    'https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bridges_part2.json',
-    'https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bridges_part3.json',
-  ],
-  // Fallback cuối: file gốc trên Vercel
-  ['/bridges_all.json'],
-];
+// ── VBMS DATA — 8 files nhỏ (~300KB/file) load song song ──
+// Chia nhỏ để Vercel không timeout, fallback jsDelivr
+const BD_FILES = 8;
+const BD_BASE_VERCEL = (i) => `/bd${i}.json`;
+const BD_BASE_CDN    = (i) => `https://cdn.jsdelivr.net/gh/hosytri07/trishteam-website@main/bd${i}.json`;
 let BRIDGES = [];
 
 async function fetchJSON(url) {
-  const res = await fetch(url, { cache: 'force-cache' });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const text = await res.text();
-  if (text.trim().startsWith('<')) throw new Error('HTML response');
-  return JSON.parse(text);
+    const res = await fetch(url, { cache: 'force-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    if (text.trim().startsWith('<')) throw new Error('HTML not JSON');
+    return JSON.parse(text);
 }
 
 async function loadBridgesData() {
-  const loadEl = document.getElementById('load-status');
-  if (loadEl) loadEl.style.display = 'flex';
-  const totalEl = document.getElementById('total-count');
+    const loadEl = document.getElementById('load-status');
+    const totalEl = document.getElementById('total-count');
+    if (loadEl) loadEl.style.display = 'flex';
 
-  for (const urlSet of BRIDGE_PARTS) {
-    try {
-      let allData = [];
-      if (urlSet.length === 1) {
-        // Single file (fallback bridges_all.json)
-        const json = await fetchJSON(urlSet[0]);
-        allData = json.data || [];
-      } else {
-        // Load 3 parts song song
-        const parts = await Promise.all(urlSet.map(u => fetchJSON(u)));
-        for (const p of parts) allData = allData.concat(p.data || []);
-      }
+    // Thử Vercel trước, fallback CDN
+    for (const baseFn of [BD_BASE_VERCEL, BD_BASE_CDN]) {
+        try {
+            const urls = Array.from({length: BD_FILES}, (_,i) => baseFn(i+1));
+            const parts = await Promise.all(urls.map(u => fetchJSON(u)));
+            let allData = [];
+            for (const p of parts) allData = allData.concat(p.d || p.data || []);
+            if (allData.length === 0) continue;
 
-      if (allData.length === 0) continue;
+            BRIDGES = allData.map((b, i) => ({
+                id: i + 1,
+                t:  b.ten_cau || '',
+                q:  b.quoc_lo || '',
+                l:  b.ly_trinh || '',
+                p:  b.tinh_tp || b.tinh || '',
+                dv: b.don_vi_ql || '',
+                v:  b.doi_tuong_vuot || '',
+                d:  b.chieu_dai || '',
+                r:  b.chieu_rong || '',
+                k:  b.ket_cau_nhip || '',
+                tr: b.tai_trong_tk || b.tai_trong_kt || '',
+                n:  b.nam_xay || b.nam_kt || '',
+                tt: b.tinh_trang || '',
+            }));
 
-      BRIDGES = allData.map((b, i) => ({
-        id: i + 1,
-        t:  b.ten_cau || '',
-        q:  b.quoc_lo || '',
-        l:  b.ly_trinh || '',
-        p:  b.tinh_tp || b.tinh || '',
-        dv: b.don_vi_ql || '',
-        v:  b.doi_tuong_vuot || '',
-        d:  b.chieu_dai || '',
-        r:  b.chieu_rong || '',
-        k:  b.ket_cau_nhip || '',
-        tr: b.tai_trong_tk || b.tai_trong_kt || '',
-        n:  b.nam_xay || b.nam_kt || '',
-        tt: b.tinh_trang || '',
-        s:  'VBMS 2026 — ' + (b.tinh || b.tinh_tp || '')
-      }));
-
-      if (totalEl) totalEl.textContent = BRIDGES.length.toLocaleString('vi-VN');
-      if (loadEl) loadEl.style.display = 'none';
-      doSearch();
-      return; // thành công, dừng
-    } catch(e) {
-      console.warn('Bridge load failed for set:', urlSet, e.message);
-      continue;
+            if (totalEl) totalEl.textContent = BRIDGES.length.toLocaleString('vi-VN');
+            if (loadEl) loadEl.style.display = 'none';
+            doSearch();
+            return; // thành công
+        } catch(e) {
+            console.warn('Bridge load failed:', e.message);
+            continue;
+        }
     }
-  }
-
-  // Tất cả thất bại
-  if (loadEl) loadEl.innerHTML = '<span style="color:#ef4444">⚠️ Không tải được dữ liệu. Vui lòng tải lại trang.</span>';
+    // Tất cả thất bại
+    if (loadEl) loadEl.innerHTML =
+        '<span style="color:#ef4444">⚠️ Không tải được dữ liệu. Vui lòng tải lại trang.</span>';
 }
-
-// ── STATE ──
-let filtered = [];
-let page = 1;
-const PER_PAGE = 50;
-let searchTimer = null;
-
-function debounceSearch() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(doSearch, 300);
-}
-
-function doSearch() {
-  const q = document.getElementById('q-search').value.trim().toLowerCase();
-  const prov = document.getElementById('q-province').value;
-  const road = document.getElementById('q-road').value;
-  const struct = document.getElementById('q-struct').value;
-  
-  filtered = BRIDGES.filter(b => {
-    if (prov && b.p !== prov) return false;
-    if (road && b.q !== road) return false;
-    if (struct && b.k !== struct) return false;
-    if (q) {
-      const hay = (b.t + b.q + b.p + b.l + b.dv).toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
-    return true;
-  });
-  
-  page = 1;
-  document.getElementById('result-count').textContent = filtered.length.toLocaleString('vi-VN');
-  renderTable();
-  renderPagination();
-}
-
-function resetSearch() {
-  document.getElementById('q-search').value = '';
-  document.getElementById('q-province').value = '';
-  document.getElementById('q-road').value = '';
-  document.getElementById('q-struct').value = '';
-  doSearch();
-}
-
-function renderTable() {
-  const start = (page-1)*PER_PAGE;
-  const rows = filtered.slice(start, start+PER_PAGE);
-  const tbody = document.getElementById('bridges-tbody');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--hint)">Không tìm thấy cầu nào phù hợp</td></tr>';
-    return;
-  }
-  tbody.innerHTML = rows.map((b,i) => `
-    <tr>
-      <td style="color:var(--hint);font-size:.75rem">${start+i+1}</td>
-      <td><span class="bridge-name" onclick="showDetail(${b.id-1})">${b.t}</span></td>
-      <td><span class="ql-badge">${b.q||'—'}</span></td>
-      <td style="font-size:.78rem;color:var(--hint);font-family:monospace">${b.l||'—'}</td>
-      <td style="font-size:.8rem">${b.p||'—'}</td>
-      <td class="ket-cau">${b.k||'—'}</td>
-      <td style="text-align:right;font-family:monospace;font-size:.8rem">${b.d||'—'}</td>
-      <td class="year-badge">${b.n||'—'}</td>
-      <td style="font-size:.75rem;color:var(--muted)">${b.tr||'—'}</td>
-    </tr>
-  `).join('');
-}
-
-function renderPagination() {
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const pg = document.getElementById('pagination');
-  if (totalPages <= 1) { pg.innerHTML=''; return; }
-  
-  let btns = '';
-  const showPages = [];
-  for (let i=1; i<=totalPages; i++) {
-    if (i===1||i===totalPages||Math.abs(i-page)<=2) showPages.push(i);
-    else if (showPages[showPages.length-1]!=='...') showPages.push('...');
-  }
-  
-  btns += `<button class="page-btn" onclick="changePage(${page-1})" ${page===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
-  showPages.forEach(p => {
-    if (p==='...') btns += `<span class="page-info">...</span>`;
-    else btns += `<button class="page-btn ${p===page?'active':''}" onclick="changePage(${p})">${p}</button>`;
-  });
-  btns += `<button class="page-btn" onclick="changePage(${page+1})" ${page===totalPages?'disabled':''}><i class="fas fa-chevron-right"></i></button>`;
-  btns += `<span class="page-info">Trang ${page}/${totalPages}</span>`;
-  pg.innerHTML = btns;
-}
-
-function changePage(p) {
-  const total = Math.ceil(filtered.length/PER_PAGE);
-  if (p<1||p>total) return;
-  page = p;
-  renderTable();
-  renderPagination();
-  document.querySelector('.table-wrap').scrollIntoView({behavior:'smooth'});
-}
-
-function showDetail(idx) {
-  const b = BRIDGES[idx];
-  if (!b) return;
-  document.getElementById('modal-title').textContent = b.t;
-  const KET_CAU = {'Dầm, mạng dầm':'Dầm bê tông / mạng dầm thép','Treo dây văng':'Cầu dây văng','Vòm':'Cầu vòm','Bản đặc':'Bản bê tông đặc','Bản rỗng':'Bản bê tông rỗng','Extradose':'Cầu Extradosé','Bê tông khung':'Bê tông khung cứng','Dạng khác':'Kết cấu khác'};
-  document.getElementById('modal-body').innerHTML = `
-    <div class="detail-grid">
-      <div class="detail-item"><div class="detail-label">Quốc lộ</div><div class="detail-value" style="color:var(--accent)">${b.q||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Lý trình</div><div class="detail-value" style="font-family:monospace">${b.l||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Tỉnh / TP</div><div class="detail-value">${b.p||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Đơn vị quản lý</div><div class="detail-value" style="font-size:.8rem">${b.dv||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Đối tượng vượt</div><div class="detail-value">${b.v||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Năm xây dựng</div><div class="detail-value">${b.n||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Chiều dài (m)</div><div class="detail-value">${b.d||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Chiều rộng (m)</div><div class="detail-value">${b.r||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Kết cấu nhịp</div><div class="detail-value">${KET_CAU[b.k]||b.k||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Tải trọng thiết kế</div><div class="detail-value">${b.tr||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Tình trạng</div><div class="detail-value">${b.tt||'Chưa có thông tin'}</div></div>
-      <div class="detail-item"><div class="detail-label">Nguồn dữ liệu</div><div class="detail-value" style="font-size:.75rem;color:var(--hint)">${b.s}</div></div>
-    </div>
-  `;
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal(e) {
-  if (e.target.id==='modal') document.getElementById('modal').classList.remove('show');
-}
-
-function exportCSV() {
-  const rows = [['#','Tên cầu','Quốc lộ','Lý trình','Tỉnh/TP','Kết cấu','Dài(m)','Rộng(m)','Năm XD','Tải trọng','Đơn vị quản lý']];
-  filtered.slice(0,5000).forEach((b,i) => {
-    rows.push([i+1,b.t,b.q,b.l,b.p,b.k,b.d,b.r,b.n,b.tr,b.dv]);
-  });
-  const csv = rows.map(r=>r.map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download = 'CauVietNam_'+(document.getElementById('q-province').value||'ToanQuoc')+'.csv';
-  a.click();
-}
-
-// Init — load data từ Drive rồi mới search
-loadBridgesData();
-</script>
-</body>
-</html>
+>

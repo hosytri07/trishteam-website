@@ -8,21 +8,41 @@
 function startDashClock() {
     const tEl = document.getElementById('clock-time');
     const dEl = document.getElementById('clock-date');
+    const lEl = document.getElementById('clock-lunar');
     if (!tEl || !dEl) return;
+    const DAYS = ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
+    const CAN  = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+    const CHI  = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+    function getLunar(now) {
+        try {
+            if (typeof Solar !== 'undefined' && typeof Lunar !== 'undefined') {
+                const s = Solar.fromDate(now);
+                const l = s.getLunar();
+                const ld = l.getDay(), lm = l.getMonth(), ly = l.getYear();
+                const can = CAN[(ly + 6) % 10], chi = CHI[(ly + 8) % 12];
+                const lds = String(ld).padStart(2,'0'), lms = String(lm).padStart(2,'0');
+                return `Âm lịch: ${lds}/${lms} • Năm ${can} ${chi}`;
+            }
+        } catch(e){}
+        return '';
+    }
+    let colonVisible = true;
     function tick() {
         const now = new Date();
         const hh = String(now.getHours()).padStart(2,'0');
         const mm = String(now.getMinutes()).padStart(2,'0');
         const ss = String(now.getSeconds()).padStart(2,'0');
-        tEl.innerHTML = `${hh}<span class="clock-colon">:</span>${mm}<span class="clock-colon">:</span>${ss}`;
-        const days = ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
-        const d = now.getDate();
-        const mo = now.getMonth()+1;
-        const yr = now.getFullYear();
-        dEl.textContent = `${days[now.getDay()]}, ${d < 10?'0'+d:d}/${mo < 10?'0'+mo:mo}/${yr}`;
+        const col = colonVisible
+            ? '<span class="clock-colon">:</span>'
+            : '<span class="clock-colon clock-colon-off">:</span>';
+        tEl.innerHTML = hh + col + mm + col + ss;
+        colonVisible = !colonVisible;
+        const d = now.getDate(), mo = now.getMonth()+1, yr = now.getFullYear();
+        dEl.textContent = DAYS[now.getDay()] + ', ' + String(d).padStart(2,'0') + '/' + String(mo).padStart(2,'0') + '/' + yr;
+        if (lEl) { const lunar = getLunar(now); lEl.textContent = lunar; lEl.style.display = lunar ? '' : 'none'; }
     }
     tick();
-    setInterval(tick, 1000);
+    setInterval(tick, 500);
 }
 
 // ── Weather Widget (Open-Meteo — miễn phí, không cần API key) ──
@@ -122,24 +142,29 @@ function updateDashActivity(user) {
     const userEl  = document.getElementById('activity-user');
     const linkEl  = document.getElementById('activity-link');
     if (!user) {
-        if (guestEl) guestEl.style.display = '';
-        if (userEl)  userEl.style.display  = 'none';
-        if (linkEl)  linkEl.style.display  = 'none';
+        if (guestEl) { guestEl.style.display = 'block'; guestEl.style.visibility = 'visible'; }
+        if (userEl)  { userEl.style.display  = 'none'; }
+        if (linkEl)  { linkEl.style.display  = 'none'; }
         return;
     }
-    if (guestEl) guestEl.style.display = 'none';
-    if (userEl)  userEl.style.display  = '';
-    if (linkEl)  linkEl.style.display  = '';
-    // Quick access: bỏ lock icon cho Notes
+    // Đã đăng nhập → ẩn guest, hiện user
+    if (guestEl) { guestEl.style.display = 'none'; guestEl.style.visibility = 'hidden'; }
+    if (userEl)  { userEl.style.display  = 'block'; }
+    if (linkEl)  { linkEl.style.display  = 'inline-flex'; }
+    // Quick access unlock
     document.querySelectorAll('.quick-item-needs-login').forEach(el => el.classList.add('unlocked'));
-    // Lấy notes gần nhất
+    // Load notes gần nhất
     if (typeof firebase === 'undefined' || !firebase.apps.length) return;
     const db = firebase.database();
     db.ref('notes/' + user.uid).orderByChild('updatedAt').limitToLast(5).once('value', snap => {
         const notes = [];
         snap.forEach(c => notes.unshift({ id: c.key, ...c.val() }));
         const list = document.getElementById('activity-list');
-        if (!list || !notes.length) return;
+        if (!list) return;
+        if (!notes.length) {
+            list.innerHTML = '<div class="activity-empty">Chưa có hoạt động nào</div>';
+            return;
+        }
         list.innerHTML = notes.map(n => {
             const ts = n.updatedAt ? timeAgo(n.updatedAt) : '';
             return `<div class="activity-item">
