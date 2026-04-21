@@ -39,12 +39,12 @@
     --bg-primary: #0f0e0c;
     --bg-secondary: #1a1814;
     --bg-tertiary: #242018;
-    --bg-card: rgba(26,24,20,0.88);
+    --bg-card: #1e1c18;
     --text-primary: #f5f2ed;
     --text-secondary: #a09890;
     --text-tertiary: #6b6560;
-    --border-color: #2e2a24;
-    --border-doodle: #3a3530;
+    --border-color: #3a3530;
+    --border-doodle: #4a4540;
     --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
     --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
@@ -2767,6 +2767,7 @@ section {
     border: 1.5px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.1rem 1.3rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
     display: flex;
     flex-direction: column;
     position: relative;
@@ -2882,10 +2883,12 @@ section {
     border: 1.5px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.2rem 1.4rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 .card-header {
     display: flex;
     align-items: center;
+    margin-bottom: 0.75rem;
     justify-content: space-between;
     margin-bottom: 1rem;
     padding-bottom: 0.65rem;
@@ -3061,8 +3064,8 @@ section {
     align-items: center;
     gap: 5px;
     padding: 0.75rem 0.4rem;
-    background: rgba(102,126,234,0.07);
-    border: 1px solid rgba(102,126,234,0.2);
+    background: rgba(102,126,234,0.1);
+    border: 1.5px solid rgba(102,126,234,0.3);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -3170,10 +3173,11 @@ body[data-theme="light"] { background: #faf9f7; }
     padding: 1rem;
     display: flex; flex-direction: column; gap: 0.65rem;
     transition: border-color var(--transition-fast), transform var(--transition-fast);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.3);
 }
 .sw-card:hover { transform: translateY(-2px); }
-.sw-live { border-top: 3px solid #10b981; background: rgba(16,185,129,0.07); }
-.sw-coming { border-top: 3px solid #f59e0b; background: rgba(245,158,11,0.05); }
+.sw-live { border-top: 3px solid #10b981; background: #1a2420; }
+.sw-coming { border-top: 3px solid #f59e0b; background: #201e14; }
 .sw-live:hover { border-color: #10b981; }
 .sw-coming:hover { border-color: #f59e0b; }
 
