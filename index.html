@@ -638,7 +638,15 @@
                 });
                 // Subscribe notifications
                 subscribeNotifications(user.uid);
-                if (typeof updateDashActivity === 'function') updateDashActivity(user);
+                // updateDashActivity - retry nếu DOM chưa sẵn sàng
+                const _doUpdateActivity = (u) => {
+                    if (document.getElementById('activity-guest')) {
+                        if (typeof updateDashActivity === 'function') updateDashActivity(u);
+                    } else {
+                        setTimeout(() => { if (typeof updateDashActivity === 'function') updateDashActivity(u); }, 300);
+                    }
+                };
+                _doUpdateActivity(user);
             } else {
                 // Chưa đăng nhập
                 if (loginBtn)  loginBtn.classList.remove('hidden');
@@ -648,7 +656,11 @@
                 const bw = document.getElementById('nav-bell-wrap');
                 if (bw) bw.style.display = 'none';
                 if (window._notifListener) { window._notifListener.off(); }
-                if (typeof updateDashActivity === 'function') updateDashActivity(null);
+                if (document.getElementById('activity-guest')) {
+                    if (typeof updateDashActivity === 'function') updateDashActivity(null);
+                } else {
+                    setTimeout(() => { if (typeof updateDashActivity === 'function') updateDashActivity(null); }, 300);
+                }
             }
         });
 
